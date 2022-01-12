@@ -3,10 +3,10 @@ This is a tiny iOS implementation of n2n.
 
 1. It works as a n2n edge to connect to supernode under iOS device which need NOT been jailbreaked.
 2. It support all versions of n2n.
-3. Thus Apple reject all GPL-only applications, we CANNOT publish it in Apple APP Store. You MUST clone source code and compile by yourself.
+3. Because Apple reject all GPL-only applications, we CANNOT publish it in Apple APP Store. You MUST clone source code and compile by yourself.
 4. To compile and run this APP, you MUST have an Apple developer account and have the Network-Extension entitlement.
 
-Any suggestion will be appreciate!
+Any suggestion will be appreciated!
 
 
 # hin2n-ios 中文说明
