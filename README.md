@@ -6,17 +6,17 @@ This is a tiny iOS implementation of n2n.
 3. Since Apple reject all GPL-only applications, we CANNOT publish it in Apple APP Store. You MUST clone source code and compile by yourself.
 4. To compile and run this APP, you MUST have an Apple developer account and have the Network-Extension entitlement.
 
-some problems:
+some problems which are already known:
 1. If you switch to another app and switch back, the connection status may be temporarily abnormal.
 2. If you select the other VPN in system configuration, then click connect button in app, it will fail and network service will be abnormal after you click disconnect button.
-3. miss legality checking of some parameters.
-4. miss night theme adaption.
+3. missing legality checking of some parameters.
+4. missing night theme adaption.
 
 
 Any suggestion will be appreciated!
 
 
-# hin2n-ios 中文说明
+# hin2n-ios 说明
 此为n2n的一个iOS简易实现。
 
 1. 它实现了在iOS设备（无需越狱）下作为edge工作，能够连接到supernode以实现NAT穿透。
