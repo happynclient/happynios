@@ -7,6 +7,7 @@ This is a tiny iOS implementation of n2n.
 4. To compile and run this APP, you MUST have an Apple developer account and have the Network-Extension entitlement.
 
 some problems which are already known:
+
 0. It does NOT support the iOS emulator in xcode.
 1. If you switch to another app and switch back, the connection status may be temporarily abnormal.
 2. If you select the other VPN in system configuration, then click connect button in app, it will fail and network service will be abnormal after you click disconnect button.
