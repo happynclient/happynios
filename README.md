@@ -1,4 +1,7 @@
-# hin2n-ios
+# happynios
+
+Forked from [hin2n-ios](https://github.com/Oliver0624/hin2n-ios)
+
 This is a tiny iOS implementation of n2n.
 
 1. It works as a n2n edge to connect to supernode. It works on iOS device which need NOT be jailbreaked.
@@ -14,16 +17,7 @@ some problems which are already known:
 3. missing legality checking of some parameters.
 4. missing night theme adaption.
 
-Notes:
-
-Due to my job change, the maintenance of this project will be suspended. 
-
-Because my job in this project is to transplant and to adapt n2n code to iOS platform,
-please don't ask me problems about interface or VPN service.
-
-And I've sold out my MacBook, so I can hardly build a IPA for this project.
-
-# hin2n-ios 说明
+# happynios 说明
 此为n2n的一个iOS简易实现。
 
 1. 它实现了在iOS设备（无需越狱）下作为edge工作，能够连接到supernode以实现NAT穿透。
@@ -38,9 +32,4 @@ And I've sold out my MacBook, so I can hardly build a IPA for this project.
 2. 如果用户选择了其他非hin2n的VPN，则点击连接按钮时会连接失败；再断开之后，就无法上网了。
 3. 未对部分参数做合法性判断
 4. 未适配深色主题
-
-注意：由于本人工作变动，后续不再从事内网穿透或iOS适配的开发工作，此项目停止维护。
-已有的问题主要是界面或者VPN服务的问题，而我在这个项目中负责的是代码移植和适配工作。
-所以请不要问我界面或是VPN服务方面的问题。
-此外，我的Mac设备已经出售，后续很难进行程序的编译了。也请不要向我索要IPA文件，谢谢！
 
