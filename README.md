@@ -39,9 +39,9 @@ some problems which are already known:
 
 # RoadMap
 
-[] 用基本配置连接成功N2N V3 Supernode
-[] 重构代码，界面上只支持N2N V3
-[] 加入 hin2n-ios的原始项目链接，致谢
-[] 同步happyn的N2N V3上游代码
-[] 加入happyn icon
-[] 上架Apple Store
+- [] 用基本配置连接成功N2N V3 Supernode #1
+- [] 重构代码，界面上只支持N2N V3
+- [] 加入 hin2n-ios的原始项目链接，致谢
+- [] 同步happyn的N2N V3上游代码
+- [] 加入happyn icon
+- [] 上架Apple Store
