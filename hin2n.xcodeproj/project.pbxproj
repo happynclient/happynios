@@ -1162,7 +1162,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/openssl/lib";
-				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios;
+				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "hin2n/hin2n-Bridging-Header.h";
@@ -1188,7 +1188,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/openssl/lib";
-				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios;
+				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "hin2n/hin2n-Bridging-Header.h";
@@ -1286,7 +1286,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.tunnel;
+				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet.tunnel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
@@ -1307,7 +1307,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.tunnel;
+				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet.tunnel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTS_MACCATALYST = NO;
