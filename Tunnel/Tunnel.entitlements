@@ -16,7 +16,7 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.hin2n.demo.hin2n2</string>
+		<string>group.net.happyn.happynios</string>
 	</array>
 	<key>com.apple.security.network.client</key>
 	<true/>
