@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0465D58629E56DF500A88C47 /* edge_management.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58229E56DF500A88C47 /* edge_management.c */; };
+		0465D58729E56DF500A88C47 /* edge.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58329E56DF500A88C47 /* edge.c */; };
+		0465D58829E56DF500A88C47 /* curve25519.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58429E56DF500A88C47 /* curve25519.c */; };
+		0465D58929E56DF500A88C47 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58529E56DF500A88C47 /* auth.c */; };
 		5D84CFD926CFB6AC004F0004 /* network_traffic_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC526CFB6AC004F0004 /* network_traffic_filter.c */; };
 		5D84CFDA26CFB6AC004F0004 /* header_encryption.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC626CFB6AC004F0004 /* header_encryption.c */; };
 		5D84CFDC26CFB6AC004F0004 /* wire.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC826CFB6AC004F0004 /* wire.c */; };
@@ -43,6 +47,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0465D58229E56DF500A88C47 /* edge_management.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = edge_management.c; path = ../../bundles/n2n_ntop_v3/src/edge_management.c; sourceTree = "<group>"; };
+		0465D58329E56DF500A88C47 /* edge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = edge.c; path = ../../bundles/n2n_ntop_v3/src/edge.c; sourceTree = "<group>"; };
+		0465D58429E56DF500A88C47 /* curve25519.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = curve25519.c; path = ../../bundles/n2n_ntop_v3/src/curve25519.c; sourceTree = "<group>"; };
+		0465D58529E56DF500A88C47 /* auth.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = auth.c; path = ../../bundles/n2n_ntop_v3/src/auth.c; sourceTree = "<group>"; };
+		0465D58A29E56E3700A88C47 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = config.h; path = ../../bundles/n2n_ntop_v3/include/config.h; sourceTree = "<group>"; };
+		0465D58B29E56E3700A88C47 /* auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = auth.h; path = ../../bundles/n2n_ntop_v3/include/auth.h; sourceTree = "<group>"; };
+		0465D58C29E56E3700A88C47 /* config.h.in */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = config.h.in; path = ../../bundles/n2n_ntop_v3/include/config.h.in; sourceTree = "<group>"; };
+		0465D58D29E56E3700A88C47 /* curve25519.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = curve25519.h; path = ../../bundles/n2n_ntop_v3/include/curve25519.h; sourceTree = "<group>"; };
+		0465D58E29E56E3700A88C47 /* hexdump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hexdump.h; path = ../../bundles/n2n_ntop_v3/include/hexdump.h; sourceTree = "<group>"; };
 		5D84CFB826CFB63A004F0004 /* libn2n_ntop_v3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libn2n_ntop_v3.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D84CFC526CFB6AC004F0004 /* network_traffic_filter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = network_traffic_filter.c; path = ../../bundles/n2n_ntop_v3/src/network_traffic_filter.c; sourceTree = "<group>"; };
 		5D84CFC626CFB6AC004F0004 /* header_encryption.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = header_encryption.c; path = ../../bundles/n2n_ntop_v3/src/header_encryption.c; sourceTree = "<group>"; };
@@ -120,6 +133,10 @@
 		5D84CFC426CFB647004F0004 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				0465D58529E56DF500A88C47 /* auth.c */,
+				0465D58429E56DF500A88C47 /* curve25519.c */,
+				0465D58229E56DF500A88C47 /* edge_management.c */,
+				0465D58329E56DF500A88C47 /* edge.c */,
 				5DE54FEC26D09EE100435594 /* ios_tuntap.c */,
 				5D84D02D26CFBAA3004F0004 /* edge_ios_v3.c */,
 				5D84CFCC26CFB6AC004F0004 /* aes.c */,
@@ -148,6 +165,11 @@
 		5D84CFED26CFB6CE004F0004 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				0465D58B29E56E3700A88C47 /* auth.h */,
+				0465D58A29E56E3700A88C47 /* config.h */,
+				0465D58C29E56E3700A88C47 /* config.h.in */,
+				0465D58D29E56E3700A88C47 /* curve25519.h */,
+				0465D58E29E56E3700A88C47 /* hexdump.h */,
 				5DE54FFB26D0F23600435594 /* edge_utils_win32.h */,
 				5D84D02626CFB872004F0004 /* aes.h */,
 				5D84D02A26CFB872004F0004 /* cc20.h */,
@@ -241,9 +263,13 @@
 				5D84CFDF26CFB6AC004F0004 /* minilzo.c in Sources */,
 				5D84CFE126CFB6AC004F0004 /* n2n_regex.c in Sources */,
 				5D84CFE626CFB6AC004F0004 /* speck.c in Sources */,
+				0465D58629E56DF500A88C47 /* edge_management.c in Sources */,
 				5D84CFEC26CFB6AC004F0004 /* edge_utils.c in Sources */,
 				5D84CFEA26CFB6AC004F0004 /* tf.c in Sources */,
+				0465D58729E56DF500A88C47 /* edge.c in Sources */,
+				0465D58929E56DF500A88C47 /* auth.c in Sources */,
 				5D84CFDE26CFB6AC004F0004 /* random_numbers.c in Sources */,
+				0465D58829E56DF500A88C47 /* curve25519.c in Sources */,
 				5D84CFDC26CFB6AC004F0004 /* wire.c in Sources */,
 				5D84CFE426CFB6AC004F0004 /* transform_null.c in Sources */,
 				5D84CFE926CFB6AC004F0004 /* cc20.c in Sources */,

@@ -13,8 +13,13 @@ else
 GIT_RELEASE=${N2N_VERSION_SHORT}
 fi
 
-CC=gcc
-AR=ar
+if test "${CC+set}" != set; then
+    CC=gcc
+fi
+if test "${AR+set}" != set; then
+    AR=ar
+fi
+
 N2N_LIBS=
 
 AC_PROG_CC
@@ -77,9 +82,16 @@ fi
 
 AC_CHECK_LIB([cap], [cap_get_proc], cap=true)
 if test x$cap != x; then
-  LDFLAGS="${LDFLAGS} -lcap"
+  N2N_LIBS="${N2N_LIBS} -lcap"
   AC_DEFINE([HAVE_LIBCAP],[1],[Support for linux capabilities])
 fi
+
+AC_CHECK_LIB([pthread], [pthread_mutex_trylock], pthread=true)
+if test x$pthread != x; then
+  LDFLAGS="${LDFLAGS} -pthread"
+  AC_DEFINE([HAVE_PTHREAD],[],[pthread is present])
+fi
+
 
 MACHINE=`uname -m`
 SYSTEM=`uname -s`
@@ -112,9 +124,6 @@ AC_SUBST(CC)
 AC_SUBST(AR)
 AC_SUBST(CFLAGS)
 AC_SUBST(LDFLAGS)
-AC_SUBST(N2N_MAJOR)
-AC_SUBST(N2N_MINOR)
-AC_SUBST(N2N_PATCH)
 AC_SUBST(N2N_VERSION_SHORT)
 AC_SUBST(GIT_COMMITS)
 AC_SUBST(GIT_REVISION)

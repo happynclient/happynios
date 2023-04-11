@@ -71,7 +71,7 @@ int decode_uint16 (uint16_t * out,
                    size_t * rem,
                    size_t * idx) {
 
-    if (*rem < 2) {
+    if(*rem < 2) {
         return 0;
     }
 
@@ -101,7 +101,7 @@ int decode_uint32 (uint32_t * out,
                    size_t * rem,
                    size_t * idx) {
 
-    if (*rem < 4) {
+    if(*rem < 4) {
         return 0;
     }
 
@@ -130,7 +130,7 @@ int decode_uint64 (uint64_t * out,
                    size_t * rem,
                    size_t * idx) {
 
-    if (*rem < 8) {
+    if(*rem < 8) {
         return 0;
     }
 
@@ -159,7 +159,7 @@ int decode_buf (uint8_t * out,
                 size_t * rem,
                 size_t * idx) {
 
-    if (*rem < bufsize) {
+    if(*rem < bufsize) {
         return 0;
     }
 
@@ -171,15 +171,14 @@ int decode_buf (uint8_t * out,
 }
 
 
-
-int encode_mac (uint8_t * base,
+int encode_mac (uint8_t * base,  /* n2n_mac_t is typedefed array type which is always passed by reference */
                 size_t * idx,
                 const n2n_mac_t m) {
 
     return encode_buf(base, idx, m, N2N_MAC_SIZE);
 }
 
-int decode_mac (n2n_mac_t out, /* n2n_mac_t is typedefed array type which is always passed by reference */
+int decode_mac (n2n_mac_t out,
                 const uint8_t * base,
                 size_t * rem,
                 size_t * idx) {
@@ -187,6 +186,20 @@ int decode_mac (n2n_mac_t out, /* n2n_mac_t is typedefed array type which is alw
     return decode_buf(out, N2N_MAC_SIZE, base, rem, idx);
 }
 
+int encode_cookie (uint8_t * base,
+                   size_t * idx,
+                   const n2n_cookie_t c) {
+
+    return encode_uint32(base, idx, c);
+}
+
+int decode_cookie (n2n_cookie_t * out,  /* cookies are typedef'd as uint32_t which needs to correspond to this code */
+                   const uint8_t * base,
+                   size_t * rem,
+                   size_t * idx) {
+
+    return decode_uint32(out, base, rem, idx);
+}
 
 
 int encode_common (uint8_t * base,
@@ -300,10 +313,10 @@ int encode_REGISTER (uint8_t *base,
     int retval = 0;
 
     retval += encode_common(base, idx, common);
-    retval += encode_buf(base, idx, reg->cookie, N2N_COOKIE_SIZE);
+    retval += encode_cookie(base, idx, reg->cookie);
     retval += encode_mac(base, idx, reg->srcMac);
     retval += encode_mac(base, idx, reg->dstMac);
-    if(0 != reg->sock.family) {
+    if(common->flags & N2N_FLAGS_SOCKET) {
         retval += encode_sock(base, idx, &(reg->sock));
     }
     retval += encode_uint32(base, idx, reg->dev_addr.net_addr);
@@ -323,7 +336,7 @@ int decode_REGISTER (n2n_REGISTER_t *reg,
     size_t retval = 0;
     memset(reg, 0, sizeof(n2n_REGISTER_t));
 
-    retval += decode_buf(reg->cookie, N2N_COOKIE_SIZE, base, rem, idx);
+    retval += decode_cookie(&reg->cookie, base, rem, idx);
     retval += decode_mac(reg->srcMac, base, rem, idx);
     retval += decode_mac(reg->dstMac, base, rem, idx);
     if(cmn->flags & N2N_FLAGS_SOCKET) {
@@ -345,17 +358,18 @@ int encode_REGISTER_SUPER (uint8_t *base,
     int retval = 0;
 
     retval += encode_common(base, idx, common);
-    retval += encode_buf(base, idx, reg->cookie, N2N_COOKIE_SIZE);
+    retval += encode_cookie(base, idx, reg->cookie);
     retval += encode_mac(base, idx, reg->edgeMac);
-    if(0 != reg->sock.family) {
+    if(common->flags & N2N_FLAGS_SOCKET) {
         retval += encode_sock(base, idx, &(reg->sock));
     }
     retval += encode_uint32(base, idx, reg->dev_addr.net_addr);
     retval += encode_uint8(base, idx, reg->dev_addr.net_bitlen);
     retval += encode_buf(base, idx, reg->dev_desc, N2N_DESC_SIZE);
     retval += encode_uint16(base, idx, reg->auth.scheme);
-    retval += encode_uint16(base, idx, reg->auth.toksize);
-    retval += encode_buf(base, idx, reg->auth.token, reg->auth.toksize);
+    retval += encode_uint16(base, idx, reg->auth.token_size);
+    retval += encode_buf(base, idx, reg->auth.token, reg->auth.token_size);
+    retval += encode_uint32(base, idx, reg->key_time);
 
     return retval;
 }
@@ -370,7 +384,7 @@ int decode_REGISTER_SUPER (n2n_REGISTER_SUPER_t *reg,
     size_t retval = 0;
     memset(reg, 0, sizeof(n2n_REGISTER_SUPER_t));
 
-    retval += decode_buf(reg->cookie, N2N_COOKIE_SIZE, base, rem, idx);
+    retval += decode_cookie(&reg->cookie, base, rem, idx);
     retval += decode_mac(reg->edgeMac, base, rem, idx);
     if(cmn->flags & N2N_FLAGS_SOCKET) {
         retval += decode_sock(&(reg->sock), base, rem, idx);
@@ -379,8 +393,9 @@ int decode_REGISTER_SUPER (n2n_REGISTER_SUPER_t *reg,
     retval += decode_uint8(&(reg->dev_addr.net_bitlen), base, rem, idx);
     retval += decode_buf(reg->dev_desc, N2N_DESC_SIZE, base, rem, idx);
     retval += decode_uint16(&(reg->auth.scheme), base, rem, idx);
-    retval += decode_uint16(&(reg->auth.toksize), base, rem, idx);
-    retval += decode_buf(reg->auth.token, reg->auth.toksize, base, rem, idx);
+    retval += decode_uint16(&(reg->auth.token_size), base, rem, idx);
+    retval += decode_buf(reg->auth.token, reg->auth.token_size, base, rem, idx);
+    retval += decode_uint32(&(reg->key_time), base, rem, idx);
 
     return retval;
 }
@@ -395,8 +410,8 @@ int encode_UNREGISTER_SUPER (uint8_t *base,
 
     retval += encode_common(base, idx, common);
     retval += encode_uint16(base, idx, unreg->auth.scheme);
-    retval += encode_uint16(base, idx, unreg->auth.toksize);
-    retval += encode_buf(base, idx, unreg->auth.token, unreg->auth.toksize);
+    retval += encode_uint16(base, idx, unreg->auth.token_size);
+    retval += encode_buf(base, idx, unreg->auth.token, unreg->auth.token_size);
     retval += encode_mac(base, idx, unreg->srcMac);
 
     return retval;
@@ -413,8 +428,8 @@ int decode_UNREGISTER_SUPER (n2n_UNREGISTER_SUPER_t *unreg,
     memset(unreg, 0, sizeof(n2n_UNREGISTER_SUPER_t));
 
     retval += decode_uint16(&(unreg->auth.scheme), base, rem, idx);
-    retval += decode_uint16(&(unreg->auth.toksize), base, rem, idx);
-    retval += decode_buf(unreg->auth.token, unreg->auth.toksize, base, rem, idx);
+    retval += decode_uint16(&(unreg->auth.token_size), base, rem, idx);
+    retval += decode_buf(unreg->auth.token, unreg->auth.token_size, base, rem, idx);
     retval += decode_mac(unreg->srcMac, base, rem, idx);
 
     return retval;
@@ -429,14 +444,14 @@ int encode_REGISTER_ACK (uint8_t *base,
     int retval = 0;
 
     retval += encode_common(base, idx, common);
-    retval += encode_buf(base, idx, reg->cookie, N2N_COOKIE_SIZE);
+    retval += encode_cookie(base, idx, reg->cookie);
     retval += encode_mac(base, idx, reg->dstMac);
     retval += encode_mac(base, idx, reg->srcMac);
 
     /* The socket in REGISTER_ACK is the socket from which the REGISTER
      * arrived. This is sent back to the sender so it knows what its public
      * socket is. */
-    if(0 != reg->sock.family) {
+    if(common->flags & N2N_FLAGS_SOCKET) {
         retval += encode_sock(base, idx, &(reg->sock));
     }
 
@@ -453,7 +468,7 @@ int decode_REGISTER_ACK (n2n_REGISTER_ACK_t *reg,
     size_t retval = 0;
     memset(reg, 0, sizeof(n2n_REGISTER_ACK_t));
 
-    retval += decode_buf(reg->cookie, N2N_COOKIE_SIZE, base, rem, idx);
+    retval += decode_cookie(&reg->cookie, base, rem, idx);
     retval += decode_mac(reg->dstMac, base, rem, idx);
     retval += decode_mac(reg->srcMac, base, rem, idx);
 
@@ -477,14 +492,22 @@ int encode_REGISTER_SUPER_ACK (uint8_t *base,
     int retval = 0;
 
     retval += encode_common(base, idx, common);
-    retval += encode_buf(base, idx, reg->cookie, N2N_COOKIE_SIZE);
+    retval += encode_cookie(base, idx, reg->cookie);
     retval += encode_mac(base, idx, reg->srcMac);
     retval += encode_uint32(base, idx, reg->dev_addr.net_addr);
     retval += encode_uint8(base, idx, reg->dev_addr.net_bitlen);
     retval += encode_uint16(base, idx, reg->lifetime);
+
     retval += encode_sock(base, idx, &(reg->sock));
+
+    retval += encode_uint16(base, idx, reg->auth.scheme);
+    retval += encode_uint16(base, idx, reg->auth.token_size);
+    retval += encode_buf(base, idx, reg->auth.token, reg->auth.token_size);
+
     retval += encode_uint8(base, idx, reg->num_sn);
     retval += encode_buf(base, idx, tmpbuf, (reg->num_sn*REG_SUPER_ACK_PAYLOAD_ENTRY_SIZE));
+
+    retval += encode_uint32(base, idx, reg->key_time);
 
     return retval;
 }
@@ -500,7 +523,7 @@ int decode_REGISTER_SUPER_ACK (n2n_REGISTER_SUPER_ACK_t *reg,
     size_t retval = 0;
     memset(reg, 0, sizeof(n2n_REGISTER_SUPER_ACK_t));
 
-    retval += decode_buf(reg->cookie, N2N_COOKIE_SIZE, base, rem, idx);
+    retval += decode_cookie(&reg->cookie, base, rem, idx);
     retval += decode_mac(reg->srcMac, base, rem, idx);
     retval += decode_uint32(&(reg->dev_addr.net_addr), base, rem, idx);
     retval += decode_uint8(&(reg->dev_addr.net_bitlen), base, rem, idx);
@@ -509,9 +532,15 @@ int decode_REGISTER_SUPER_ACK (n2n_REGISTER_SUPER_ACK_t *reg,
     /* Socket is mandatory in this message type */
     retval += decode_sock(&(reg->sock), base, rem, idx);
 
+    retval += decode_uint16(&(reg->auth.scheme), base, rem, idx);
+    retval += decode_uint16(&(reg->auth.token_size), base, rem, idx);
+    retval += decode_buf(reg->auth.token, reg->auth.token_size, base, rem, idx);
+
     /* Following the edge socket are an array of backup supernodes. */
     retval += decode_uint8(&(reg->num_sn), base, rem, idx);
     retval += decode_buf(tmpbuf, (reg->num_sn * REG_SUPER_ACK_PAYLOAD_ENTRY_SIZE), base, rem, idx);
+
+    retval += decode_uint32(&(reg->key_time), base, rem, idx);
 
     return retval;
 }
@@ -525,8 +554,12 @@ int encode_REGISTER_SUPER_NAK (uint8_t *base,
     int retval = 0;
 
     retval += encode_common(base, idx, common);
-    retval += encode_buf(base, idx, nak->cookie, N2N_COOKIE_SIZE);
+    retval += encode_cookie(base, idx, nak->cookie);
     retval += encode_mac(base, idx, nak->srcMac);
+
+    retval += encode_uint16(base, idx, nak->auth.scheme);
+    retval += encode_uint16(base, idx, nak->auth.token_size);
+    retval += encode_buf(base, idx, nak->auth.token, nak->auth.token_size);
 
     return retval;
 }
@@ -541,8 +574,12 @@ int decode_REGISTER_SUPER_NAK (n2n_REGISTER_SUPER_NAK_t *nak,
     size_t retval = 0;
     memset(nak, 0, sizeof(n2n_REGISTER_SUPER_NAK_t));
 
-    retval += decode_buf(nak->cookie, N2N_COOKIE_SIZE, base, rem, idx);
+    retval += decode_cookie(&nak->cookie, base, rem, idx);
     retval += decode_mac(nak->srcMac, base, rem, idx);
+
+    retval += decode_uint16(&(nak->auth.scheme), base, rem, idx);
+    retval += decode_uint16(&(nak->auth.token_size), base, rem, idx);
+    retval += decode_buf(nak->auth.token, nak->auth.token_size, base, rem, idx);
 
     return retval;
 }
@@ -578,7 +615,7 @@ int encode_PACKET (uint8_t * base,
     retval += encode_common(base, idx, common);
     retval += encode_mac(base, idx, pkt->srcMac);
     retval += encode_mac(base, idx, pkt->dstMac);
-    if(0 != pkt->sock.family) {
+    if(common->flags & N2N_FLAGS_SOCKET) {
         retval += encode_sock(base, idx, &(pkt->sock));
     }
     retval += encode_uint8(base, idx, pkt->compression);
@@ -613,17 +650,22 @@ int decode_PACKET (n2n_PACKET_t * pkt,
 
 int encode_PEER_INFO (uint8_t *base,
                       size_t *idx,
-                      const n2n_common_t *common,
+                      const n2n_common_t *cmn,
                       const n2n_PEER_INFO_t *pkt) {
 
     int retval = 0;
 
-    retval += encode_common(base, idx, common);
+    retval += encode_common(base, idx, cmn);
     retval += encode_uint16(base, idx, pkt->aflags);
     retval += encode_mac(base, idx, pkt->srcMac);
     retval += encode_mac(base, idx, pkt->mac);
     retval += encode_sock(base, idx, &pkt->sock);
-    retval += encode_buf(base, idx, &pkt->data, sizeof(SN_SELECTION_CRITERION_DATA_TYPE));
+    if(cmn->flags & N2N_FLAGS_SOCKET) {
+        retval += encode_sock(base, idx, &pkt->preferred_sock);
+    }
+    retval += encode_uint32(base, idx, (uint32_t)pkt->load);
+    retval += encode_uint32(base, idx, (uint32_t)pkt->uptime);
+    retval += encode_buf(base, idx, pkt->version, sizeof(n2n_version_t));
 
     return retval;
 }
@@ -642,7 +684,12 @@ int decode_PEER_INFO (n2n_PEER_INFO_t *pkt,
     retval += decode_mac(pkt->srcMac, base, rem, idx);
     retval += decode_mac(pkt->mac, base, rem, idx);
     retval += decode_sock(&pkt->sock, base, rem, idx);
-    retval += decode_buf((uint8_t*)&pkt->data, sizeof(SN_SELECTION_CRITERION_DATA_TYPE), base, rem, idx);
+    if(cmn->flags & N2N_FLAGS_SOCKET) {
+        retval += decode_sock(&pkt->preferred_sock, base, rem, idx);
+    }
+    retval += decode_uint32(&pkt->load, base, rem, idx);
+    retval += decode_uint32((uint32_t*)&pkt->uptime, base, rem, idx);
+    retval += decode_buf((uint8_t*)pkt->version, sizeof(n2n_version_t), base, rem, idx);
 
     return retval;
 }
@@ -658,6 +705,7 @@ int encode_QUERY_PEER (uint8_t * base,
     retval += encode_common(base, idx, common);
     retval += encode_mac(base, idx, pkt->srcMac);
     retval += encode_mac(base, idx, pkt->targetMac);
+    retval += encode_uint16(base, idx, pkt->aflags);
 
     return retval;
 }
@@ -673,6 +721,7 @@ int decode_QUERY_PEER (n2n_QUERY_PEER_t * pkt,
 
     retval += decode_mac(pkt->srcMac, base, rem, idx);
     retval += decode_mac(pkt->targetMac, base, rem, idx);
+    retval += decode_uint16(&(pkt->aflags), base, rem, idx);
 
     return retval;
 }

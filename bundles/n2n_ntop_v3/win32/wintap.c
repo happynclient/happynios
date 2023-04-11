@@ -253,6 +253,30 @@ int open_wintap(struct tuntap_dev *device,
 
   /* ************************************** */
 
+  /* interface index, required for routing */
+
+  ULONG buffer_len = 0;
+  IP_ADAPTER_INFO *buffer;
+
+  // get required buffer size and allocate buffer
+  GetAdaptersInfo(NULL, &buffer_len);
+  buffer = malloc(buffer_len);
+
+  // find device by name and get its index
+  if(buffer && !GetAdaptersInfo(buffer, &buffer_len)) {
+    IP_ADAPTER_INFO *i;
+    for(i = buffer; i != NULL; i = i->Next) {
+      if(!strcmp(device->device_name, i->AdapterName)) {
+        device->if_idx = i->Index;
+        break;
+      }
+    }
+  }
+
+  free(buffer);
+
+  /* ************************************** */
+
   if(device_mac[0])
     set_interface_mac(device, device_mac);
 
@@ -315,16 +339,27 @@ int open_wintap(struct tuntap_dev *device,
 
   /* metric */
 
+  PMIB_IPINTERFACE_ROW Row;
+
   if(metric) { /* try to change only if a value has been given, otherwise leave with default or as set before */
+    // find & store original metric
+    Row = calloc(1, sizeof(MIB_IPINTERFACE_ROW));
+    InitializeIpInterfaceEntry(Row);
+    Row->InterfaceIndex = device->if_idx;
+    Row->Family = AF_INET;
+    GetIpInterfaceEntry(Row);
+
+    device->metric_original = Row->Metric;
     device->metric = metric;
 
-    _snprintf(cmd, sizeof(cmd),
-      "netsh interface ipv4 set interface \"%s\" metric=%d > nul",
-      device->ifName, device->metric);
+    // set new value
+    Row->Metric = metric;
 
-    if(system(cmd) != 0)
-      printf("WARNING: Unable to set device %s parameters metric=%d [%s]\n",
-        device->ifName, device->metric, cmd);
+    // store
+    Row->SitePrefixLength = 0; /* if not set to zero, following function call fails... */
+    SetIpInterfaceEntry(Row);
+    
+    free(Row);
   }
 
   /* ****************** */
@@ -419,6 +454,27 @@ int tuntap_open(struct tuntap_dev *device,
 /* ************************************************ */
 
 void tuntap_close(struct tuntap_dev *tuntap) {
+
+  PMIB_IPINTERFACE_ROW Row;
+
+  if(tuntap->metric) { /* only required if a value has been given (and thus stored) */
+    // find device entry
+    Row = calloc(1, sizeof(MIB_IPINTERFACE_ROW));
+    InitializeIpInterfaceEntry(Row);
+    Row->InterfaceIndex = tuntap->if_idx;
+    Row->Family = AF_INET;
+    GetIpInterfaceEntry(Row);
+
+    // restore original value
+    Row->Metric = tuntap->metric_original;
+
+    // store
+    Row->SitePrefixLength = 0; /* if not set to zero, following function call fails... */
+    SetIpInterfaceEntry(Row);
+
+    free(Row);
+  }
+
   CloseHandle(tuntap->device_handle);
 }
 

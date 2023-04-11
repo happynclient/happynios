@@ -12,7 +12,7 @@ If you are on a modern version of macOS (i.e. Catalina), the commands above will
 For more information refer to vendor documentation or the [Apple Technical Note](https://developer.apple.com/library/content/technotes/tn2459/_index.html).
 
 
-# Build on Windows
+# Build on Windows (Visual Studio)
 
 ## Requirements
 
@@ -45,9 +45,10 @@ In order to run n2n, you will need the following:
 
 - If OpenSSL has been linked dynamically, the corresponding `.dll` file should be available
   onto the target computer.
-  
-NOTE: Sticking to this tool chain ensures that resulting executables are able to communicate with Linux or other OS builds.
-Especialy MinGW builds are reported to not be compatible to other OS builds, please see [#617](https://github.com/ntop/n2n/issues/617) and [#642](https://github.com/ntop/n2n/issues/642).
+
+NOTE: Sticking to this tool chain has historically meant that resulting
+executables are more likely to be able to communicate with Linux or other
+OS builds, however efforts are being made to address this concern.
 
 ## Build (CLI)
 
@@ -96,6 +97,29 @@ Here is an example `supernode.conf` file:
 ```
 
 See `edge.exe --help` and `supernode.exe --help` for a full list of supported options.
+
+# Build on Windows (MinGW)
+
+These steps were tested on a fresh install of Windows 10 Pro with all patches
+applied as of 2021-09-29.
+
+- Install Chocolatey (Following instructions on https://chocolatey.org/install)
+- from an admin cmd prompt
+    - choco install git mingw make
+- All the remaining commands must be run from inside a bash shell ("C:\Program Files\Git\usr\bin\bash.exe")
+    - git clone $THIS_REPO
+    - cd n2n
+    - ./scripts/hack_fakeautoconf.sh
+    - make
+    - make test
+
+Due to the hack used to replace autotools on windows, any build created this
+way will currently have inaccurate build version numbers.
+
+Note: MinGW builds have a history of incompatibility reports with other OS
+builds, please see [#617](https://github.com/ntop/n2n/issues/617) and [#642](https://github.com/ntop/n2n/issues/642).
+However, if the tests pass, you should have a high confidence that your build
+will be compatible.
 
 # General Building Options
 
@@ -149,16 +173,6 @@ which then will include ZSTD if found on the system. It will be available via `-
 
 Again, and this needs to be reiterated sufficiently often, please do no forget to `make clean` after (re-)configuration and before building (again) using `make`.
 
-## Federation – Supernode Selection by Round Trip Time
-
-If used with multiple supernodes, by default, an edge choses the least loaded supernode to connect to. This selection strategy is part of the [federation](Federation.md) feature and aims at a fair workload distribution among the supernodes. To serve special scenarios, an edge can be compiled to always connect to the supernode with the lowest round trip time, i.e. the "closest" with the lowest ping. However, this could result in not so fair workload distribution among supernodes. This option can be configured by defining the macro `SN_SELECTION_RTT` and affects edge's behaviour only:
-
-`./configure CFLAGS="-DSN_SELECTION_RTT"`
-
-which of course can be combined with the compiler optimizations mentioned above…
-
-Note that the activation of this strategy requires a sufficiently accurate local day-of-time clock. It probably will fail on smaller systems using `uclibc` (instead of `glibc`) whose day-of-time clock is said to not provide sub-second accuracy.
-
 ## SPECK – ARM NEON Hardware Acceleration
 
 By default, SPECK does not take advantage of ARM NEON hardware acceleration even if compiled with `-march=native`. The reason is that the NEON implementation proved to be slower than the 64-bit scalar code on Raspberry Pi 3B+, see [here](https://github.com/ntop/n2n/issues/563).
@@ -168,3 +182,46 @@ Your specific ARM mileage may vary, so it can be enabled by configuring the defi
 `./configure CFLAGS="-DSPECK_ARM_NEON"`
 
 Just make sure that the correct architecture is set, too. `-march=native` usually works quite well.
+
+## Disable Multicast Local Peer Detection
+
+For better local peer detection, the edges try to detect local peers by sending REGISTER
+packets to a certain multicast address. Also, edges listen to this address to eventually
+fetch such packets.
+
+If these packets disturb network's peace or even get forwarded by (other) edges through the
+n2n network, this behavior can be disabled, just add
+
+`-DSKIP_MULTICAST_PEERS_DISCOVERY`
+
+to your `CFLAGS` when configuring, e.g.
+
+`./configure --with-zstd CFLAGS="-O3 -march=native -DSKIP_MULTICAST_PEERS_DISCOVERY"`
+
+# Cross compiling on Linux
+
+## Using the Makefiles and Autoconf
+
+The Makefiles are all setup to allow cross compiling of this code.  You
+will need to have the cross compiler, binutils and any additional libraries
+desired installed for the target architecture.  Then you can run the `./configure`
+with the appropriate CC and AR environment and the right `--host` option.
+
+If compiling on Debian or Ubuntu, this can be as simple as the following example:
+
+```
+HOST_TRIPLET=arm-linux-gnueabi
+sudo apt-get install binutils-$HOST_TRIPLET gcc-$HOST_TRIPLET
+./autogen.sh
+export CC=$HOST_TRIPLET-gcc
+export AR=$HOST_TRIPLET-ar
+./configure --host $HOST_TRIPLET
+make
+```
+
+A good starting point to determine the host triplet for your destination platform
+can be found by copying the `./config.guess` script to it and running it on the
+destination.
+
+This is not a good way to produce binaries for embedded environments (like OpenWRT)
+as they will often use a different libc environment.

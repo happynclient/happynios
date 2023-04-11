@@ -29,6 +29,7 @@
 #define MSG_TYPE_PEER_INFO                  10
 #define MSG_TYPE_QUERY_PEER                 11
 #define MSG_TYPE_MAX_TYPE                   11
+#define MSG_TYPE_RE_REGISTER_SUPER          12
 
 /* Max available space to add supernodes' informations (sockets and MACs) in REGISTER_SUPER_ACK
  * Field sizes of REGISTER_SUPER_ACK as used in encode/decode fucntions in src/wire.c
@@ -62,6 +63,10 @@
 
 #define SORT_COMMUNITIES_INTERVAL        90 /* sec. until supernode sorts communities' hash list again */
 
+#define AF_INVALID                       -1 /* to mark a socket invalid by an invalid address family (do not use AF_UNSPEC, it could turn into auto-detect) */
+#define N2N_RESOLVE_INTERVAL            300 /* seconds until edge and supernode try to resolve supernode names again */
+#define N2N_RESOLVE_CHECK_INTERVAL       30 /* seconds until main loop checking in on changes from resolver thread */
+
 #define ETH_FRAMESIZE 14
 #define IP4_SRCOFFSET 12
 #define IP4_DSTOFFSET 16
@@ -87,19 +92,22 @@
 
 /* Federation name and indicators */
 #define FEDERATION_NAME "*Federation"
-enum federation{IS_NO_FEDERATION = 0,IS_FEDERATION = 1};
+enum federation {IS_NO_FEDERATION = 0,IS_FEDERATION = 1};
 
 /* (un)purgeable community indicator (supernode) */
 #define COMMUNITY_UNPURGEABLE                 0
 #define COMMUNITY_PURGEABLE                   1
 
 /* (un)purgeable supernode indicator */
-enum sn_purge{SN_PURGEABLE = 0, SN_UNPURGEABLE = 1};
+enum sn_purge {SN_PURGEABLE = 0, SN_UNPURGEABLE = 1};
 
 /* Header encryption indicators */
 #define HEADER_ENCRYPTION_UNKNOWN             0
 #define HEADER_ENCRYPTION_NONE                1
 #define HEADER_ENCRYPTION_ENABLED             2
+
+/* REGISTER_SUPER_ACK packet hash length with user/pw auth, up to 16 bytes */
+#define N2N_REG_SUP_HASH_CHECK_LEN           16
 
 #define DEFAULT_MTU     1290
 
@@ -113,6 +121,14 @@ enum sn_purge{SN_PURGEABLE = 0, SN_UNPURGEABLE = 1};
 #define N2N_EDGE_MGMT_PORT        5644
 #define N2N_SN_MGMT_PORT          5645
 
+enum n2n_mgmt_type {
+    N2N_MGMT_READ = 0,
+    N2N_MGMT_WRITE = 1,
+};
+
+#define N2N_MGMT_PASSWORD  "n2n"               /* default password for management port access (so far, json only) */
+
+
 #define N2N_TCP_BACKLOG_QUEUE_SIZE   3         /* number of concurrently pending connections to be accepted */
                                                /* NOT the number of max. TCP connections                    */
 
@@ -120,7 +136,7 @@ enum sn_purge{SN_PURGEABLE = 0, SN_UNPURGEABLE = 1};
                                                /* which the socket explicitly is closed before reopening    */
 
 /* flag used in add_sn_to_list_by_mac_or_sock */
-enum skip_add{SN_ADD = 0, SN_ADD_SKIP = 1, SN_ADD_ADDED = 2};
+enum skip_add {SN_ADD = 0, SN_ADD_SKIP = 1, SN_ADD_ADDED = 2};
 
 #define N2N_NETMASK_STR_SIZE      16 /* dotted decimal 12 numbers + 3 dots */
 #define N2N_MACNAMSIZ             18 /* AA:BB:CC:DD:EE:FF + NULL*/
@@ -154,8 +170,15 @@ enum skip_add{SN_ADD = 0, SN_ADD_SKIP = 1, SN_ADD_ADDED = 2};
 #define N2N_PKT_VERSION            3
 #define N2N_DEFAULT_TTL            2  /* can be forwarded twice at most */
 #define N2N_COMMUNITY_SIZE         20
+#define N2N_PRIVATE_PUBLIC_KEY_SIZE 32
+#define N2N_USER_KEY_LINE_STARTER  '*'
 #define N2N_MAC_SIZE               6
-#define N2N_COOKIE_SIZE            4
+#define N2N_NO_REG_COOKIE          0x00000000
+#define N2N_FORWARDED_REG_COOKIE   0x00001000
+#define N2N_PORT_REG_COOKIE        0x00004000
+#define N2N_REGULAR_REG_COOKIE     0x00010000
+#define N2N_MCAST_REG_COOKIE       0x00400000
+#define N2N_LOCAL_REG_COOKIE       0x01000000
 #define N2N_DESC_SIZE              16
 #define N2N_PKT_BUF_SIZE           2048
 #define N2N_SOCKBUF_SIZE           64  /* string representation of INET or INET6 sockets */
@@ -169,16 +192,24 @@ enum skip_add{SN_ADD = 0, SN_ADD_SKIP = 1, SN_ADD_ADDED = 2};
 #define N2N_IFNAMSIZ               16 /* 15 chars * NULL */
 #endif
 
-#define SN_SELECTION_CRITERION_DATA_TYPE    uint32_t
+#ifdef _MSC_VER
+#define N2N_THREAD_RETURN_DATATYPE       DWORD WINAPI
+#define N2N_THREAD_PARAMETER_DATATYPE    LPVOID
+#else
+#define N2N_THREAD_RETURN_DATATYPE        void*
+#define N2N_THREAD_PARAMETER_DATATYPE     void*
+#endif
+
+#define SN_SELECTION_CRITERION_DATA_TYPE    uint64_t
 #define SN_SELECTION_CRITERION_BUF_SIZE     16
 
 #define N2N_TRANSFORM_ID_USER_START         64
 #define N2N_TRANSFORM_ID_MAX                65535
 
 #ifndef max
-#define max(a, b) ((a < b) ? b : a)
+#define max(a, b) (((a) < (b)) ? (b) : (a))
 #endif
 
 #ifndef min
-#define min(a, b) ((a > b) ? b : a)
+#define min(a, b) (((a) >(b)) ? (b) : (a))
 #endif

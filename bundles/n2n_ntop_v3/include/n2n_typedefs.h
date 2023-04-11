@@ -20,18 +20,12 @@
 #define _N2N_TYPEDEFS_H_
 
 
-
-typedef uint8_t n2n_community_t[N2N_COMMUNITY_SIZE];
-typedef uint8_t n2n_mac_t[N2N_MAC_SIZE];
-typedef uint8_t n2n_cookie_t[N2N_COOKIE_SIZE];
-typedef uint8_t n2n_desc_t[N2N_DESC_SIZE];
-typedef char    n2n_sock_str_t[N2N_SOCKBUF_SIZE]; /* tracing string buffer */
-
-// those are definitely not typedefs (with a view to the filename) but neither are they defines
-static const n2n_mac_t broadcast_mac      = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
-static const n2n_mac_t multicast_mac      = { 0x01, 0x00, 0x5E, 0x00, 0x00, 0x00 }; /* First 3 bytes are meaningful */
-static const n2n_mac_t ipv6_multicast_mac = { 0x33, 0x33, 0x00, 0x00, 0x00, 0x00 }; /* First 2 bytes are meaningful */
-static const n2n_mac_t null_mac           = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+typedef uint8_t  n2n_community_t[N2N_COMMUNITY_SIZE];
+typedef uint8_t  n2n_private_public_key_t[N2N_PRIVATE_PUBLIC_KEY_SIZE];
+typedef uint8_t  n2n_mac_t[N2N_MAC_SIZE];
+typedef uint32_t n2n_cookie_t;
+typedef uint8_t  n2n_desc_t[N2N_DESC_SIZE];
+typedef char     n2n_sock_str_t[N2N_SOCKBUF_SIZE]; /* tracing string buffer */
 
 
 #if defined(_MSC_VER) || defined(__MINGW32__)
@@ -123,6 +117,14 @@ typedef unsigned long in_addr_t;
 #if defined(_MSC_VER) || defined(__MINGW32__)
 #pragma pack(push,1)
 #endif
+
+
+// those are definitely not typedefs (with a view to the filename) but neither are they defines
+static const n2n_mac_t broadcast_mac      = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+static const n2n_mac_t multicast_mac      = { 0x01, 0x00, 0x5E, 0x00, 0x00, 0x00 }; /* First 3 bytes are meaningful */
+static const n2n_mac_t ipv6_multicast_mac = { 0x33, 0x33, 0x00, 0x00, 0x00, 0x00 }; /* First 2 bytes are meaningful */
+static const n2n_mac_t null_mac           = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+
 
 #define ETH_ADDR_LEN 6
 
@@ -253,7 +255,8 @@ typedef enum n2n_pc {
     n2n_register_super_nak = 8,     /* NAK from supernode to edge - registration refused */
     n2n_federation =         9,     /* Not used by edge */
     n2n_peer_info =          10,    /* Send info on a peer from sn to edge */
-    n2n_query_peer =         11     /* ask supernode for info on a peer */
+    n2n_query_peer =         11,    /* ask supernode for info on a peer */
+    n2n_re_register_super =  12     /* ask edge to re-register with supernode */
 } n2n_pc_t;
 
 #define N2N_FLAGS_OPTIONS                0x0080
@@ -267,12 +270,25 @@ typedef enum n2n_pc {
 #define IPV4_SIZE                        4
 #define IPV6_SIZE                        16
 
-#define N2N_AUTH_TOKEN_SIZE              32  /* bytes */
+
+#define N2N_AUTH_MAX_TOKEN_SIZE          48  /* max token size in bytes */
+#define N2N_AUTH_CHALLENGE_SIZE          16  /* challenge always is of same size as dynamic key */
+#define N2N_AUTH_ID_TOKEN_SIZE           16
+#define N2N_AUTH_PW_TOKEN_SIZE           (N2N_PRIVATE_PUBLIC_KEY_SIZE + N2N_AUTH_CHALLENGE_SIZE)
 
 #define N2N_EUNKNOWN                     -1
 #define N2N_ENOTIMPL                     -2
 #define N2N_EINVAL                       -3
 #define N2N_ENOSPACE                     -4
+
+
+#define N2N_VERSION_STRING_SIZE           20
+typedef char n2n_version_t[N2N_VERSION_STRING_SIZE];
+
+
+#define SN_SELECTION_STRATEGY_LOAD       1
+#define SN_SELECTION_STRATEGY_RTT        2
+#define SN_SELECTION_STRATEGY_MAC        3
 
 
 typedef struct n2n_ip_subnet {
@@ -290,8 +306,9 @@ typedef struct n2n_sock {
 } n2n_sock_t;
 
 typedef enum {
-    n2n_auth_none =      0,
-    n2n_auth_simple_id = 1
+    n2n_auth_none =          0,
+    n2n_auth_simple_id =     1,
+    n2n_auth_user_password = 2
 } n2n_auth_scheme_t;
 
 typedef enum {
@@ -302,9 +319,9 @@ typedef enum {
 } update_edge_ret_value_t;
 
 typedef struct n2n_auth {
-    uint16_t        scheme;                      /* What kind of auth */
-    uint16_t        toksize;                     /* Size of auth token */
-    uint8_t         token[N2N_AUTH_TOKEN_SIZE];  /* Auth data interpreted based on scheme */
+    uint16_t        scheme;                         /* What kind of auth */
+    uint16_t        token_size;                     /* Size of auth token */
+    uint8_t         token[N2N_AUTH_MAX_TOKEN_SIZE]; /* Auth data interpreted based on scheme */
 } n2n_auth_t;
 
 typedef struct n2n_common {
@@ -321,7 +338,7 @@ typedef struct n2n_REGISTER {
     n2n_cookie_t       cookie;      /**< Link REGISTER and REGISTER_ACK */
     n2n_mac_t          srcMac;      /**< MAC of registering party */
     n2n_mac_t          dstMac;      /**< MAC of target edge */
-    n2n_sock_t         sock;        /**< REVISIT: unused? */
+    n2n_sock_t         sock;        /**< Supernode's view of edge socket OR edge's preferred local socket */
     n2n_ip_subnet_t    dev_addr;    /**< IP address of the tuntap adapter. */
     n2n_desc_t         dev_desc;    /**< Hint description correlated with the edge */
 } n2n_REGISTER_t;
@@ -349,6 +366,7 @@ typedef struct n2n_REGISTER_SUPER {
     n2n_ip_subnet_t    dev_addr;    /**< IP address of the tuntap adapter. */
     n2n_desc_t         dev_desc;    /**< Hint description correlated with the edge */
     n2n_auth_t         auth;        /**< Authentication scheme and tokens */
+    uint32_t           key_time;    /**< key time for dynamic key, used between federatred supernodes only */
 } n2n_REGISTER_SUPER_t;
 
 
@@ -367,6 +385,8 @@ typedef struct n2n_REGISTER_SUPER_ACK {
      */
     uint8_t            num_sn;      /**< Number of supernodes that were send
                                        * even if we cannot store them all. */
+
+    uint32_t           key_time;    /**< key time for dynamic key, used between federatred supernodes only */
 } n2n_REGISTER_SUPER_ACK_t;
 
 
@@ -374,6 +394,7 @@ typedef struct n2n_REGISTER_SUPER_ACK {
 typedef struct n2n_REGISTER_SUPER_NAK {
     n2n_cookie_t    cookie;    /* Return cookie from REGISTER_SUPER */
     n2n_mac_t       srcMac;
+    n2n_auth_t      auth;      /* Authentication scheme and tokens */
 } n2n_REGISTER_SUPER_NAK_t;
 
 
@@ -397,14 +418,19 @@ typedef struct n2n_PEER_INFO {
     n2n_mac_t                        srcMac;
     n2n_mac_t                        mac;
     n2n_sock_t                       sock;
-    SN_SELECTION_CRITERION_DATA_TYPE data;
+    n2n_sock_t                       preferred_sock;
+    uint32_t                         load;
+    n2n_version_t                    version;
+    time_t                           uptime;
 } n2n_PEER_INFO_t;
 
 
 typedef struct n2n_QUERY_PEER {
+    uint16_t                      aflags;
     n2n_mac_t                     srcMac;
     n2n_sock_t                    sock;
     n2n_mac_t                     targetMac;
+
 } n2n_QUERY_PEER_t;
 
 typedef struct n2n_buf n2n_buf_t;
@@ -415,6 +441,7 @@ struct peer_info {
     n2n_desc_t                       dev_desc;
     n2n_sock_t                       sock;
     SOCKET                           socket_fd;
+    n2n_sock_t                       preferred_sock;
     n2n_cookie_t                     last_cookie;
     n2n_auth_t                       auth;
     int                              timeout;
@@ -426,6 +453,8 @@ struct peer_info {
     uint64_t                         last_valid_time_stamp;
     char                             *ip_addr;
     uint8_t                          local;
+    time_t                           uptime;
+    n2n_version_t                    version;
 
     UT_hash_handle     hh; /* makes this structure hashable */
 };
@@ -579,34 +608,74 @@ typedef struct n2n_trans_op {
 
 /* *************************************************** */
 
+
+typedef struct n2n_resolve_ip_sock {
+    char          *org_ip;            /* pointer to original ip/named address string (used read only) */
+    n2n_sock_t    sock;               /* resolved socket */
+    n2n_sock_t    *org_sock;          /* pointer to original socket where 'sock' gets copied to from time to time */
+    int           error_code;         /* result of last resolution attempt */
+
+    UT_hash_handle hh;                /* makes this structure hashable */
+} n2n_resolve_ip_sock_t;
+
+
+// structure to hold resolver thread's parameters
+typedef struct n2n_resolve_parameter {
+    n2n_resolve_ip_sock_t   *list;         /* pointer to list of to be resolved nodes */
+    uint8_t                 changed;       /* indicates a change */
+#ifdef HAVE_PTHREAD
+    pthread_t               id;            /* thread id */
+    pthread_mutex_t         access;        /* mutex for shared access */
+#endif
+    uint8_t                 request;       /* flags main thread's need for intermediate resolution */
+    time_t                  check_interval;/* interval to checik resolover results */
+    time_t                  last_checked;  /* last time the resolver results were cheked */
+    time_t                  last_resolved; /* last time the resolver completed */
+} n2n_resolve_parameter_t;
+
+
+/* *************************************************** */
+
+
 typedef struct n2n_edge_conf {
-    struct peer_info   *supernodes;            /**< List of supernodes */
-    n2n_route_t        *routes;                /**< Networks to route through n2n */
-    n2n_community_t    community_name;         /**< The community. 16 full octets. */
-    n2n_desc_t         dev_desc;               /**< The device description (hint) */
-    uint8_t            header_encryption;      /**< Header encryption indicator. */
-    he_context_t       *header_encryption_ctx; /**< Header encryption cipher context. */
-    he_context_t       *header_iv_ctx;         /**< Header IV ecnryption cipher context, REMOVE as soon as seperte fileds for checksum and replay protection available */
-    n2n_transform_t    transop_id;             /**< The transop to use. */
-    uint8_t            compression;            /**< Compress outgoing data packets before encryption */
-    uint16_t           num_routes;             /**< Number of routes in routes */
-    uint8_t            tuntap_ip_mode;         /**< Interface IP address allocated mode, eg. DHCP. */
-    uint8_t            allow_routing;          /**< Accept packet no to interface address. */
-    uint8_t            drop_multicast;         /**< Multicast ethernet addresses. */
-    uint8_t            disable_pmtu_discovery; /**< Disable the Path MTU discovery. */
-    uint8_t            allow_p2p;              /**< Allow P2P connection */
-    uint8_t            sn_num;                 /**< Number of supernode addresses defined. */
-    uint8_t            tos;                    /** TOS for sent packets */
-    char               *encrypt_key;
-    int                register_interval;      /**< Interval for supernode registration, also used for UDP NAT hole punching. */
-    int                register_ttl;           /**< TTL for registration packet when UDP NAT hole punching through supernode. */
-    int                local_port;
-    int                mgmt_port;
-    uint8_t            connect_tcp;            /** connection to supernode 0 = UDP; 1 = TCP */
-    n2n_auth_t         auth;
-    filter_rule_t      *network_traffic_filter_rules;
-    int                metric;                /**< Network interface metric (Windows only). */
-    uint8_t            number_max_sn_pings;   /**< Number of maximum concurrently allowed supernode pings. */
+    struct peer_info         *supernodes;            /**< List of supernodes */
+    n2n_route_t              *routes;                /**< Networks to route through n2n */
+    n2n_community_t          community_name;         /**< The community. 16 full octets. */
+    n2n_desc_t               dev_desc;               /**< The device description (hint) */
+    n2n_private_public_key_t *public_key;            /**< edge's public key (for user/password based authentication) */
+    n2n_private_public_key_t *shared_secret;         /**< shared secret derived from federation public key, username and password */
+    he_context_t             *shared_secret_ctx;     /**< context holding the roundkeys derived from shared secret */
+    n2n_private_public_key_t *federation_public_key; /**< federation public key provided by command line */
+    uint8_t                  header_encryption;      /**< Header encryption indicator. */
+    he_context_t     *header_encryption_ctx_static;  /**< Header encryption cipher context. */
+    he_context_t     *header_encryption_ctx_dynamic; /**< Header encryption cipher context. */
+    he_context_t             *header_iv_ctx_static;  /**< Header IV ecnryption cipher context, REMOVE as soon as separate fileds for checksum and replay protection available */
+    he_context_t             *header_iv_ctx_dynamic; /**< Header IV ecnryption cipher context, REMOVE as soon as separate fileds for checksum and replay protection available */
+    n2n_transform_t          transop_id;             /**< The transop to use. */
+    uint8_t                  compression;            /**< Compress outgoing data packets before encryption */
+    uint16_t                 num_routes;             /**< Number of routes in routes */
+    uint8_t                  tuntap_ip_mode;         /**< Interface IP address allocated mode, eg. DHCP. */
+    uint8_t                  allow_routing;          /**< Accept packet no to interface address. */
+    uint8_t                  drop_multicast;         /**< Multicast ethernet addresses. */
+    uint8_t                  disable_pmtu_discovery; /**< Disable the Path MTU discovery. */
+    uint8_t                  allow_p2p;              /**< Allow P2P connection */
+    uint8_t                  sn_num;                 /**< Number of supernode addresses defined. */
+    uint8_t                  tos;                    /** TOS for sent packets */
+    char                     *encrypt_key;
+    int                      register_interval;      /**< Interval for supernode registration, also used for UDP NAT hole punching. */
+    int                      register_ttl;           /**< TTL for registration packet when UDP NAT hole punching through supernode. */
+    in_addr_t                bind_address;           /**< The address to bind to if provided (-b) */
+    n2n_sock_t               preferred_sock;         /**< propagated local sock for better p2p in LAN (-e) */
+    uint8_t                  preferred_sock_auto;    /**< indicates desired auto detect for preferred sock */
+    int                      local_port;
+    int                      mgmt_port;
+    uint8_t                  connect_tcp;            /** connection to supernode 0 = UDP; 1 = TCP */
+    n2n_auth_t               auth;
+    filter_rule_t            *network_traffic_filter_rules;
+    int                      metric;                /**< Network interface metric (Windows only). */
+    uint8_t                  sn_selection_strategy; /**< encodes currently chosen supernode selection strategy. */
+    uint8_t                  number_max_sn_pings;   /**< Number of maximum concurrently allowed supernode pings. */
+    uint64_t                 mgmt_password_hash;    /**< contains hash of managament port password. */
 } n2n_edge_conf_t;
 
 
@@ -623,6 +692,7 @@ struct n2n_edge {
     n2n_edge_conf_t         conf;
 
     /* Status */
+    int                              *keep_running;                      /**< Pointer to edge loop stop/go flag */
     struct peer_info                 *curr_sn;                           /**< Currently active supernode. */
     uint8_t                          sn_wait;                            /**< Whether we are waiting for a supernode response. */
     uint8_t                          sn_pong;                            /**< Whether we have seen a PONG since last time reset. */
@@ -660,6 +730,9 @@ struct n2n_edge {
 
     struct n2n_edge_stats            stats;                              /**< Statistics */
 
+    n2n_resolve_parameter_t          *resolve_parameter;                 /**< Pointer to name resolver's parameter block */
+    uint8_t                          resolution_request;                 /**< Flag an immediate DNS resolution request */
+
     n2n_tuntap_priv_config_t         tuntap_priv_conf;                   /**< Tuntap config */
 
     network_traffic_filter_t         *network_traffic_filter;
@@ -684,15 +757,28 @@ typedef struct node_supernode_association {
     UT_hash_handle hh;                      /* makes this structure hashable */
 } node_supernode_association_t;
 
+typedef struct sn_user {
+    n2n_private_public_key_t   public_key;
+    n2n_private_public_key_t   shared_secret;
+    he_context_t               *shared_secret_ctx;
+    n2n_desc_t                 name;
+
+   UT_hash_handle hh;
+} sn_user_t;
+
 struct sn_community {
     char                          community[N2N_COMMUNITY_SIZE];
     uint8_t                       is_federation;          /* if not-zero, then the current community is the federation of supernodes */
     uint8_t                       purgeable;              /* indicates purgeable community (fixed-name, predetermined (-c parameter) communties usually are unpurgeable) */
     uint8_t                       header_encryption;      /* Header encryption indicator. */
-    he_context_t                  *header_encryption_ctx; /* Header encryption cipher context. */
-    he_context_t                  *header_iv_ctx;         /* Header IV ecnryption cipher context, REMOVE as soon as seperate fields for checksum and replay protection available */
+    he_context_t          *header_encryption_ctx_static;  /* Header encryption cipher context. */
+    he_context_t          *header_encryption_ctx_dynamic; /* Header encryption cipher context. */
+    he_context_t                  *header_iv_ctx_static;  /* Header IV encryption cipher context, REMOVE as soon as separate fields for checksum and replay protection available */
+    he_context_t                  *header_iv_ctx_dynamic; /* Header IV encryption cipher context, REMOVE as soon as separate fields for checksum and replay protection available */
+    uint8_t                       dynamic_key[N2N_AUTH_CHALLENGE_SIZE]; /* dynamic key */
     struct                        peer_info *edges;       /* Link list of registered edges. */
-    node_supernode_association_t  *assoc;            /* list of other edges from this community and their supernodes */
+    node_supernode_association_t  *assoc;                 /* list of other edges from this community and their supernodes */
+    sn_user_t                     *allowed_users;         /* list of allowed users */
     int64_t                       number_enc_packets;     /* Number of encrypted packets handled so far, required for sorting from time to time */
     n2n_ip_subnet_t               auto_ip_net;            /* Address range of auto ip address service. */
 
@@ -723,7 +809,9 @@ typedef struct n2n_tcp_connection {
 
 
 typedef struct n2n_sn {
+    int                                    *keep_running;   /* Pointer to sn loop stop/go flag */
     time_t                                 start_time;      /* Used to measure uptime. */
+    n2n_version_t                          version;         /* version string sent to edges along with PEER_INFO a.k.a. PONG */
     sn_stats_t                             stats;
     int                                    daemon;          /* If non-zero then daemonise. */
     n2n_mac_t                              mac_addr;
@@ -744,10 +832,15 @@ typedef struct n2n_sn {
     struct sn_community                    *communities;
     struct sn_community_regular_expression *rules;
     struct sn_community                    *federation;
+    n2n_private_public_key_t               private_key;       /* private federation key derived from federation name */
     n2n_auth_t                             auth;
+    uint32_t                               dynamic_key_time;  /* UTC time of last dynamic key generation (second accuracy) */
+    uint8_t                                override_spoofing_protection; /* set if overriding MAC/IP spoofing protection (cli option '-M') */
+    n2n_resolve_parameter_t                *resolve_parameter;/*Pointer to name resolver's parameter block */
+    uint64_t                               mgmt_password_hash;/* contains hash of managament port password */
 } n2n_sn_t;
 
 
-
+/* *************************************************** */
 
 #endif /* _N2N_TYPEDEFS_H_ */

@@ -657,7 +657,8 @@ __attribute__((visibility("default"))) int start_edge_v3(CurrentSettings *settin
     
     traceEvent(TRACE_NORMAL, "edge started");
     keep_on_running = 1;
-    run_edge_loop(eee, &keep_on_running);
+    eee->keep_running = &keep_on_running;
+    run_edge_loop(eee);
     traceEvent(TRACE_NORMAL, "edge stopped");
     
 cleanup:

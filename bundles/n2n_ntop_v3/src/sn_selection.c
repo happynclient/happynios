@@ -38,7 +38,7 @@ int sn_selection_criterion_init (peer_info_t *peer) {
 /* Set selection_criterion field to default value according to selected strategy. */
 int sn_selection_criterion_default (SN_SELECTION_CRITERION_DATA_TYPE *selection_criterion) {
 
-    *selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE) (UINT32_MAX >> 1) - 1;
+    *selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)(UINT64_MAX >> 1) - 1;
 
     return 0; /* OK */
 }
@@ -47,7 +47,7 @@ int sn_selection_criterion_default (SN_SELECTION_CRITERION_DATA_TYPE *selection_
 /* Set selection_criterion field to 'bad' value (worse than default) according to selected strategy. */
 int sn_selection_criterion_bad (SN_SELECTION_CRITERION_DATA_TYPE *selection_criterion) {
 
-    *selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE) (UINT32_MAX >> 1);
+    *selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)(UINT64_MAX >> 1);
 
     return 0; /* OK */
 }
@@ -55,7 +55,7 @@ int sn_selection_criterion_bad (SN_SELECTION_CRITERION_DATA_TYPE *selection_crit
 /* Set selection_criterion field to 'good' value (better than default) according to selected strategy. */
 int sn_selection_criterion_good (SN_SELECTION_CRITERION_DATA_TYPE *selection_criterion) {
 
-    *selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE) (UINT32_MAX >> 1) - 2;
+    *selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)(UINT64_MAX >> 1) - 2;
 
     return 0; /* OK */
 }
@@ -71,20 +71,43 @@ int sn_selection_criterion_calculate (n2n_edge_t *eee, peer_info_t *peer, SN_SEL
 
     common_data = sn_selection_criterion_common_read(eee);
 
-#ifndef SN_SELECTION_RTT
-    peer->selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)(be32toh(*data) + common_data);
+    switch(eee->conf.sn_selection_strategy) {
 
-    /* Mitigation of the real supernode load in order to see less oscillations.
-     * Edges jump from a supernode to another back and forth due to purging.
-     * Because this behavior has a cost of switching, the real load is mitigated with a stickyness factor.
-     * This factor is dynamically calculated basing on network size and prevent that unnecessary switching */
-    if(peer == eee->curr_sn) {
-        sum = HASH_COUNT(eee->known_peers) + HASH_COUNT(eee->pending_peers);
-        peer->selection_criterion = peer->selection_criterion * sum / (sum + 1);
+        case SN_SELECTION_STRATEGY_LOAD: {
+            peer->selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)(be32toh(*data) + common_data);
+
+            /* Mitigation of the real supernode load in order to see less oscillations.
+             * Edges jump from a supernode to another back and forth due to purging.
+             * Because this behavior has a cost of switching, the real load is mitigated with a stickyness factor.
+             * This factor is dynamically calculated basing on network size and prevent that unnecessary switching */
+            if(peer == eee->curr_sn) {
+                sum = HASH_COUNT(eee->known_peers) + HASH_COUNT(eee->pending_peers);
+                peer->selection_criterion = peer->selection_criterion * sum / (sum + 1);
+            }
+            break;
+        }
+
+        case SN_SELECTION_STRATEGY_RTT: {
+            peer->selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)((uint32_t)time_stamp() >> 22) - common_data;
+            break;
+        }
+
+        case SN_SELECTION_STRATEGY_MAC: {
+            peer->selection_criterion = 0;
+            memcpy(&peer->selection_criterion, /* leftbound, don't mess with pointer arithmetics */
+                   peer->mac_addr,
+                   N2N_MAC_SIZE);
+            peer->selection_criterion = be64toh(peer->selection_criterion);
+            peer->selection_criterion >>= (sizeof(peer->selection_criterion) - N2N_MAC_SIZE) * 8; /* rightbound */
+            break;
+        }
+
+        default: {
+            // this should never happen
+            traceEvent(TRACE_ERROR, "selection_criterion unknown selection strategy configuration");
+            break;
+        }
     }
-#else
-    peer->selection_criterion = (SN_SELECTION_CRITERION_DATA_TYPE)(time_stamp() >> 22) - common_data;
-#endif
 
     return 0; /* OK */
 }
@@ -93,17 +116,35 @@ int sn_selection_criterion_calculate (n2n_edge_t *eee, peer_info_t *peer, SN_SEL
 /* Set sn_selection_criterion_common_data field to default value. */
 int sn_selection_criterion_common_data_default (n2n_edge_t *eee) {
 
-#ifndef SN_SELECTION_RTT
-    SN_SELECTION_CRITERION_DATA_TYPE tmp = 0;
+    switch(eee->conf.sn_selection_strategy) {
 
-    tmp = HASH_COUNT(eee->pending_peers);
-    if(eee->conf.header_encryption == HEADER_ENCRYPTION_ENABLED) {
-        tmp *= 2;
+        case SN_SELECTION_STRATEGY_LOAD: {
+            SN_SELECTION_CRITERION_DATA_TYPE tmp = 0;
+
+            tmp = HASH_COUNT(eee->pending_peers);
+            if(eee->conf.header_encryption == HEADER_ENCRYPTION_ENABLED) {
+                tmp *= 2;
+            }
+            eee->sn_selection_criterion_common_data = tmp / HASH_COUNT(eee->conf.supernodes);
+            break;
+        }
+
+        case SN_SELECTION_STRATEGY_RTT: {
+            eee->sn_selection_criterion_common_data = (SN_SELECTION_CRITERION_DATA_TYPE)((uint32_t)time_stamp() >> 22);
+            break;
+        }
+
+        case SN_SELECTION_STRATEGY_MAC: {
+            eee->sn_selection_criterion_common_data = 0;
+            break;
+        }
+
+        default: {
+            // this should never happen
+            traceEvent(TRACE_ERROR, "selection_criterion unknown selection strategy configuration");
+            break;
+        }
     }
-    eee->sn_selection_criterion_common_data = tmp / HASH_COUNT(eee->conf.supernodes);
-#else
-    eee->sn_selection_criterion_common_data = (SN_SELECTION_CRITERION_DATA_TYPE)(time_stamp() >> 22);
-#endif
 
     return 0; /* OK */
 }
@@ -119,8 +160,15 @@ static SN_SELECTION_CRITERION_DATA_TYPE sn_selection_criterion_common_read (n2n_
 /* Function that compare two selection_criterion fields and sorts them in ascending order. */
 static int sn_selection_criterion_sort (peer_info_t *a, peer_info_t *b) {
 
+    int ret = 0;
+
     // comparison function for sorting supernodes in ascending order of their selection_criterion.
-    return (a->selection_criterion - b->selection_criterion);
+    if(a->selection_criterion > b->selection_criterion)
+        ret = 1;
+    else if(a->selection_criterion < b->selection_criterion)
+        ret = -2;
+
+    return ret;
 }
 
 
@@ -134,7 +182,7 @@ int sn_selection_sort (peer_info_t **peer_list) {
 
 
 /* Function that gathers requested data on a supernode.
- * it remains unaffected by SN_SELECT_RTT macro because it refers to edge behaviour only
+ * it remains unaffected by selection strategy because it refers to edge behaviour only
  */
 SN_SELECTION_CRITERION_DATA_TYPE sn_selection_criterion_gather_data (n2n_sn_t *sss) {
 
@@ -151,24 +199,54 @@ SN_SELECTION_CRITERION_DATA_TYPE sn_selection_criterion_gather_data (n2n_sn_t *s
         data += tmp;
     }
 
-    return htobe32(data);
+    return htobe64(data);
 }
 
 
 /* Convert selection_criterion field in a string for management port output. */
-extern char * sn_selection_criterion_str (selection_criterion_str_t out, peer_info_t *peer) {
+extern char * sn_selection_criterion_str (n2n_edge_t *eee, selection_criterion_str_t out, peer_info_t *peer) {
+
+    int chars = 0;
+
 
     if(NULL == out) {
-      return NULL;
+        return NULL;
     }
     memset(out, 0, SN_SELECTION_CRITERION_BUF_SIZE);
-    
-    if(peer->selection_criterion >= 0) {
-#ifndef SN_SELECTION_RTT
-      snprintf(out, SN_SELECTION_CRITERION_BUF_SIZE, "load = %8d", peer->selection_criterion);
-#else
-      snprintf(out, SN_SELECTION_CRITERION_BUF_SIZE, "rtt = %6d ms", peer->selection_criterion);
-#endif
+
+    // keep off the super-big values (used for "bad" or "good" or "undetermined" supernodes,
+    // easier to sort to the end of the list).
+    // Alternatively, typecast to (int16_t) and check for greater or equal zero
+    if(peer->selection_criterion < (UINT64_MAX >> 2)) {
+
+        switch(eee->conf.sn_selection_strategy) {
+
+            case SN_SELECTION_STRATEGY_LOAD: {
+                chars = snprintf(out, SN_SELECTION_CRITERION_BUF_SIZE, "load = %8ld", peer->selection_criterion);
+                break;
+            }
+
+            case SN_SELECTION_STRATEGY_RTT: {
+                chars = snprintf(out, SN_SELECTION_CRITERION_BUF_SIZE, "rtt = %6ld ms", peer->selection_criterion);
+                break;
+            }
+
+            case SN_SELECTION_STRATEGY_MAC: {
+                chars = snprintf(out, SN_SELECTION_CRITERION_BUF_SIZE, "%s", (int64_t)peer->selection_criterion > 0 ? "active" : "");
+                break;
+            }
+
+            default: {
+                // this should never happen
+                traceEvent(TRACE_ERROR, "selection_criterion unknown selection strategy configuration");
+                break;
+            }
+        }
+
+        // this test is to make "-Wformat-truncation" less sad
+        if(chars > SN_SELECTION_CRITERION_BUF_SIZE) {
+            traceEvent(TRACE_ERROR, "selection_criterion buffer overflow");
+        }
     }
 
     return out;

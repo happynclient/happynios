@@ -25,163 +25,22 @@
 
 static n2n_sn_t sss_node;
 
-/** Load the list of allowed communities. Existing/previous ones will be removed
- *
- */
-static int load_allowed_sn_community (n2n_sn_t *sss) {
+void close_tcp_connection (n2n_sn_t *sss, n2n_tcp_connection_t *conn);
+void calculate_shared_secrets (n2n_sn_t *sss);
+int load_allowed_sn_community (n2n_sn_t *sss);
+int resolve_create_thread (n2n_resolve_parameter_t **param, struct peer_info *sn_list);
 
-    char buffer[4096], *line, *cmn_str, net_str[20];
-    dec_ip_str_t ip_str = {'\0'};
-    uint8_t bitlen;
-    in_addr_t net;
-    uint32_t mask;
-    FILE *fd = fopen(sss->community_file, "r");
-    struct sn_community *s, *tmp;
-    uint32_t num_communities = 0;
-    struct sn_community_regular_expression *re, *tmp_re;
-    uint32_t num_regex = 0;
-    int has_net;
-
-    if(fd == NULL) {
-        traceEvent(TRACE_WARNING, "File %s not found", sss->community_file);
-        return -1;
-    }
-
-    HASH_ITER(hh, sss->communities, s, tmp) {
-        if(s->is_federation) {
-            continue;
-        }
-        HASH_DEL(sss->communities, s);
-        if(NULL != s->header_encryption_ctx) {
-            free(s->header_encryption_ctx);
-        }
-        free(s);
-    }
-
-    HASH_ITER(hh, sss->rules, re, tmp_re) {
-        HASH_DEL(sss->rules, re);
-        free(re);
-    }
-
-    while((line = fgets(buffer, sizeof(buffer), fd)) != NULL) {
-        int len = strlen(line);
-
-        if((len < 2) || line[0] == '#') {
-            continue;
-        }
-
-        len--;
-        while(len > 0) {
-            if((line[len] == '\n') || (line[len] == '\r')) {
-	        line[len] = '\0';
-	        len--;
-            } else {
-	        break;
-            }
-        }
-        // the loop above does not always determine correct 'len'
-        len = strlen(line);
-
-        // cut off any IP sub-network upfront
-        cmn_str = (char*)calloc(len + 1, sizeof(char));
-        has_net = (sscanf(line, "%s %s", cmn_str, net_str) == 2);
-
-        // if it contains typical characters...
-        if(NULL != strpbrk(cmn_str, ".*+?[]\\")) {
-            // ...it is treated as regular expression
-            re = (struct sn_community_regular_expression*)calloc(1,sizeof(struct sn_community_regular_expression));
-            if(re) {
-                re->rule = re_compile(cmn_str);
-                HASH_ADD_PTR(sss->rules, rule, re);
-	        num_regex++;
-                traceEvent(TRACE_INFO, "Added regular expression for allowed communities '%s'", cmn_str);
-                free(cmn_str);
-                continue;
-            }
-        }
-
-        s = (struct sn_community*)calloc(1,sizeof(struct sn_community));
-
-        if(s != NULL) {
-            comm_init(s,cmn_str);
-            /* loaded from file, this community is unpurgeable */
-            s->purgeable = COMMUNITY_UNPURGEABLE;
-            /* we do not know if header encryption is used in this community,
-             * first packet will show. just in case, setup the key. */
-            s->header_encryption = HEADER_ENCRYPTION_UNKNOWN;
-            packet_header_setup_key (s->community, &(s->header_encryption_ctx), &(s->header_iv_ctx));
-            HASH_ADD_STR(sss->communities, community, s);
-
-            num_communities++;
-            traceEvent(TRACE_INFO, "Added allowed community '%s' [total: %u]",
-		       (char*)s->community, num_communities);
-
-            // check for sub-network address
-            if(has_net) {
-                if(sscanf(net_str, "%15[^/]/%hhu", ip_str, &bitlen) != 2) {
-                    traceEvent(TRACE_WARNING, "Bad net/bit format '%s' for community '%c', ignoring. See comments inside community.list file.",
-		                           net_str, cmn_str);
-                    has_net = 0;
-                }
-                net = inet_addr(ip_str);
-                mask = bitlen2mask(bitlen);
-                if((net == (in_addr_t)(-1)) || (net == INADDR_NONE) || (net == INADDR_ANY)
-	                 || ((ntohl(net) & ~mask) != 0)) {
-                    traceEvent(TRACE_WARNING, "Bad network '%s/%u' in '%s' for community '%s', ignoring.",
-		                           ip_str, bitlen, net_str, cmn_str);
-                    has_net = 0;
-                }
-                if((bitlen > 30) || (bitlen == 0)) {
-                    traceEvent(TRACE_WARNING, "Bad prefix '%hhu' in '%s' for community '%s', ignoring.",
-		                           bitlen, net_str, cmn_str);
-                    has_net = 0;
-                }
-            }
-            if(has_net) {
-                s->auto_ip_net.net_addr = ntohl(net);
-                s->auto_ip_net.net_bitlen = bitlen;
-                traceEvent(TRACE_INFO, "Assigned sub-network %s/%u to community '%s'.",
-		                       inet_ntoa(*(struct in_addr *) &net),
-		           s->auto_ip_net.net_bitlen,
-		           s->community);
-            } else {
-                assign_one_ip_subnet(sss, s);
-            }
-        }
-
-        free(cmn_str);
-
-    }
-
-    fclose(fd);
-
-    if((num_regex + num_communities) == 0) {
-        traceEvent(TRACE_WARNING, "File %s does not contain any valid community names or regular expressions", sss->community_file);
-        return -1;
-    }
-
-    traceEvent(TRACE_NORMAL, "Loaded %u fixed-name communities from %s",
-	             num_communities, sss->community_file);
-
-    traceEvent(TRACE_NORMAL, "Loaded %u regular expressions for community name matching from %s",
-	             num_regex, sss->community_file);
-
-    /* No new communities will be allowed */
-    sss->lock_communities = 1;
-
-    return(0);
-}
-
-
-/* *************************************************** */
 
 /** Help message to print if the command line arguments are not valid. */
 static void help (int level) {
 
+    if(level == 0) /* no help required */
+        return;
+
     printf("\n");
     print_n2n_version();
 
-    if(level == 0) /* short help */ {
+    if(level == 1) /* short help */ {
 
         printf("   basic usage:  supernode <config file> (see supernode.conf)\n"
                "\n"
@@ -196,7 +55,7 @@ static void help (int level) {
                "\n   man  files for n2n, edge, and superndode contain in-depth information"
                "\n\n");
 
-    } else if(level == 1) /* quick reference */ {
+    } else if(level == 2) /* quick reference */ {
 
         printf(" general usage:  supernode <config file> (see supernode.conf)\n"
            "\n"
@@ -210,6 +69,8 @@ static void help (int level) {
 #ifdef SN_MANUAL_MAC
                "[-m <mac address>] "
 #endif
+               "[-M] "
+               "[-V <version text>] "
           "\n\n overlay network           "
                "[-c <community list file>] "
             "\n configuration             "
@@ -219,6 +80,8 @@ static void help (int level) {
                "[-f] "
 #endif
                "[-t <management port>] "
+            "\n                           "
+               "[--management-password <pw>] "
                "[-v] "
 #ifndef WIN32
             "\n                           "
@@ -226,10 +89,12 @@ static void help (int level) {
                "[-g <numerical group id>]"
 #endif
           "\n\n meaning of the            "
+                "[-M]  disable MAC and IP address spoofing protection"
+            "\n flag options              "
 #if defined(N2N_HAVE_DAEMON)
                 "[-f]  do not fork but run in foreground"
+            "\n                           "
 #endif
-            "\n flag options              "
                 "[-v]  make more verbose, repeat as required"
             "\n                           "
           "\n technically, all parameters are optional, but the supernode executable"
@@ -248,7 +113,7 @@ static void help (int level) {
         );
         printf (" OPTIONS FOR THE UNDERLYING NETWORK CONNECTION\n");
         printf (" ---------------------------------------------\n\n");
-        printf(" -p <local port>   | fixed local UDP port, defaults to 7654\n");
+        printf(" -p <local port>   | fixed local UDP port, defaults to %u\n", N2N_SN_LPORT_DEFAULT);
         printf(" -F <fed name>     | name of the supernode's federation, defaults to\n"
                "                   | '%s'\n", (char *)FEDERATION_NAME);
         printf(" -l <host:port>    | ip address or name, and port of known supernode\n");
@@ -256,6 +121,10 @@ static void help (int level) {
         printf(" -m <mac>          | fixed MAC address for the supernode, e.g.\n"
                "                   | '-m 10:20:30:40:50:60', random otherwise\n");
 #endif
+        printf(" -M                | disable MAC and IP address spoofing protection for all\n"
+               "                   | non-username-password-authenticating communities\n");
+        printf(" -V <version text> | sends a custom supernode version string of max 19 letters \n"
+               "                   | length to edges, visible in their management port output\n");
         printf ("\n");
         printf (" TAP DEVICE AND OVERLAY NETWORK CONFIGURATION\n");
         printf (" --------------------------------------------\n\n");
@@ -270,7 +139,9 @@ static void help (int level) {
         printf(" -f                | do not fork and run as a daemon, rather run in foreground\n");
 #endif
         printf(" -t <port>         | management UDP port, for multiple supernodes on a machine,\n"
-               "                   | defaults to 5645\n");
+               "                   | defaults to %u\n", N2N_SN_MGMT_PORT);
+        printf(" --management_...  | management port password, defaults to '%s'\n"
+               " ...password <pw>  | \n", N2N_MGMT_PASSWORD);
         printf(" -v                | make more verbose, repeat as required\n");
 #ifndef WIN32
         printf(" -u <UID>          | numeric user ID to use when privileges are dropped\n");
@@ -299,20 +170,18 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
         case 'p': /* local-port */
             sss->lport = atoi(_optarg);
 
-            if(sss->lport == 0) {
-                traceEvent(TRACE_WARNING, "Bad local port format");
-                break;
-            }
+            if(sss->lport == 0)
+                traceEvent(TRACE_WARNING, "bad local port format, defaulting to %u", N2N_SN_LPORT_DEFAULT);
+                // default is made sure in sn_init()
 
             break;
 
         case 't': /* mgmt-port */
             sss->mport = atoi(_optarg);
 
-            if(sss->mport == 0) {
-                traceEvent(TRACE_WARNING, "Bad management port format");
-                break;
-            }
+            if(sss->mport == 0)
+                traceEvent(TRACE_WARNING, "bad management port format, defaulting to %u", N2N_SN_MGMT_PORT);
+                // default is made sure in sn_init()
 
             break;
 
@@ -326,26 +195,25 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
 
             length = strlen(_optarg);
             if(length >= N2N_EDGE_SN_HOST_SIZE) {
-                traceEvent(TRACE_WARNING, "Size of -l argument too long: %zu. Maximum size is %d", length, N2N_EDGE_SN_HOST_SIZE);
-                break;
+                traceEvent(TRACE_WARNING, "size of -l argument too long: %zu; maximum size is %d", length, N2N_EDGE_SN_HOST_SIZE);
+                return 1;
             }
 
             if(!double_column) {
-                traceEvent(TRACE_WARNING, "Invalid -l format: ignored");
-                return (-1);
+                traceEvent(TRACE_WARNING, "invalid -l format, missing port");
+                return 1;
             }
 
             socket = (n2n_sock_t *)calloc(1, sizeof(n2n_sock_t));
             rv = supernode2sock(socket, _optarg);
 
-            if(rv != 0) {
-                traceEvent(TRACE_WARNING, "Invalid socket");
+            if(rv < -2) { /* we accept resolver failure as it might resolve later */
+                traceEvent(TRACE_WARNING, "invalid supernode parameter");
                 free(socket);
-                break;
+                return 1;
             }
 
             if(sss->federation != NULL) {
-
                 skip_add = SN_ADD;
                 anchor_sn = add_sn_to_list_by_mac_or_sock(&(sss->federation->edges), socket, null_mac, &skip_add);
 
@@ -353,7 +221,7 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
                     anchor_sn->ip_addr = calloc(1, N2N_EDGE_SN_HOST_SIZE);
                     if(anchor_sn->ip_addr) {
                         strncpy(anchor_sn->ip_addr, _optarg, N2N_EDGE_SN_HOST_SIZE - 1);
-	                      memcpy(&(anchor_sn->sock), socket, sizeof(n2n_sock_t));
+	                memcpy(&(anchor_sn->sock), socket, sizeof(n2n_sock_t));
                         memcpy(anchor_sn->mac_addr, null_mac, sizeof(n2n_mac_t));
                         anchor_sn->purgeable = SN_UNPURGEABLE;
                         anchor_sn->last_valid_time_stamp = initial_time_stamp();
@@ -373,8 +241,8 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
             uint32_t mask;
 
             if(sscanf(_optarg, "%15[^\\-]-%15[^/]/%hhu", ip_min_str, ip_max_str, &bitlen) != 3) {
-                traceEvent(TRACE_WARNING, "Bad net-net/bit format '%s'. See -h.", _optarg);
-                break;
+                traceEvent(TRACE_WARNING, "bad net-net/bit format '%s'.", _optarg);
+                return 2;
             }
 
             net_min = inet_addr(ip_min_str);
@@ -384,20 +252,20 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
 	             || (net_max == (in_addr_t)(-1)) || (net_max == INADDR_NONE) || (net_max == INADDR_ANY)
 	             || (ntohl(net_min) >  ntohl(net_max))
 	             || ((ntohl(net_min) & ~mask) != 0) || ((ntohl(net_max) & ~mask) != 0)) {
-                traceEvent(TRACE_WARNING, "Bad network range '%s...%s/%u' in '%s', defaulting to '%s...%s/%d'",
+                traceEvent(TRACE_WARNING, "bad network range '%s...%s/%u' in '%s', defaulting to '%s...%s/%d'",
 		                       ip_min_str, ip_max_str, bitlen, _optarg,
 		                       N2N_SN_MIN_AUTO_IP_NET_DEFAULT, N2N_SN_MAX_AUTO_IP_NET_DEFAULT, N2N_SN_AUTO_IP_NET_BIT_DEFAULT);
-                break;
+                return 2;
             }
 
             if((bitlen > 30) || (bitlen == 0)) {
-                traceEvent(TRACE_WARNING, "Bad prefix '%hhu' in '%s', defaulting to '%s...%s/%d'",
+                traceEvent(TRACE_WARNING, "bad prefix '%hhu' in '%s', defaulting to '%s...%s/%d'",
 		                       bitlen, _optarg,
 		                       N2N_SN_MIN_AUTO_IP_NET_DEFAULT, N2N_SN_MAX_AUTO_IP_NET_DEFAULT, N2N_SN_AUTO_IP_NET_BIT_DEFAULT);
-                break;
+                return 2;
             }
 
-            traceEvent(TRACE_NORMAL, "The network range for community ip address service is '%s...%s/%hhu'.", ip_min_str, ip_max_str, bitlen);
+            traceEvent(TRACE_NORMAL, "the network range for community ip address service is '%s...%s/%hhu'", ip_min_str, ip_max_str, bitlen);
 
             sss->min_auto_ip_net.net_addr = ntohl(net_min);
             sss->min_auto_ip_net.net_bitlen = bitlen;
@@ -416,10 +284,8 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
             break;
 #endif
         case 'F': { /* federation name */
-
             snprintf(sss->federation->community, N2N_COMMUNITY_SIZE - 1 ,"*%s", _optarg);
             sss->federation->community[N2N_COMMUNITY_SIZE - 1] = '\0';
-
             break;
         }
 #ifdef SN_MANUAL_MAC
@@ -428,50 +294,63 @@ static int setOption (int optkey, char *_optarg, n2n_sn_t *sss) {
             break;
         }
 #endif
+        case 'M': /* override spoofing protection */
+            sss->override_spoofing_protection = 1;
+            break;
+
+        case 'V': /* version text */
+            strncpy(sss->version, _optarg, sizeof(n2n_version_t));
+            sss->version[sizeof(n2n_version_t) - 1] = '\0';
+            break;
         case 'c': /* community file */
             sss->community_file = calloc(1, strlen(_optarg) + 1);
             if(sss->community_file)
                 strcpy(sss->community_file, _optarg);
             break;
+
+        case ']': /* password for management port */ {
+            sss->mgmt_password_hash = pearson_hash_64((uint8_t*)_optarg, strlen(_optarg));
+
+            break;
+        }
 #if defined(N2N_HAVE_DAEMON)
         case 'f': /* foreground */
             sss->daemon = 0;
             break;
 #endif
         case 'h': /* quick reference */
-            help(1);
-            break;
+            return 2;
 
         case '@': /* long help */
-            help(2);
-            break;
+            return 3;
 
         case 'v': /* verbose */
             setTraceLevel(getTraceLevel() + 1);
             break;
 
         default:
-            traceEvent(TRACE_WARNING, "Unknown option -%c: Ignored.", (char) optkey);
-            return (-1);
+            traceEvent(TRACE_WARNING, "unknown option -%c:", (char) optkey);
+            return 2;
     }
 
-    return (0);
+    return 0;
 }
 
 
 /* *********************************************** */
 
 static const struct option long_options[] = {
-    {"communities", required_argument, NULL, 'c'},
+    {"communities",         required_argument, NULL, 'c'},
 #if defined(N2N_HAVE_DAEMON)
-    {"foreground",  no_argument,       NULL, 'f'},
+    {"foreground",          no_argument,       NULL, 'f'},
 #endif
-    {"local-port",  required_argument, NULL, 'p'},
-    {"mgmt-port",   required_argument, NULL, 't'},
-    {"autoip",      required_argument, NULL, 'a'},
-    {"help",        no_argument,       NULL, '@'}, /* special character '@' to identify long help case */
-    {"verbose",     no_argument,       NULL, 'v'},
-    {NULL,          0,                 NULL, 0}
+    {"local-port",          required_argument, NULL, 'p'},
+    {"mgmt-port",           required_argument, NULL, 't'},
+    {"autoip",              required_argument, NULL, 'a'},
+    {"verbose",             no_argument,       NULL, 'v'},
+    {"help",                no_argument,       NULL, '@'}, /* special character '@' to identify long help case */
+    {"management-password", required_argument, NULL, ']' }, /*                  ']'             management port password */
+    {NULL,                  0,                 NULL, 0}
 };
 
 /* *************************************************** */
@@ -482,7 +361,7 @@ static int loadFromCLI (int argc, char * const argv[], n2n_sn_t *sss) {
     u_char c;
 
     while((c = getopt_long(argc, argv,
-                           "p:l:t:a:c:F:vh"
+                           "p:l:t:a:c:F:vhMV:"
 #ifdef SN_MANUAL_MAC
                            "m:"
 #endif
@@ -497,7 +376,7 @@ static int loadFromCLI (int argc, char * const argv[], n2n_sn_t *sss) {
         if(c == 255) {
             break;
         }
-        setOption(c, optarg, sss);
+        help(setOption(c, optarg, sss));
     }
 
     return 0;
@@ -540,7 +419,7 @@ static int loadFromFile (const char *path, n2n_sn_t *sss) {
     fd = fopen(path, "r");
 
     if(fd == NULL) {
-        traceEvent(TRACE_WARNING, "Config file %s not found", path);
+        traceEvent(TRACE_WARNING, "config file %s not found", path);
         return -1;
     }
 
@@ -585,7 +464,7 @@ static int add_federation_to_communities (n2n_sn_t *sss) {
 
         num_communities = HASH_COUNT(sss->communities);
 
-        traceEvent(TRACE_INFO, "Added federation '%s' to the list of communities [total: %u]",
+        traceEvent(TRACE_INFO, "added federation '%s' to the list of communities [total: %u]",
 	                 (char*)sss->federation->community, num_communities);
     }
 
@@ -606,7 +485,7 @@ static void dump_registrations (int signo) {
     traceEvent(TRACE_NORMAL, "====================================");
 
     HASH_ITER(hh, sss_node.communities, comm, ctmp) {
-        traceEvent(TRACE_NORMAL, "Dumping community: %s", comm->community);
+        traceEvent(TRACE_NORMAL, "dumping community: %s", comm->community);
 
         HASH_ITER(hh, comm->edges, list, tmp) {
             if(list->sock.family == AF_INET) {
@@ -641,10 +520,10 @@ BOOL WINAPI term_handler (DWORD sig)
     static int called = 0;
 
     if(called) {
-        traceEvent(TRACE_NORMAL, "Ok I am leaving now");
+        traceEvent(TRACE_NORMAL, "ok, I am leaving now");
         _exit(0);
     } else {
-        traceEvent(TRACE_NORMAL, "Shutting down...");
+        traceEvent(TRACE_NORMAL, "shutting down...");
         called = 1;
     }
 
@@ -667,7 +546,7 @@ int main (int argc, char * const argv[]) {
     struct peer_info *scan, *tmp;
 
 
-    sn_init(&sss_node);
+    sn_init_defaults(&sss_node);
     add_federation_to_communities(&sss_node);
 
     if((argc >= 2) && (argv[1][0] != '-')) {
@@ -687,7 +566,7 @@ int main (int argc, char * const argv[]) {
 #endif
 
     if(rc < 0) {
-        help(0); /* short help */
+        help(1); /* short help */
     }
 
     if(sss_node.community_file)
@@ -698,42 +577,53 @@ int main (int argc, char * const argv[]) {
         setUseSyslog(1); /* traceEvent output now goes to syslog. */
 
         if(-1 == daemon(0, 0)) {
-            traceEvent(TRACE_ERROR, "Failed to become daemon.");
+            traceEvent(TRACE_ERROR, "failed to become daemon");
             exit(-5);
         }
     }
 #endif /* #if defined(N2N_HAVE_DAEMON) */
 
+    // warn on default federation name
+    if(!strcmp(sss_node.federation->community, FEDERATION_NAME)) {
+        traceEvent(TRACE_WARNING, "using default federation name; FOR TESTING ONLY, usage of a custom federation name (-F) is highly recommended!");
+    }
+
+    if(sss_node.override_spoofing_protection) {
+        traceEvent(TRACE_WARNING, "disabled MAC and IP address spoofing protection; FOR TESTING ONLY, usage of user-password authentication (-I, -J, -P) recommended instead!");
+    }
+
+    calculate_shared_secrets(&sss_node);
+
     traceEvent(TRACE_DEBUG, "traceLevel is %d", getTraceLevel());
 
-    sss_node.sock = open_socket(sss_node.lport, 1 /*bind ANY*/, 0 /* UDP */);
+    sss_node.sock = open_socket(sss_node.lport, INADDR_ANY, 0 /* UDP */);
     if(-1 == sss_node.sock) {
-        traceEvent(TRACE_ERROR, "Failed to open main socket. %s", strerror(errno));
+        traceEvent(TRACE_ERROR, "failed to open main socket. %s", strerror(errno));
         exit(-2);
     } else {
         traceEvent(TRACE_NORMAL, "supernode is listening on UDP %u (main)", sss_node.lport);
     }
 
 #ifdef N2N_HAVE_TCP
-    sss_node.tcp_sock = open_socket(sss_node.lport, 1 /*bind ANY*/, 1 /* TCP */);
+    sss_node.tcp_sock = open_socket(sss_node.lport, INADDR_ANY, 1 /* TCP */);
     if(-1 == sss_node.tcp_sock) {
-        traceEvent(TRACE_ERROR, "Failed to open auxiliary TCP socket. %s", strerror(errno));
+        traceEvent(TRACE_ERROR, "failed to open auxiliary TCP socket, %s", strerror(errno));
         exit(-2);
     } else {
         traceEvent(TRACE_NORMAL, "supernode opened TCP %u (aux)", sss_node.lport);
     }
 
     if(-1 == listen(sss_node.tcp_sock, N2N_TCP_BACKLOG_QUEUE_SIZE)) {
-        traceEvent(TRACE_ERROR, "Failed to listen on auxiliary TCP socket. %s", strerror(errno));
+        traceEvent(TRACE_ERROR, "failed to listen on auxiliary TCP socket, %s", strerror(errno));
         exit(-2);
     } else {
         traceEvent(TRACE_NORMAL, "supernode is listening on TCP %u (aux)", sss_node.lport);
     }
 #endif
 
-    sss_node.mgmt_sock = open_socket(sss_node.mport, 0 /* bind LOOPBACK */, 0 /* UDP */);
+    sss_node.mgmt_sock = open_socket(sss_node.mport, INADDR_LOOPBACK, 0 /* UDP */);
     if(-1 == sss_node.mgmt_sock) {
-        traceEvent(TRACE_ERROR, "Failed to open management socket. %s", strerror(errno));
+        traceEvent(TRACE_ERROR, "failed to open management socket, %s", strerror(errno));
         exit(-2);
     } else {
         traceEvent(TRACE_NORMAL, "supernode is listening on UDP %u (management)", sss_node.mport);
@@ -748,21 +638,23 @@ int main (int argc, char * const argv[]) {
         sss_node.groupid = sss_node.groupid == 0 ? pw->pw_gid : 0;
     }
     if((sss_node.userid != 0) || (sss_node.groupid != 0)) {
-        traceEvent(TRACE_NORMAL, "Dropping privileges to uid=%d, gid=%d",
+        traceEvent(TRACE_NORMAL, "dropping privileges to uid=%d, gid=%d",
 	                 (signed int)sss_node.userid, (signed int)sss_node.groupid);
 
         /* Finished with the need for root privileges. Drop to unprivileged user. */
         if((setgid(sss_node.groupid) != 0)
            || (setuid(sss_node.userid) != 0)) {
-            traceEvent(TRACE_ERROR, "Unable to drop privileges [%u/%s]", errno, strerror(errno));
+            traceEvent(TRACE_ERROR, "unable to drop privileges [%u/%s]", errno, strerror(errno));
             exit(1);
         }
     }
 
     if((getuid() == 0) || (getgid() == 0)) {
-        traceEvent(TRACE_WARNING, "Running as root is discouraged, check out the -u/-g options");
+        traceEvent(TRACE_WARNING, "running as root is discouraged, check out the -u/-g options");
     }
 #endif
+
+    sn_init(&sss_node);
 
     traceEvent(TRACE_NORMAL, "supernode started");
 
@@ -777,5 +669,6 @@ int main (int argc, char * const argv[]) {
 #endif
 
     keep_running = 1;
-    return run_sn_loop(&sss_node, &keep_running);
+    sss_node.keep_running = &keep_running;
+    return run_sn_loop(&sss_node);
 }

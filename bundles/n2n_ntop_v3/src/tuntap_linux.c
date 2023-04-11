@@ -48,7 +48,7 @@ static int setup_ifname (int fd, const char *ifname, const char *ipaddr,
     if(ioctl(fd, SIOCSIFADDR, &ifr) == -1) {
         traceEvent(TRACE_ERROR, "ioctl(SIOCSIFADDR) failed [%d]: %s", errno, strerror(errno));
         return -2;
-  }
+    }
 
     // netmask
     if(netmask && (((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr.s_addr != 0)) {
@@ -148,10 +148,8 @@ int tuntap_open (tuntap_dev *device,
         // set an explicit random MAC to know the exact MAC in use, manually
         // reading the MAC address is not safe as it may change internally
         // also after the TAP interface UP status has been notified
-        int i;
 
-        for(i = 0; i < 6; i++)
-            device->mac_addr[i] = n2n_rand();
+        memrnd(device->mac_addr, N2N_MAC_SIZE);
 
         // clear multicast bit
         device->mac_addr[0] &= ~0x01;

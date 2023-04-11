@@ -1,46 +1,42 @@
-CC=@CC@
+#
+# This is not a standalone makefile, it must be called from the toplevel
+# makefile to inherit the correct environment
+
 DEBUG?=-g3
-OPTIMIZATION?=-O2 #-march=native
-WARN?=-Wall
 
-INSTALL=install
-INSTALL_PROG=$(INSTALL) -m755
-MKDIR=mkdir -p
-
-PREFIX?=$(DESTDIR)/usr
-ifeq ($(OS),Darwin)
-SBINDIR=$(PREFIX)/local/sbin
-else
-SBINDIR=$(PREFIX)/sbin
-endif
-
-LIBS_EDGE_OPT=@N2N_LIBS@
-LIBS_EDGE+=$(LIBS_EDGE_OPT)
 HEADERS=$(wildcard include/*.h)
-CFLAGS+=-I../include @CFLAGS@
+CFLAGS+=-I../include
+ifeq ($(CONFIG_TARGET),mingw)
+CFLAGS+=-I../win32
+endif
+CFLAGS+=$(DEBUG)
 LDFLAGS+=-L..
-CFLAGS+=$(DEBUG) $(OPTIMIZATION) $(WARN)
-LDFLAGS=@LDFLAGS@
 
 N2N_LIB=../libn2n.a
 
-TOOLS=n2n-benchmark
+TOOLS=n2n-benchmark n2n-keygen
 TOOLS+=@ADDITIONAL_TOOLS@
 
+TESTS=tests-compress tests-elliptic tests-hashing tests-transform
+TESTS+=tests-wire
+
 .PHONY: all clean install
-all: $(TOOLS)
+all: $(TOOLS) $(TESTS)
 
-n2n-benchmark: benchmark.c $(N2N_LIB) $(HEADERS)
-	$(CC) $(CFLAGS) $< $(LDFLAGS) $(N2N_LIB) $(LIBS_EDGE) -o $@
+n2n-benchmark.o: $(N2N_LIB) $(HEADERS) ../Makefile Makefile
+n2n-keygen.o: $(N2N_LIB) $(HEADERS) ../Makefile Makefile
 
-n2n-decode: n2n_decode.c $(N2N_LIB) $(HEADERS)
-	$(CC) $(CFLAGS) $< $(LDFLAGS) $(N2N_LIB) $(LIBS_EDGE) -lpcap -o $@
+n2n-decode: n2n-decode.c $(N2N_LIB) $(HEADERS) ../Makefile Makefile
+	$(CC) $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -lpcap -o $@
 
-.c.o: $(HEADERS) ../Makefile Makefile
-	$(CC) $(CFLAGS) -c $< -o $@
+# See comments in the topdir Makefile about how to generate coverage
+# data.
+gcov:
+	gcov $(TOOLS) $(TESTS)
 
 clean:
 	rm -rf $(TOOLS) *.o *.dSYM *~
+	rm -f $(TESTS) *.gcno *.gcda
 
 install: $(TOOLS)
 	$(INSTALL_PROG) $(TOOLS) $(SBINDIR)/

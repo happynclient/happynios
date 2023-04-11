@@ -18,7 +18,7 @@ rpmbuild -bb ./n2n.spec
 - Better ming Windows build support.
 - Added `-E` flag to allow multicast ethernet traffic.
 
-## Draft changelog between 2.8.x and 2.9.x (as of February 8, 2021)
+## Draft changelog between 2.8 and 3.0 (as of September 27, 2021)
 
 ### New Features
 
@@ -32,16 +32,26 @@ rpmbuild -bb ./n2n.spec
 - Network interface metric can be set by command-line option `-x` (Windows only)
 - Re-enabled local peer detection by multicast on Windows
 - Edge identifier (`-I`) helps to identify edges more easily in management port output
+- Optionally bind edge to one local IP address only (extension to `-p`)
+- A preferred local socket can be advertised to other edges for better local peer-to-peer connections (`-e`)
+- Optional edge user and password authentication (`-J`, `-P`, `doc/Authentication.md`)
+- Optional json format at management port allows for machine-driven handling such as `.html` page generation (`scripts/n2n-httpd`) or script-based evaluation (`scripts/n2n-ctl`)
+- Completely overhauled build system including GitHub's action runners performing code syntax and formal checks, creating and running test builds, providing binairies and packages as artifacts and running verification tests
+
 
 ### Improvements
 
-- Increased edges' resiliance to temporary supernode failure
+- Increased edges' resilience to temporary supernode failure
 - Fixed a compression-related memory leak
-- Ciphers partly come with platform-specific hardware acceleration (check `tools/n2n-benchmark`)
+- Ciphers partly come with platform-specific hardware acceleration
+- Added a test framework (`tools/test-*.c` and `tests/`)
 - Clean-up management port output
 - Polished benchmark tool output
+- Spun-off the name resolution into a separate thread avoiding lags
+- Added support for additional environment variables (`N2N_COMMUNITY`, `N2N_PASSWORD`, and `N2N_FEDERATION`)
+- Implemented new `reload_communities` command to make supernode hot-reload the `-c` provided `community.list` file, issued through management port
 - Reactivated send out of gratuitous ARP packet on establishing connection
-- Enhanced documentation (`doc/` folder) including the man pages and command-line help text
+- Enhanced documentation (`doc/` folder) including the man pages and command-line help text (`-h` and more detailed `--help`)
 - Self-monitoring time stamp accuracy for use on systems with less accurate clocks
 - Fixed man pages' and config files' paths
 - Code clean-up

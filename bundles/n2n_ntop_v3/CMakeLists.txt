@@ -6,7 +6,7 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # N2n release information
-set(N2N_VERSION "2.9.0")
+set(N2N_VERSION "3.0.0")
 set(N2N_OSNAME ${CMAKE_SYSTEM_NAME})
 execute_process(
         COMMAND git status
@@ -27,7 +27,7 @@ execute_process(
 )
 string(REGEX REPLACE "\n$" "" GIT_REV "${GIT_REV}")
 string(REGEX REPLACE "\n$" "" GIT_ID "${GIT_ID}")
-set(N2N_VERSION "${N2N_VERSION}.r${GIT_REV}.${GIT_ID}")
+set(N2N_VERSION "${N2N_VERSION}.r${GIT_REV}.${GIT_ID}.happyn")
 MESSAGE(STATUS "Build from git rev: ${N2N_VERSION}")
 endif (GIT_ERROR_CODE EQUAL 0)
 
@@ -40,10 +40,21 @@ add_definitions(-DN2N_VERSION="${N2N_VERSION}" -DN2N_OSNAME="${N2N_OSNAME}")
 OPTION(BUILD_SHARED_LIBS "BUILD Shared Library" OFF)
 
 # N2n specific params
+OPTION(N2N_OPTION_USE_PTHREAD "USE PTHREAD Library" ON)
 OPTION(N2N_OPTION_USE_OPENSSL "USE OPENSSL Library" OFF)
 OPTION(N2N_OPTION_USE_PCAPLIB "USE PCAP Library" OFF)
 OPTION(N2N_OPTION_USE_ZSTD "USE ZSTD Library" OFF)
 
+
+if(N2N_OPTION_USE_PTHREAD)
+  find_library(PTHREAD_LIB pthread)
+  if(PTHREAD_LIB)
+    ADD_DEFINITIONS("-DHAVE_PTHREAD")
+  else()
+    MESSAGE(WARNING "libpthread not found.")
+    set(N2N_OPTION_USE_PTHREAD OFF)   
+  endif(PTHREAD_LIB)
+endif(N2N_OPTION_USE_PTHREAD)
 
 if(NOT DEFINED N2N_OPTION_USE_OPENSSL)
 set(N2N_OPTION_USE_OPENSSL OFF)
@@ -106,9 +117,12 @@ endif(DEFINED WIN32)
 #add_library(n2n STATIC ${N2N_DIR_SRCS})
 add_library(n2n STATIC
         src/n2n.c
+        src/edge_management.c
         src/edge_utils.c
+        src/sn_management.c
         src/sn_utils.c
         src/wire.c
+        src/hexdump.c
         src/minilzo.c
         src/tf.c
         src/cc20.c
@@ -128,8 +142,14 @@ add_library(n2n STATIC
         src/tuntap_osx.c
         src/n2n_regex.c
         src/network_traffic_filter.c
-        src/sn_selection.c)
+        src/sn_selection.c
+        src/auth.c
+        src/curve25519.c)
 
+
+if(N2N_OPTION_USE_PTHREAD)
+  target_link_libraries(n2n pthread)
+endif(N2N_OPTION_USE_PTHREAD)
 
 if(N2N_OPTION_USE_OPENSSL)
 #  target_link_libraries(n2n crypto)
@@ -149,7 +169,7 @@ endif(DEFINED WIN32)
 add_executable(edge src/edge.c)
 target_link_libraries(edge n2n)
 
-add_executable(supernode src/sn.c)
+add_executable(supernode src/supernode.c)
 target_link_libraries(supernode n2n)
 
 add_executable(example_edge_embed_quick_edge_init src/example_edge_embed_quick_edge_init.c)
@@ -179,13 +199,26 @@ install(TARGETS edge supernode
 
 
 # Tools
-add_executable(n2n-benchmark tools/benchmark.c)
+add_executable(n2n-benchmark tools/n2n-benchmark.c)
 target_link_libraries(n2n-benchmark n2n)
+add_executable(n2n-keygen tools/n2n-keygen.c)
+target_link_libraries(n2n-keygen n2n)
+
+add_executable(tests-compress tools/tests-compress.c)
+target_link_libraries(tests-compress n2n)
+add_executable(tests-elliptic tools/tests-elliptic.c)
+target_link_libraries(tests-elliptic n2n)
+add_executable(tests-hashing tools/tests-hashing.c)
+target_link_libraries(tests-hashing n2n)
+add_executable(tests-transform tools/tests-transform.c)
+target_link_libraries(tests-transform n2n)
+add_executable(tests-wire tools/tests-wire.c)
+target_link_libraries(tests-wire n2n)
 
 if(N2N_OPTION_USE_PCAPLIB)
   find_library(PCAP_LIB pcap)
   if(PCAP_LIB)
-    add_executable(n2n-decode tools/n2n_decode.c)
+    add_executable(n2n-decode tools/n2n-decode.c)
     target_link_libraries(n2n-decode n2n pcap)
     install(TARGETS n2n-decode RUNTIME DESTINATION bin)
 
@@ -234,4 +267,10 @@ install(FILES ${PROJECT_BINARY_DIR}/doc/supernode.1.gz
         DESTINATION /usr/share/man/man1)
 install(FILES ${PROJECT_BINARY_DIR}/doc/n2n.7.gz
         DESTINATION /usr/share/man/man7)
+
+# TODO:
+# - Add the right dependancy so that the tests binaries get built first
+enable_testing()
+add_test(tests ${PROJECT_SOURCE_DIR}/scripts/test_harness.sh ${PROJECT_BINARY_DIR} ${PROJECT_SOURCE_DIR}/tests)
+
 endif(DEFINED UNIX)
