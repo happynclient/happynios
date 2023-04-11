@@ -52,7 +52,7 @@ AVAudioPlayer *_player;
 
         NETunnelProviderProtocol * protocal = [[NETunnelProviderProtocol alloc]init];
         mg.localizedDescription = @"hin2n";
-        protocal.providerBundleIdentifier = @"com.hin2n.demo.hin2n2.Tunnel";
+        protocal.providerBundleIdentifier = @"net.happyn.happynios.happynet.tunnel";
         protocal.serverAddress = currentModel.supernode;
         protocal.providerConfiguration = @{@"":@""};
         mg.protocolConfiguration = protocal;
@@ -238,7 +238,7 @@ AVAudioPlayer *_player;
 -(void)registerNotificationCallBack{
     
     if (traditionalWormhole == nil) {
-        traditionalWormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.com.hin2n.demo.hin2n2"
+        traditionalWormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet"
                                                                         optionalDirectory:@"n2n"];
         watchConnectivityListeningWormhole = [MMWormholeSession sharedListeningSession];
 
@@ -313,7 +313,7 @@ int openVPN(void){
     NSString * subnetMark = params[@"subnetMark"];
     NETunnelProviderProtocol * protocal = [[NETunnelProviderProtocol alloc]init];
     mg.localizedDescription = @"hin2n";
-    protocal.providerBundleIdentifier = @"com.hin2n.demo.hin2n2.Tunnel";
+    protocal.providerBundleIdentifier = @"net.happyn.happynios.happynet.tunnel";
     protocal.serverAddress = currentModel.supernode;
     protocal.providerConfiguration = @{@"":@""};
     mg.protocolConfiguration = protocal;

@@ -68,7 +68,7 @@ int writePacketIntoTunnel(char data[], int length){
 }
 
 -(int)writePacketIntoTunnel:(NSArray * )dataArray{
-    MMWormhole * hole = [[MMWormhole alloc]initWithApplicationGroupIdentifier:@"group.com.hin2n.demo.hin2n2" optionalDirectory:@"n2n"];
+    MMWormhole * hole = [[MMWormhole alloc]initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
     [hole passMessageObject:@{@"packets" : dataArray} identifier:@"writePacket"];
     return [[Hin2nTunnelManager shareManager] writPackets:dataArray];
 }

@@ -59,7 +59,7 @@
       launchAutomaticallySubstyle = "2">
       <RemoteRunnable
          runnableDebuggingMode = "0"
-         BundleIdentifier = "com.hin2n.demo.hin2n2"
+         BundleIdentifier = "net.happyn.happynios.happynet"
          RemotePath = "/var/containers/Bundle/Application/53D6B301-27E9-4FE3-A8D2-EE0A0602747C/hin2n.app">
       </RemoteRunnable>
       <MacroExpansion>

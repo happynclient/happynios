@@ -521,7 +521,7 @@ typedef enum {
 }
 
 -(void)setDiscrption{
-    NSUserDefaults  * shareDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.com.hin2n.demo.hin2n"];
+    NSUserDefaults  * shareDefaults = [[NSUserDefaults alloc]initWithSuiteName:@"group.net.happyn.happynios.happynet"];
     [shareDefaults setInteger:123456 forKey:@"description"];
     
     NSString * d = @"ffffff";

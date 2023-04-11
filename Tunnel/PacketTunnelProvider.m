@@ -96,7 +96,7 @@ static id obj;
 //注册写包通知,如果有收到来自remote packet, 则写进tunnel
 -(void)registerNotificationCallBack{
     if (traditionalWormhole == nil) {
-        traditionalWormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.com.hin2n.demo.hin2n2"
+        traditionalWormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet"
                                                                         optionalDirectory:@"n2n"];
         watchConnectivityListeningWormhole = [MMWormholeSession sharedListeningSession];
 
@@ -130,7 +130,7 @@ static id obj;
 -(void)readPacket{
     __weak typeof(self) weakSelf = self;
    
-    hole = [[MMWormhole alloc]initWithApplicationGroupIdentifier:@"group.com.hin2n.demo.hin2n2" optionalDirectory:@"n2n"];
+    hole = [[MMWormhole alloc]initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
     NSMutableArray * packArray = [NSMutableArray array];
     [self.packetFlow readPacketsWithCompletionHandler:^(NSArray<NSData *> * _Nonnull packets, NSArray<NSNumber *> * _Nonnull protocols) {
                       if (packets.count>0) {
