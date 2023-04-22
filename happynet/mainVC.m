@@ -62,7 +62,7 @@ typedef enum {
     [self regApplicationExitNotification];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"N2N";
+    self.title = @"Happynet";
     [self createLogFolder];
     [self initUI];
    

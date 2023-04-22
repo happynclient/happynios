@@ -287,7 +287,7 @@
 		CB7EE6BD26D6188000DEA5EF /* PacketTunnelProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PacketTunnelProvider.m; sourceTree = "<group>"; };
 		CB7EE6BF26D6188000DEA5EF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CB7EE6C026D6188000DEA5EF /* Tunnel.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tunnel.entitlements; sourceTree = "<group>"; };
-		CB7EE6DB26D62EA000DEA5EF /* hin2n-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hin2n-Bridging-Header.h"; sourceTree = "<group>"; };
+		CB7EE6DB26D62EA000DEA5EF /* happynet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "happynet-Bridging-Header.h"; sourceTree = "<group>"; };
 		CB854B1D26EF325D0095CA63 /* BridgeC2OC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeC2OC.m; sourceTree = "<group>"; };
 		CB854B1E26EF325D0095CA63 /* Hin2nTunnelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hin2nTunnelManager.h; sourceTree = "<group>"; };
 		CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hin2nTunnelManager.m; sourceTree = "<group>"; };
@@ -460,7 +460,7 @@
 				5DE54FF326D0A1BE00435594 /* edge_ios.c */,
 				CB8CAEFF26E36251003D68F6 /* PacketDataManager.h */,
 				CB8CAF0026E36251003D68F6 /* PacketDataManager.c */,
-				CB7EE6DB26D62EA000DEA5EF /* hin2n-Bridging-Header.h */,
+				CB7EE6DB26D62EA000DEA5EF /* happynet-Bridging-Header.h */,
 				CB8DF86026FB2CA600798323 /* MP3 */,
 			);
 			path = happynet;

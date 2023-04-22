@@ -590,7 +590,7 @@ void print_n2n_version () {
 
     printf("Welcome to happynet v.%s for %s\n"
            "Built on %s\n"
-           "Copyright 2007-2021 - ntop.org and 2022 - happyn.cn and contributors\n\n",
+           "Copyright 2007-2021 - ntop.org and 2022-2023 happyn.net and contributors\n\n",
            GIT_RELEASE, PACKAGE_OSNAME, PACKAGE_BUILDDATE);
 }
 
