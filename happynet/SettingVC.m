@@ -24,7 +24,7 @@
 
 @property(nonatomic,assign)BOOL         forwarding;  // Enable packet forwarding default NO;
 @property(nonatomic,assign)BOOL         acceptMulticast; // Accept multicast mac address default NO;
-@property(nonatomic,assign)NSInteger    level; //0-4  error,warning,normal,info,debug default 4
+@property(nonatomic,assign)NSInteger    level; //0-4  normal,warning,error,info,debug default normal
 
 @property(nonatomic,assign)NSInteger    version; //0-3 default 3
 
@@ -997,7 +997,7 @@
     alertLevelView.layer.cornerRadius = 5;
     CGFloat item_h = 5;
     
-    NSArray * itemTextArray = @[@"ERROR",@"WARNING",@"NORMAL",@"INFO",@"DEBUG"];
+    NSArray * itemTextArray = @[@"NORMAL",@"ERROR",@"WARNING",@"INFO",@"DEBUG"];
     for (int i = 0; i<5; i++) {
         UIButton * levelItemButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [alertLevelView addSubview:levelItemButton];
@@ -1084,13 +1084,13 @@
     NSString * levelName = nil;
     switch (_model.level) {
         case 0:
-            levelName = @"ERROR";
+            levelName = @"NORMAL";
             break;
         case 1:
             levelName = @"WARNING";
             break;
         case 2:
-            levelName = @"NORMAL";
+            levelName = @"ERROR";
             break;
         case 3:
             levelName = @"INFO";
