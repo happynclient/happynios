@@ -901,7 +901,8 @@
         item_h += 44;
     }
     [UIView animateWithDuration:0.33 animations:^{
-        alertLevelView.frame = CGRectMake(self.view.frame.size.width-220, self.view.frame.size.height-250, 200, 250);
+        //alertLevelView.frame = CGRectMake(self.view.frame.size.width-220, self.view.frame.size.height-250, 200, 250);
+        alertLevelView.frame = CGRectMake((self.view.frame.size.width-200)/2, (self.view.frame.size.height-250)/2, 200, 250);
         } completion:^(BOOL finished) {
             
         }];
@@ -988,6 +989,7 @@
     [self.view addSubview:_backgroundView];
     
     UIView * alertLevelView = [[UIView alloc]initWithFrame:CGRectMake(self.view.frame.size.width-220, self.view.frame.size.height, 200, 250)];
+
     [_backgroundView addSubview:alertLevelView];
     alertLevelView.backgroundColor = [UIColor whiteColor];
     alertLevelView.layer.borderWidth = 1;
@@ -1007,7 +1009,8 @@
         item_h += 44;
     }
     [UIView animateWithDuration:0.33 animations:^{
-        alertLevelView.frame = CGRectMake(self.view.frame.size.width-220, self.view.frame.size.height-250, 200, 250);
+        //alertLevelView.frame = CGRectMake(self.view.frame.size.width-220, self.view.frame.size.height-250, 200, 250);
+        alertLevelView.frame = CGRectMake((self.view.frame.size.width-200)/2, (self.view.frame.size.height-250)/2, 200, 250);
         } completion:^(BOOL finished) {
             
         }];
