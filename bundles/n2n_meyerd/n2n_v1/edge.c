@@ -27,7 +27,7 @@
 #ifdef __APPLE__
 #include "libs_def.h"
 
-#include "../../../hin2n/BridgeC2OC.h"
+#include "../../../happynet/BridgeC2OC.h"
 #endif
 
 #include "minilzo.h"

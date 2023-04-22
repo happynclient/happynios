@@ -3,7 +3,7 @@
 #include "n2n.h"
 #include "libs_def.h"
 
-#include "../../hin2n/BridgeC2OC.h"
+#include "../../happynet/BridgeC2OC.h"
 
 static int scan_address(char *ip_addr, size_t addr_size,
                         char *ip_mode, size_t mode_size,

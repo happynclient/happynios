@@ -271,6 +271,7 @@ int supernode2sock (n2n_sock_t *sn, const n2n_sn_name_t addrIn) {
     sn->family = AF_INVALID;
 
     memcpy(addr, addrIn, N2N_EDGE_SN_HOST_SIZE);
+    traceEvent(TRACE_WARNING, "supernode addr: %s", addr);
     supernode_host = strtok(addr, ":");
 
     if(supernode_host) {

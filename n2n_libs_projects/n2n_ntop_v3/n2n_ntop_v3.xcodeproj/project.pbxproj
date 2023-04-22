@@ -97,8 +97,8 @@
 		5D84D02B26CFB872004F0004 /* lzoconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lzoconf.h; path = ../../bundles/n2n_ntop_v3/include/lzoconf.h; sourceTree = "<group>"; };
 		5D84D02C26CFB872004F0004 /* n2n_regex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = n2n_regex.h; path = ../../bundles/n2n_ntop_v3/include/n2n_regex.h; sourceTree = "<group>"; };
 		5D84D02D26CFBAA3004F0004 /* edge_ios_v3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = edge_ios_v3.c; sourceTree = "<group>"; };
-		5DE54FD526D0935400435594 /* libs_def.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../hin2n/libs_def.h; sourceTree = "<group>"; };
-		5DE54FEC26D09EE100435594 /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../hin2n/ios_tuntap.c; sourceTree = "<group>"; };
+		5DE54FD526D0935400435594 /* libs_def.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../happynet/libs_def.h; sourceTree = "<group>"; };
+		5DE54FEC26D09EE100435594 /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../happynet/ios_tuntap.c; sourceTree = "<group>"; };
 		5DE54FFB26D0F23600435594 /* edge_utils_win32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = edge_utils_win32.h; path = ../../bundles/n2n_ntop_v3/include/edge_utils_win32.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -414,7 +414,7 @@
 					"DEBUG=1",
 					"GIT_RELEASE=\"\\\"1.0\\\"\"",
 					"PACKAGE_OSNAME=\"\\\"iOS\\\"\"",
-					"PACKAGE_VERSION=\"\\\"2.9.0\\\"\"",
+					"PACKAGE_VERSION=\"\\\"3.0.0\\\"\"",
 					N2N_HAVE_AES,
 					HAVE_OPENSSL_1_1,
 				);
@@ -441,7 +441,7 @@
 					"$(inherited)",
 					"GIT_RELEASE=\"\\\"1.0\\\"\"",
 					"PACKAGE_OSNAME=\"\\\"iOS\\\"\"",
-					"PACKAGE_VERSION=\"\\\"2.9.0\\\"\"",
+					"PACKAGE_VERSION=\"\\\"3.0.0\\\"\"",
 					N2N_HAVE_AES,
 					HAVE_OPENSSL_1_1,
 				);

@@ -3,7 +3,7 @@
 #include "n2n.h"
 #include "libs_def.h"
 
-#include "../../hin2n/BridgeC2OC.h"
+#include "../../happynet/BridgeC2OC.h"
 
 int supernode_connect(n2n_edge_t *eee);
 void send_query_peer (n2n_edge_t * eee, const n2n_mac_t dst_mac);

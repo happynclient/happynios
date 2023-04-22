@@ -45,8 +45,8 @@
 		5DC96BC726EEDC4A00AF5DBA /* transform_tf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = transform_tf.c; path = ../../bundles/n2n_meyerd/n2n_v2/transform_tf.c; sourceTree = "<group>"; };
 		5DC96BC826EEDC4A00AF5DBA /* twofish.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = twofish.c; path = ../../bundles/n2n_meyerd/n2n_v2/twofish.c; sourceTree = "<group>"; };
 		5DC96BC926EEDC4A00AF5DBA /* transform_null.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = transform_null.c; path = ../../bundles/n2n_meyerd/n2n_v2/transform_null.c; sourceTree = "<group>"; };
-		5DC96BE626EEDEDE00AF5DBA /* libs_def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../hin2n/libs_def.h; sourceTree = "<group>"; };
-		5DC96BEB26EEDFFE00AF5DBA /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../hin2n/ios_tuntap.c; sourceTree = "<group>"; };
+		5DC96BE626EEDEDE00AF5DBA /* libs_def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../happynet/libs_def.h; sourceTree = "<group>"; };
+		5DC96BEB26EEDFFE00AF5DBA /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../happynet/ios_tuntap.c; sourceTree = "<group>"; };
 		5DC96BED26EEE1DC00AF5DBA /* tuntap_android.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tuntap_android.c; path = ../../bundles/n2n_meyerd/n2n_v2/android/tuntap_android.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 

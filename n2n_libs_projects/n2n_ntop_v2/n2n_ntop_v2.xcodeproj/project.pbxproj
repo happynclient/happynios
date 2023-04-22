@@ -69,8 +69,8 @@
 		5DE54FB426D08D9100435594 /* lzoconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lzoconf.h; path = ../../bundles/n2n_ntop_v2/include/lzoconf.h; sourceTree = "<group>"; };
 		5DE54FB626D08DFC00435594 /* edge_ios_v2.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = edge_ios_v2.c; sourceTree = "<group>"; };
 		5DE54FB926D08EC400435594 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
-		5DE54FD626D0938A00435594 /* libs_def.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../hin2n/libs_def.h; sourceTree = "<group>"; };
-		5DE54FEA26D09ECE00435594 /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../hin2n/ios_tuntap.c; sourceTree = "<group>"; };
+		5DE54FD626D0938A00435594 /* libs_def.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../happynet/libs_def.h; sourceTree = "<group>"; };
+		5DE54FEA26D09ECE00435594 /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../happynet/ios_tuntap.c; sourceTree = "<group>"; };
 		993D86D826F876E40056EDB9 /* header_encryption.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = header_encryption.c; path = ../../bundles/n2n_ntop_v2/src/header_encryption.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
