@@ -242,10 +242,10 @@ __attribute__((visibility("default"))) int start_edge_v3(CurrentSettings *settin
 
         switch(settings->encryptionMethod){
             case 0:
-                conf.transop_id = N2N_TRANSFORM_ID_TWOFISH;
+                conf.transop_id = N2N_TRANSFORM_ID_AES;
                 break;
             case 1:
-                conf.transop_id = N2N_TRANSFORM_ID_AES;
+                conf.transop_id = N2N_TRANSFORM_ID_TWOFISH;
                 break;
             case 2:
                 conf.transop_id = N2N_TRANSFORM_ID_SPECK;

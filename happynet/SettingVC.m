@@ -20,7 +20,7 @@
 @property(nonatomic,strong)UIView      * backgroundView;
 
 
-@property(nonatomic,assign)NSInteger    method; //0-3 Twofish,AES-CBC,Speck-CTR,Chacha20
+@property(nonatomic,assign)NSInteger    method; //0-3 AES-CBC,Twofish,Speck-CTR,Chacha20
 
 @property(nonatomic,assign)BOOL         forwarding;  // Enable packet forwarding default NO;
 @property(nonatomic,assign)BOOL         acceptMulticast; // Accept multicast mac address default NO;
@@ -889,7 +889,7 @@
     CGFloat item_h = 5;
     
 //    2是speck，3是chacha。
-    NSArray * itemTextArray = @[@"Twofish",@"AES-CBC",@"Speck-CRT",@"ChaCha20"];
+    NSArray * itemTextArray = @[@"AES-CBC",@"Twofish",@"Speck-CRT",@"ChaCha20"];
     for (int i = 0; i<itemTextArray.count; i++) {
         UIButton * levelItemButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [alertLevelView addSubview:levelItemButton];
@@ -1109,10 +1109,10 @@
     _method = _model.encryptionMethod;
     switch (_model.encryptionMethod) {
         case 0:
-            levelName = @"Twofish";
+            levelName = @"AES-CBC";
             break;
         case 1:
-            levelName = @"AES-CBC";
+            levelName = @"Twofish";
             break;
         case 2:
             levelName = @"Speck-CTR";
