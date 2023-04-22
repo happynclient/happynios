@@ -154,7 +154,7 @@
         make.top.mas_equalTo(line1.mas_bottom).mas_offset(10);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(-50);
-        make.height.mas_equalTo(75);
+        make.height.mas_equalTo(15);
     }];
     
     UILabel * versionLabel = [[UILabel alloc]init];
@@ -201,6 +201,8 @@
         }
         [_array addObject:itemView];
     }
+    versionView.hidden = YES;
+
     [_array mas_distributeViewsAlongAxis:MASAxisTypeHorizontal withFixedSpacing:10 leadSpacing:20 tailSpacing:10];
     
     
@@ -486,7 +488,7 @@
     if (_isUpdate) {
         [self setSelectMethodButtonTitle];
     }else{
-       [_selectMethodButton setTitle:@"Twofish" forState:UIControlStateNormal];
+       [_selectMethodButton setTitle:@"AES-CBC" forState:UIControlStateNormal];
     }
     [_selectMethodButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _selectMethodButton.contentHorizontalAlignment =UIControlContentHorizontalAlignmentLeft;
