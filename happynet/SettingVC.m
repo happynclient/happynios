@@ -76,7 +76,7 @@
         [self setDataFromListVC];
     }else{
         self.title = @"Setting";
-        _level = 0;
+        _level = 2;
         _version = 3;
     }
     [self initDB];
@@ -737,7 +737,7 @@
     traceLabel.text = @"Trace level:";
     traceLabel.textColor = [UIColor lightGrayColor];
     traceLabel.font = [UIFont systemFontOfSize:14];
-//    traceLabel.backgroundColor = [UIColor orangeColor];
+    //traceLabel.backgroundColor = [UIColor orangeColor];
     [traceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(acceptMulticastLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
@@ -933,7 +933,7 @@
         [self cancelMoreView];
         _scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1150);
     }
-    [self setlevelButtonTitle];
+    //[self setlevelButtonTitle];
     
     if ([[_model.mac class] isEqual:[NSNull class]] ||_model.mac.length <5 ) {
         self.macAddressTF.text = [self getMac];
