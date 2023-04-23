@@ -20,12 +20,10 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>NSAllowsLocalNetworking</key>
-	<string>YES</string>
-	<key>NSAllowsArbitraryLoadsInWebContent</key>
-	<string>YES</string>
 	<key>NSExtension</key>
 	<dict>
+		<key>NEProviderStreamIsDirected</key>
+		<string>YES</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.networkextension.packet-tunnel</string>
 		<key>NSExtensionPrincipalClass</key>
