@@ -289,7 +289,7 @@ __attribute__((visibility("default"))) int start_edge_v3(CurrentSettings *settin
     if(0 == edge_conf_add_supernode(&conf, settings->supernode))
         traceEvent(TRACE_DEBUG, "Adding supernode[%u] = %s\n", (unsigned int) conf.sn_num, settings->supernode);
         
-    if(strlen(settings->supernode2))
+    if(settings->supernode2 && strlen(settings->supernode2))
         if(0 == edge_conf_add_supernode(&conf, settings->supernode2))
             traceEvent(TRACE_DEBUG, "Adding supernode[%u] = %s\n", (unsigned int) conf.sn_num, settings->supernode2);
 
