@@ -21,31 +21,26 @@ some problems which are already known:
 
 此项目同步于[hin2n-ios](https://github.com/Oliver0624/hin2n-ios)
 
-此为n2n的一个iOS简易实现。希望能在次项目基础上，开发一个兼容N2N3以及happyn.net服务的APP，同时上架Apple Store;
+此为n2n的一个iOS简易实现。希望能在原项目基础上，开发一个兼容N2N v3以及happyn.net服务的APP，同时上架Apple Store;
 
 1. 它实现了在iOS设备（无需越狱）下作为edge工作，能够连接到supernode以实现NAT穿透。
-2. 支持全部n2n协议(v1/v2/v2s/v3)
-3. 由于苹果不支持仅以GPL协议发行的APP，我们无法在苹果商店上架。您必须自己下载代码并编译安装。
-4. 如果要编译，您必须拥有一个苹果开发者账号且确保申请了Network-Extension的权限。
+2. 支持n2n V3协议
+3. 如果要编译，您必须拥有一个苹果开发者账号且确保申请了Network-Extension的权限。
 
 部分已知问题：
 
 0. 不支持使用Xcode中的模拟器运行这个程序。
 1. 切出再切入APP，则连接状态会短暂地显示不正常。
-2. 如果用户选择了其他非hin2n的VPN，则点击连接按钮时会连接失败；再断开之后，就无法上网了。
+2. 如果用户选择了其他非happyn的VPN，则点击连接按钮时会连接失败；再断开之后，就无法上网了。
 3. 未对部分参数做合法性判断
 4. 未适配深色主题
 
 
 # RoadMap
 
-- [] 用基本配置连接成功N2N V3 Supernode
-- [] 重构代码，界面上只支持N2N V3
+- [x] 用基本配置连接成功N2N V3 Supernode
+- [x] 重构代码，界面上只支持N2N V3
 - [] 加入 hin2n-ios的原始项目链接，致谢
-- [] 同步happyn的N2N V3上游代码
-- [] 加入happyn icon
+- [x] 同步happyn的N2N V3上游代码
+- [x] 加入happyn icon
 - [] 上架Apple Store
-
-# Current Task List
-
-- [] #1
