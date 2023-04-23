@@ -51,7 +51,7 @@ AVAudioPlayer *_player;
     }else{
 
         NETunnelProviderProtocol * protocal = [[NETunnelProviderProtocol alloc]init];
-        mg.localizedDescription = @"hin2n";
+        mg.localizedDescription = @"happyn";
         protocal.providerBundleIdentifier = @"net.happyn.happynios.happynet.tunnel";
         protocal.serverAddress = currentModel.supernode;
         protocal.providerConfiguration = @{@"":@""};
@@ -312,7 +312,7 @@ int openVPN(void){
     NSString * ipAddrerss = params[@"ipAddress"];
     NSString * subnetMark = params[@"subnetMark"];
     NETunnelProviderProtocol * protocal = [[NETunnelProviderProtocol alloc]init];
-    mg.localizedDescription = @"hin2n";
+    mg.localizedDescription = @"happyn";
     protocal.providerBundleIdentifier = @"net.happyn.happynios.happynet.tunnel";
     protocal.serverAddress = currentModel.supernode;
     protocal.providerConfiguration = @{@"":@""};

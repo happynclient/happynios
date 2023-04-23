@@ -45,7 +45,7 @@ static id obj;
         NEDNSSettings * set_dns = [[NEDNSSettings alloc]initWithServers:@[dns]];
         settings.DNSSettings = set_dns;
     }
-    [NETunnelProviderManager sharedManager].localizedDescription = @"hin2n";
+    [NETunnelProviderManager sharedManager].localizedDescription = @"happyn";
 //    [self setUdpSession];
 
 //    NSLog(@"%@",description);
