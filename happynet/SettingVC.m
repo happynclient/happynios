@@ -807,7 +807,8 @@
     }
     if (_deviceDescriptionTF.text == nil||      _deviceDescriptionTF.text.length <1||
         [_deviceDescriptionTF.text isEqual:@""]){
-        [self alertMessage:@"Description is error"];
+        //[self alertMessage:@"Description is error"];
+        _deviceDescriptionTF.text = @"happynios";
         return;
     }
     if (_macAddressTF.text != nil){
