@@ -998,7 +998,7 @@
     alertLevelView.layer.cornerRadius = 5;
     CGFloat item_h = 5;
     
-    NSArray * itemTextArray = @[@"NORMAL",@"ERROR",@"WARNING",@"INFO",@"DEBUG"];
+    NSArray * itemTextArray = @[@"NORMAL",@"WARNING",@"ERROR",@"INFO",@"DEBUG"];
     for (int i = 0; i<5; i++) {
         UIButton * levelItemButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [alertLevelView addSubview:levelItemButton];
