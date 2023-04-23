@@ -1024,7 +1024,7 @@ static ssize_t sendto_fd (n2n_edge_t *eee, const void *buf,
                 traceEvent(TRACE_DEBUG, "WSAGetLastError(): %u", WSAGetLastError());
 #endif
             } else {
-                traceEvent(TRACE_WARNING, "sendto failed (%d) %s", errno, c);
+                traceEvent(TRACE_WARNING, "sendto failed (%d) %s, dest:%s:%d", errno, c, inet_ntoa(dest->sin_addr), dest->sin_port);
 #ifdef WIN32
                 traceEvent(TRACE_WARNING, "WSAGetLastError(): %u", WSAGetLastError());
 #endif

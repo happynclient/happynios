@@ -66,6 +66,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSAllowsArbitraryLoadsInWebContent</key>
+	<string>YES</string>
+	<key>NSAllowsLocalNetworking</key>
+	<string>YES</string>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>Need play music,please select yes</string>
 </dict>
