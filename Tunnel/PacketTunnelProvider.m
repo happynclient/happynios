@@ -36,10 +36,20 @@ static id obj;
     NSString * ip = options[@"ip"];
     
     NSString * subnetMarks = options[@"subnetMark"];
-    NEIPv4Settings * set_ipv4 = [[NEIPv4Settings alloc]initWithAddresses:@[ip] subnetMasks:@[subnetMarks]];
-    set_ipv4.includedRoutes = @[[NEIPv4Route defaultRoute]];
+    NEIPv4Settings * ipv4Settings = [[NEIPv4Settings alloc]initWithAddresses:@[ip] subnetMasks:@[subnetMarks]];
+    
+    // 添加 VPN 子网路由规则
+    NSString *subnetAddress = [self subnetAddressWithIPAddress:ip subnetMask:subnetMarks];
+    //NEIPv4Route *vpnRoute = [[NEIPv4Route alloc] initWithDestinationAddress:@"10.202.48.0" subnetMask:@"255.255.255.0"];
+    NEIPv4Route *vpnRoute = [[NEIPv4Route alloc] initWithDestinationAddress:subnetAddress subnetMask:@[subnetMarks]];
+    ipv4Settings.includedRoutes = @[vpnRoute];
+    
+    // 添加默认路由规则
+    NEIPv4Route *defaultRoute = [NEIPv4Route defaultRoute];
+    ipv4Settings.excludedRoutes = @[defaultRoute];
 
-    settings.IPv4Settings = set_ipv4;
+
+    settings.IPv4Settings = ipv4Settings;
     NSString * dns = options[@"dns"];
     if (![[dns class] isEqual:[NSNull class]] && dns.length >0) {
         NEDNSSettings * set_dns = [[NEDNSSettings alloc]initWithServers:@[dns]];
@@ -56,6 +66,22 @@ static id obj;
         
     }];
     // Add code here to start the process of connecting the tunnel.
+}
+
+- (NSString *)subnetAddressWithIPAddress:(NSString *)ipAddress subnetMask:(NSString *)subnetMask {
+    struct in_addr ipAddr;
+    struct in_addr subnetAddr;
+    inet_aton(ipAddress.UTF8String, &ipAddr);
+    inet_aton(subnetMask.UTF8String, &subnetAddr);
+    uint32_t ip = ntohl(ipAddr.s_addr);
+    uint32_t subnet = ntohl(subnetAddr.s_addr);
+    uint32_t subnetMaskInt = 0xffffffff << (32 - (int)log2(subnet & 0x7fffffff));
+    uint32_t subnetInt = ip & subnetMaskInt;
+    struct in_addr subnetInAddr;
+    subnetInAddr.s_addr = htonl(subnetInt);
+    char subnetBuffer[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &subnetInAddr, subnetBuffer, INET_ADDRSTRLEN);
+    return [NSString stringWithUTF8String:subnetBuffer];
 }
 
 - (void)stopTunnelWithReason:(NEProviderStopReason)reason completionHandler:(void (^)(void))completionHandler {
