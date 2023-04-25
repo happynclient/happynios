@@ -40,8 +40,9 @@ static id obj;
     
     // 添加 VPN 子网路由规则
     NSString *subnetAddress = [self subnetAddressWithIPAddress:ip subnetMask:subnetMarks];
+    NSArray *subnetMasks = @[subnetMarks];
     //NEIPv4Route *vpnRoute = [[NEIPv4Route alloc] initWithDestinationAddress:@"10.202.48.0" subnetMask:@"255.255.255.0"];
-    NEIPv4Route *vpnRoute = [[NEIPv4Route alloc] initWithDestinationAddress:subnetAddress subnetMask:@[subnetMarks]];
+    NEIPv4Route *vpnRoute = [[NEIPv4Route alloc] initWithDestinationAddress:subnetAddress subnetMask:subnetMasks[0]];
     ipv4Settings.includedRoutes = @[vpnRoute];
     
     // 添加默认路由规则
@@ -69,19 +70,20 @@ static id obj;
 }
 
 - (NSString *)subnetAddressWithIPAddress:(NSString *)ipAddress subnetMask:(NSString *)subnetMask {
-    struct in_addr ipAddr;
-    struct in_addr subnetAddr;
-    inet_aton(ipAddress.UTF8String, &ipAddr);
-    inet_aton(subnetMask.UTF8String, &subnetAddr);
-    uint32_t ip = ntohl(ipAddr.s_addr);
-    uint32_t subnet = ntohl(subnetAddr.s_addr);
-    uint32_t subnetMaskInt = 0xffffffff << (32 - (int)log2(subnet & 0x7fffffff));
-    uint32_t subnetInt = ip & subnetMaskInt;
-    struct in_addr subnetInAddr;
-    subnetInAddr.s_addr = htonl(subnetInt);
-    char subnetBuffer[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &subnetInAddr, subnetBuffer, INET_ADDRSTRLEN);
-    return [NSString stringWithUTF8String:subnetBuffer];
+     NSArray *ipArray = [ipAddress componentsSeparatedByString:@"."];
+     NSArray *maskArray = [subnetMask componentsSeparatedByString:@"."];
+     NSMutableString *subnet = [NSMutableString string];
+     
+     for (int i = 0; i < 4; i++) {
+         NSString *ipPart = ipArray[i];
+         NSString *maskPart = maskArray[i];
+         NSInteger subnetPart = [ipPart integerValue] & [maskPart integerValue];
+         [subnet appendFormat:@"%ld", subnetPart];
+         if (i < 3) {
+             [subnet appendString:@"."];
+         }
+     }
+     return subnet;
 }
 
 - (void)stopTunnelWithReason:(NEProviderStopReason)reason completionHandler:(void (^)(void))completionHandler {
