@@ -247,8 +247,8 @@ typedef enum {
         int result = StopEdge();
         if(0 == result){
          [self stopVPN];
-//        button.backgroundColor = [UIColor lightGrayColor];
-//         _startButton.selected = NO;
+         button.backgroundColor = [UIColor lightGrayColor];
+         _startButton.selected = NO;
         }
     }
     
@@ -399,12 +399,11 @@ typedef enum {
     [self setCurrentModelSetting];
     _manger = [Hin2nTunnelManager shareManager];
     [_manger initTunnel:_currentSettingModel];
-//    __weak typeof(self) weakSelf = self;
-//    _manger.tunnelStatus = ^(NEVPNStatus status) {
-//        //tunnel 连接状态
-//    [weakSelf tunnelConnectStatus:status];
-//    };
-//
+    __weak typeof(self) weakSelf = self;
+    _manger.tunnelStatus = ^(NEVPNStatus status) {
+        //tunnel 连接状态
+    [weakSelf tunnelConnectStatus:status];
+    };
 }
 
 //配置设置
