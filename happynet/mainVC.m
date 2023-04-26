@@ -127,7 +127,7 @@ typedef enum {
     
     UILabel * settingTitle = [[UILabel alloc]init];
     [self.view addSubview:settingTitle];
-    settingTitle.text = @"Current Setting";
+    settingTitle.text = NSLocalizedString(@"Current Setting", nil);
     settingTitle.textColor = [UIColor grayColor];
     settingTitle.font = [UIFont systemFontOfSize:16];
     [settingTitle mas_makeConstraints:^(MASConstraintMaker *make) {
