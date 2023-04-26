@@ -362,6 +362,7 @@ N2N_THREAD_RETURN_DATATYPE resolve_thread(N2N_THREAD_PARAMETER_DATATYPE p) {
         pthread_mutex_unlock(&param->access);
     }
 #endif
+    return 0;
 }
 
 
@@ -405,6 +406,7 @@ int resolve_create_thread (n2n_resolve_parameter_t **param, struct peer_info *sn
 
     return 0;
 #endif
+    return 0;
 }
 
 

@@ -22,7 +22,7 @@
 #define HAVE_PCAP_IMMEDIATE_MODE /**/
 
 /* pthread is present */
-#define HAVE_PTHREAD /**/
+//#define HAVE_PTHREAD /**/
 
 /* Have PCAP library */
 #define N2N_HAVE_PCAP /**/

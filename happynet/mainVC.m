@@ -246,9 +246,9 @@ typedef enum {
         //关闭
         int result = StopEdge();
         if(0 == result){
-         [self stopVPN];
-         button.backgroundColor = [UIColor lightGrayColor];
-         _startButton.selected = NO;
+            [self stopVPN];
+            button.backgroundColor = [UIColor lightGrayColor];
+            _startButton.selected = NO;
         }
     }
     
@@ -433,9 +433,10 @@ typedef enum {
 
 -(void)stopVPN{
     Hin2nTunnelManager * manger = [Hin2nTunnelManager shareManager];
+    NSLog(@"stop tunnel");
     [manger stopTunnel];
-//    [_logTimer invalidate];
-//    _logTimer = nil;
+    [_logTimer invalidate];
+    _logTimer = nil;
     [self stopWatchFileChange];
     
 

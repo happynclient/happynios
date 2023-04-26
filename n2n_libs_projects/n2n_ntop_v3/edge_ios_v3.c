@@ -684,6 +684,7 @@ __attribute__((visibility("default"))) int stop_edge_v3(void){
     peer_addr.sin_family = PF_INET;
     peer_addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     peer_addr.sin_port = htons(N2N_EDGE_MGMT_PORT);
+    traceEvent(TRACE_NORMAL, "send stop command to supernode, waiting for response......");
     sendto(fd, "stop", 4, 0, (struct sockaddr *) &peer_addr, sizeof(struct sockaddr_in));
     close(fd);
 

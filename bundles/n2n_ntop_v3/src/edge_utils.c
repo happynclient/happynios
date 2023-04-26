@@ -1531,7 +1531,9 @@ void update_supernode_reg (n2n_edge_t * eee, time_t now) {
         off = n2n_rand() % ((eee->conf.register_interval * 3) / 4);
     }
 
+    #ifndef SKIP_MULTICAST_PEERS_DISCOVERY
     check_join_multicast_group(eee);
+    #endif
 
     if(0 == eee->sup_attempts) {
         /* Give up on that supernode and try the next one. */
