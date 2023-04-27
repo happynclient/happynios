@@ -72,10 +72,10 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self initUI];
     if (_isUpdate) {
-        self.title = @"Update Setting";
+        self.title = NSLocalizedString(@"Update Setting", nil);
         [self setDataFromListVC];
     }else{
-        self.title = @"Setting";
+        self.title = NSLocalizedString(@"Setting", nil);
         _level = 2;
         _version = 3;
     }

@@ -152,7 +152,7 @@ typedef enum {
     UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nextButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
     [nextButton setBackgroundImage:image forState:UIControlStateNormal];
-        [nextButton addTarget:self action:@selector(currentSettingLists:) forControlEvents:UIControlEventTouchUpInside];
+    [nextButton addTarget:self action:@selector(currentSettingLists:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:nextButton];
     [nextButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(settingTitle.mas_top).offset(5);
