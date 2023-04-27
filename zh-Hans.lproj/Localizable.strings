@@ -8,6 +8,7 @@
 
 "Current Setting" = "当前配置";
 "Setting Name" = "配置别名";
+"settingName" = "当前配置";
 "supernode" = "服务URL";
 "community" = "服务ID";
 "Encrypt Key" = "服务密钥";
@@ -26,3 +27,8 @@
 "Enable packet forwarding" = "开启本地数据包转发";
 "Accept multicast Mac address" = "开启多播";
 "Trace level:" = "LOG级别:";
+"Supnode is error" = "请检查服务URL是否合法";
+"Community is error" = "请检查服务ID是否合法";
+"MAC Address is error!" = "请检查Mac地址是否合法";
+"IP address is error" = "请检查IP地址是否合法";
+"subnetMark is error" = "请检查子网掩码是否合法";

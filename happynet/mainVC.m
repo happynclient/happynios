@@ -150,13 +150,13 @@ typedef enum {
     _currentSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_currentSettingButton];
     [_currentSettingButton addTarget:self action:@selector(currentSettingLists:) forControlEvents:UIControlEventTouchUpInside];
-//    currentSettingButton.backgroundColor = [UIColor orangeColor];
-    [_currentSettingButton setTitle:@"settingName" forState:UIControlStateNormal];
+    _currentSettingButton.backgroundColor = [UIColor cyanColor];
+    [_currentSettingButton setTitle:NSLocalizedString(@"settingName", nil) forState:UIControlStateNormal];
     [_currentSettingButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
 
     [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(settingTitle.mas_top).offset(-5);
-        make.right.mas_equalTo(-100);
+        make.right.mas_equalTo(-110);
         make.left.mas_equalTo(settingTitle.mas_right);
         make.height.mas_equalTo(30);
     }];

@@ -794,14 +794,14 @@
     }
     if (_supernodeTF.text != nil){
         if (![self checkSupnodeAddress:_supernodeTF.text]) {
-            [self alertMessage:@"Supnode is error"];
+            [self alertMessage:NSLocalizedString(@"Supnode is error", nil)];
         return;
         }
     }
     if (_communityTF.text == nil ||
         _communityTF.text.length <1 ||
         [_communityTF.text isEqual:@""]){
-        [self alertMessage:@"Community is error"];
+        [self alertMessage:NSLocalizedString(@"Community is error", nil)];
         _communityTFline.backgroundColor = [UIColor redColor];
         return;
     }
@@ -813,18 +813,18 @@
     }
     if (_macAddressTF.text != nil){
         if (![self checkMacAddress:_macAddressTF.text]) {
-            [self alertMessage:@"MAC Address is error!"];
+            [self alertMessage:NSLocalizedString(@"MAC Address is error!", nil)];
             _macLine.backgroundColor = [UIColor redColor];
             return;
         };
         }
     if (_getSuperModelIcon.selected == NO) {
         if (![self checkIpAddress:_ipAddressTF.text]) {
-            [self alertMessage:@"IP address is error"];
+            [self alertMessage:NSLocalizedString(@"IP address is error", nil)];
             return;
         };
         if (![self checkMark:_subnetMarkTF.text]) {
-            [self alertMessage:@"subnetMark is error"];
+            [self alertMessage:NSLocalizedString(@"subnetMark is error", nil)];
             return;
         }
     }
