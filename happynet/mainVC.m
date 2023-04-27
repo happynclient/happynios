@@ -156,7 +156,7 @@ typedef enum {
 
     [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(settingTitle.mas_top).offset(-5);
-        make.right.mas_equalTo(-50);
+        make.right.mas_equalTo(-100);
         make.left.mas_equalTo(settingTitle.mas_right);
         make.height.mas_equalTo(30);
     }];

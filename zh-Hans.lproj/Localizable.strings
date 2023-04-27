@@ -7,3 +7,22 @@
 */
 
 "Current Setting" = "当前配置";
+"Setting Name" = "配置别名";
+"supernode" = "服务URL";
+"community" = "服务ID";
+"Encrypt Key" = "服务密钥";
+"Get IP from supernode" = "自动获取IP";
+"ip address" = "IP地址";
+"Subnet Mark" = "子网掩码";
+"Device Description" = "设备昵称(推荐英文)";
+"more setting" = "专家设置";
+"Supernode2" = "备用服务URL";
+"Save" = "保存";
+"Encryption method" = "加密算法";
+"Port" = "手工设置本地端口";
+"gateway ip address" = "手工设置网关地址";
+"DNS server ip address" = "手工设置DNS地址";
+"Mac  address" = "手工设置MAC地址";
+"Enable packet forwarding" = "开启本地数据包转发";
+"Accept multicast Mac address" = "开启多播";
+"Trace level:" = "LOG级别:";

@@ -108,7 +108,7 @@
     _contextView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height+1150);
 
     UILabel * name = [[UILabel alloc]init];
-    name.text = @"Setting name";
+    name.text = NSLocalizedString(@"Setting Name", nil);
     
     name.font = [UIFont systemFontOfSize:14];
     name.textColor = [UIColor grayColor];
@@ -208,7 +208,7 @@
     
     UILabel * supernodeLabel = [[UILabel alloc]init];
     [_contextView addSubview:supernodeLabel];
-    supernodeLabel.text = @"Supernode";
+    supernodeLabel.text = NSLocalizedString(@"supernode", nil);;
     supernodeLabel.textColor = [UIColor grayColor];
     supernodeLabel.font = [UIFont systemFontOfSize:13];
     [supernodeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -226,7 +226,7 @@
         make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
-    _supernodeTF.placeholder = @"192.168.0.2";
+    _supernodeTF.placeholder = @"192.168.0.2:30001";
     _supernodeTF.keyboardType  = UIKeyboardTypeDefault;
     _supernodeTF.delegate = self;
     _superModeTFline = [[UIView alloc]init];
@@ -241,7 +241,7 @@
     
     UILabel * communityTitle = [[UILabel alloc]init];
     [_contextView addSubview:communityTitle];
-    communityTitle.text = @"community";
+    communityTitle.text = NSLocalizedString(@"community", nil);
     communityTitle.textColor = [UIColor grayColor];
     communityTitle.font = [UIFont systemFontOfSize:13];
     [communityTitle mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -261,7 +261,7 @@
         make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
-    _communityTF.placeholder = @"community";
+    _communityTF.placeholder = @"VIP0378";
     
     _communityTFline = [[UIView alloc]init];
     [_contextView addSubview:_communityTFline];
@@ -284,7 +284,7 @@
         make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
-    _EncryptTF.placeholder = @"Encrypt Key";
+    _EncryptTF.placeholder = NSLocalizedString(@"Encrypt Key", nil);
     _EncryptTF.textColor = [UIColor grayColor];
     _EncryptTF.font = [UIFont systemFontOfSize:13];
     UIView * EncryptTFline = [[UIView alloc]init];
@@ -310,7 +310,7 @@
     [_getSuperModelIcon addTarget:self action:@selector(getSuperModel:) forControlEvents:UIControlEventTouchUpInside];
     _getSuperModelButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_contextView addSubview:_getSuperModelButton];
-    [_getSuperModelButton setTitle:@"Get IP from supernode" forState:UIControlStateNormal];
+    [_getSuperModelButton setTitle:NSLocalizedString(@"Get IP from supernode", nil) forState:UIControlStateNormal];
     [_getSuperModelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _getSuperModelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_getSuperModelButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -346,7 +346,7 @@
     _ipAddressTF.delegate = self;
     _ipAddressTF.keyboardType  = UIKeyboardTypeDecimalPad;
 
-    _ipAddressTF.placeholder = @"ip address";
+    _ipAddressTF.placeholder = NSLocalizedString(@"ip address", nil);
     [_ipAddressTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_getSuperModelButton.mas_bottom).offset(10);
         make.left.mas_equalTo(20);
@@ -370,7 +370,7 @@
     _subnetMarkTF.delegate = self;
     _subnetMarkTF.keyboardType  = UIKeyboardTypeDecimalPad;
 
-    _subnetMarkTF.placeholder = @"Subnet Mark";
+    _subnetMarkTF.placeholder = NSLocalizedString(@"Subnet Mark", nil);
     [_subnetMarkTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_ipAddressTFline.mas_bottom).offset(10);
         make.left.mas_equalTo(20);
@@ -395,7 +395,7 @@
     _deviceDescriptionTF.delegate = self;
     _deviceDescriptionTF.keyboardType  = UIKeyboardTypeDefault;
 
-    _deviceDescriptionTF.placeholder = @"Device Description";
+    _deviceDescriptionTF.placeholder = NSLocalizedString(@"Device Description", nil);
     [_deviceDescriptionTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_supernodeView.mas_bottom).offset(10);
         make.left.mas_equalTo(20);
@@ -430,7 +430,7 @@
     _moreSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_contextView addSubview:_moreSettingButton];
 //    [_moreSettingButton addTarget:self action:@selector(moreSetting:) forControlEvents:UIControlEventTouchUpInside];
-    [_moreSettingButton setTitle:@"more setting" forState:UIControlStateNormal];
+    [_moreSettingButton setTitle:NSLocalizedString(@"more setting", nil) forState:UIControlStateNormal];
     [_moreSettingButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     _moreSettingButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_moreSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -443,7 +443,7 @@
     _saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_contextView addSubview:_saveButton];
     [_saveButton addTarget:self action:@selector(saveSettingData:) forControlEvents:UIControlEventTouchUpInside];
-    [_saveButton setTitle:@"Save" forState:UIControlStateNormal];
+    [_saveButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
     
     [_saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_saveButton mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -473,7 +473,7 @@
     
     UILabel * encryptionLabel = [[UILabel alloc]init];
     [_moreView addSubview:encryptionLabel];
-    encryptionLabel.text = @"Encryption method";
+    encryptionLabel.text = NSLocalizedString(@"Encryption method", nil);
     encryptionLabel.textColor = [UIColor lightGrayColor];
     encryptionLabel.font = [UIFont systemFontOfSize:14];
     [encryptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -504,7 +504,7 @@
     _supernode2 = [[UITextField alloc]init];
     [_moreView addSubview:_supernode2];
     _supernode2.delegate = self;
-    _supernode2.placeholder = @"Supernode2";
+    _supernode2.placeholder = NSLocalizedString(@"Supernode2", nil);
     [_supernode2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_selectMethodButton.mas_bottom);
         make.left.mas_equalTo(10);
@@ -560,7 +560,7 @@
     [_moreView addSubview:portLabel];
     portLabel.textColor = [UIColor lightGrayColor];
     portLabel.font = [UIFont systemFontOfSize:14];
-    portLabel.text = @"Port";
+    portLabel.text = NSLocalizedString(@"Port", nil);
     [portLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(mtuTFLine.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
@@ -593,7 +593,7 @@
     [_moreView addSubview:_gatewayTF];
     _gatewayTF.delegate = self;
     _gatewayTF.keyboardType = UIKeyboardTypeDecimalPad;
-    _gatewayTF.placeholder = @"gateway ip address";
+    _gatewayTF.placeholder = NSLocalizedString(@"gateway ip address", nil);
     [_gatewayTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(portTFLine.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
@@ -616,7 +616,7 @@
     [_moreView addSubview:_DNSTF];
     _DNSTF.delegate = self;
     _DNSTF.keyboardType = UIKeyboardTypeDecimalPad;
-    _DNSTF.placeholder = @"DNS server ip address";
+    _DNSTF.placeholder = NSLocalizedString(@"DNS server ip address", nil);
     [_DNSTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(gatewayTFLine.mas_bottom).offset(10);
         make.left.mas_equalTo(10);
@@ -637,7 +637,7 @@
     UILabel * macLabel = [[UILabel alloc]init];
     [_moreView addSubview:macLabel];
     macLabel.textColor = [UIColor lightGrayColor];
-    macLabel.text = @"Mac  address";
+    macLabel.text = NSLocalizedString(@"Mac  address", nil);
 //    macLabel.backgroundColor = [UIColor blueColor];
     [macLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(DNSTFLine.mas_bottom).offset(10);
@@ -696,7 +696,7 @@
     
     UILabel * forwardLabel = [[UILabel alloc]init];
     [_moreView addSubview:forwardLabel];
-    forwardLabel.text = @"Enable packet forwarding";
+    forwardLabel.text = NSLocalizedString(@"Enable packet forwarding", nil);
     forwardLabel.textColor = [UIColor lightGrayColor];
     forwardLabel.font = [UIFont systemFontOfSize:14];
     [forwardLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -722,7 +722,7 @@
     
     UILabel * acceptMulticastLabel = [[UILabel alloc]init];
     [_moreView addSubview:acceptMulticastLabel];
-    acceptMulticastLabel.text = @"Accept multicast Mac address";
+    acceptMulticastLabel.text = NSLocalizedString(@"Accept multicast Mac address", nil);
     acceptMulticastLabel.textColor = [UIColor lightGrayColor];
     acceptMulticastLabel.font = [UIFont systemFontOfSize:14];
     [acceptMulticastLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -734,7 +734,7 @@
     
     UILabel * traceLabel = [[UILabel alloc]init];
     [_moreView addSubview:traceLabel];
-    traceLabel.text = @"Trace level:";
+    traceLabel.text = NSLocalizedString(@"Trace level:", nil);
     traceLabel.textColor = [UIColor lightGrayColor];
     traceLabel.font = [UIFont systemFontOfSize:14];
     //traceLabel.backgroundColor = [UIColor orangeColor];
