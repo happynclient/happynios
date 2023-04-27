@@ -137,10 +137,24 @@ typedef enum {
         make.height.mas_equalTo(20);
     }];
     
+    /*
     UIImageView * nextIcon = [[UIImageView alloc]init];
     [self.view addSubview:nextIcon];
     nextIcon.image = [UIImage imageNamed:@"TableViewArrow"];
     [nextIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(settingTitle.mas_top).offset(5);
+        make.right.mas_equalTo(-30);
+        make.width.mas_equalTo(18);
+        make.height.mas_equalTo(18);
+    }];
+    */
+    UIImage *image = [UIImage imageNamed:@"TableViewArrow"];
+    UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    nextButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    [nextButton setBackgroundImage:image forState:UIControlStateNormal];
+        [nextButton addTarget:self action:@selector(currentSettingLists:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:nextButton];
+    [nextButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(settingTitle.mas_top).offset(5);
         make.right.mas_equalTo(-30);
         make.width.mas_equalTo(18);
