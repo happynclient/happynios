@@ -1540,7 +1540,7 @@ void update_supernode_reg (n2n_edge_t * eee, time_t now) {
         sn_selection_criterion_bad(&(eee->curr_sn->selection_criterion));
         sn_selection_sort(&(eee->conf.supernodes));
         eee->curr_sn = eee->conf.supernodes;
-        traceEvent(TRACE_WARNING, "supernode not responding, now trying [%s]", supernode_ip(eee));
+        traceEvent(TRACE_INFO, "supernode not responding, now trying [%s]", supernode_ip(eee));
         supernode_connect(eee);
         reset_sup_attempts(eee);
         // trigger out-of-schedule DNS resolution
