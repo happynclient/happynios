@@ -193,6 +193,31 @@ typedef enum {
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button];
     [button addTarget:self action:@selector(setting:) forControlEvents:UIControlEventTouchUpInside];
     }
+    
+    // 添加一个 footerView
+    UIView *footerView = [[UIView alloc] init];
+    footerView.backgroundColor = [UIColor grayColor];
+    [self.view addSubview:footerView];
+    [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.width.equalTo(self.view.mas_width);
+        make.height.mas_equalTo(50);
+    }];
+    
+    // 在 footerView 中添加版权信息
+    UILabel *copyRightLabel = [[UILabel alloc] init];
+    copyRightLabel.textColor = [UIColor whiteColor];
+    copyRightLabel.font = [UIFont systemFontOfSize:12];
+    copyRightLabel.numberOfLines = 2; // 设置为两行
+    copyRightLabel.textAlignment = NSTextAlignmentCenter;
+    copyRightLabel.text = @"Version 1.0 ©happyn.net\nBased on N2N | Hin2n Project.";
+    [footerView addSubview:copyRightLabel];
+    [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(footerView.mas_centerX);
+        make.centerY.equalTo(footerView.mas_centerY);
+        make.width.equalTo(footerView.mas_width);
+        make.height.equalTo(@40); // 改为两行文字的高度
+    }];
 }
 
 +(char *)ocStyleStrConvert2cStyleStr:(NSString *)stringOBJ {
