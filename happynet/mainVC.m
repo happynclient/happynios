@@ -200,8 +200,10 @@ typedef enum {
     [self.view addSubview:footerView];
     [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.view.mas_bottom);
-        make.width.equalTo(self.view.mas_width);
+        //make.width.equalTo(self.view.mas_width);
         make.height.mas_equalTo(50);
+        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(10);
     }];
     
     // 在 footerView 中添加版权信息
