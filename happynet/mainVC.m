@@ -164,13 +164,13 @@ typedef enum {
     _currentSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_currentSettingButton];
     [_currentSettingButton addTarget:self action:@selector(currentSettingLists:) forControlEvents:UIControlEventTouchUpInside];
-    _currentSettingButton.backgroundColor = [UIColor cyanColor];
+    _currentSettingButton.backgroundColor = [UIColor colorWithRed:135/255.0 green:206/255.0  blue:250/255.0  alpha:1];
     [_currentSettingButton setTitle:NSLocalizedString(@"settingName", nil) forState:UIControlStateNormal];
     [_currentSettingButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
 
     [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(settingTitle.mas_top).offset(-5);
-        make.right.mas_equalTo(-110);
+        make.right.mas_equalTo(-130);
         make.left.mas_equalTo(settingTitle.mas_right);
         make.height.mas_equalTo(30);
     }];
@@ -210,7 +210,7 @@ typedef enum {
     copyRightLabel.font = [UIFont systemFontOfSize:12];
     copyRightLabel.numberOfLines = 2; // 设置为两行
     copyRightLabel.textAlignment = NSTextAlignmentCenter;
-    copyRightLabel.text = @"Version 1.0 ©happyn.net\nBased on N2N | Hin2n Project.";
+    copyRightLabel.text = @"Version 1.0 ©happyn.net\nBased on N2N | Hin2n Project";
     [footerView addSubview:copyRightLabel];
     [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(footerView.mas_centerX);
