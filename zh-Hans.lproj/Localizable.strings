@@ -33,3 +33,4 @@
 "IP address is error" = "请检查IP地址是否合法";
 "subnetMark is error" = "请检查子网掩码是否合法";
 "Update Setting" = "更新配置";
+"Setting" = "配置";

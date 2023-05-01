@@ -69,7 +69,20 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    if (@available(iOS 13.0, *)) {
+        BOOL isDarkMode = self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
+        if (isDarkMode) {
+            // 当前是夜间模式
+            self.view.backgroundColor = [UIColor blackColor];
+        } else {
+            // 当前是白天模式
+            self.view.backgroundColor = [UIColor whiteColor];
+        }
+    } else {
+        // 设备运行的是旧版本的iOS，此时无法确定模式
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
+
     [self initUI];
     if (_isUpdate) {
         self.title = NSLocalizedString(@"Update Setting", nil);
