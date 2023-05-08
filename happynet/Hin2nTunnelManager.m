@@ -292,6 +292,8 @@ int openVPN(void){
     if (self.background) {
         self.background(YES);
     }
+    
+    /*
     AVAudioSession *as = [AVAudioSession sharedInstance];
     [as setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
     NSURL * url = [[NSBundle mainBundle] URLForResource:@"silence.mp3" withExtension:nil];
@@ -301,6 +303,7 @@ int openVPN(void){
     _player.numberOfLoops = -1;
     [_player prepareToPlay];
     [_player play];
+    */
 }
 
 -(int)setIpFromSupernode:(NSDictionary*)params{
