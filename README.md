@@ -9,9 +9,8 @@ Forked from [hin2n-ios](https://github.com/Oliver0624/hin2n-ios)
 This is a tiny iOS implementation of n2n.
 
 1. It works as a n2n edge to connect to supernode. It works on iOS device which need NOT be jailbreaked.
-2. It supports all versions of n2n(v1/v2/v2s/v3).
-3. Since Apple reject all GPL-only applications, we CANNOT publish it in Apple APP Store. You MUST clone source code and compile by yourself.
-4. To compile and run this APP, you MUST have an Apple developer account and have the Network-Extension entitlement.
+2. It supports  n2n v3
+3. To compile and run this APP, you MUST have an Apple developer account and have the Network-Extension entitlement.
 
 some problems which are already known:
 
@@ -19,7 +18,6 @@ some problems which are already known:
 1. If you switch to another app and switch back, the connection status may be temporarily abnormal.
 2. If you select the other VPN in system configuration, then click connect button in app, it will fail and network service will be abnormal after you click disconnect button.
 3. missing legality checking of some parameters.
-4. missing night theme adaption.
 
 # happynios 说明
 
