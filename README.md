@@ -1,5 +1,9 @@
 # happynios
 
+Apple Store:
+
+https://apps.apple.com/us/app/happynet/id6448507986
+
 Forked from [hin2n-ios](https://github.com/Oliver0624/hin2n-ios)
 
 This is a tiny iOS implementation of n2n.
@@ -40,7 +44,7 @@ some problems which are already known:
 
 - [x] 用基本配置连接成功N2N V3 Supernode
 - [x] 重构代码，界面上只支持N2N V3
-- [] 加入 hin2n-ios的原始项目链接，致谢
+- [x] 加入 hin2n-ios的原始项目链接，致谢
 - [x] 同步happyn的N2N V3上游代码
 - [x] 加入happyn icon
-- [] 上架Apple Store
+- [x] 上架Apple Store
