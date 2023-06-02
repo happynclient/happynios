@@ -294,6 +294,7 @@ typedef enum {
         int result = StartEdge(&cSettings);
         if (result<0) {
         [self stopVPN];
+         _startButton.enabled = YES;
          button.selected = NO;
         }
     }else{
@@ -303,6 +304,7 @@ typedef enum {
             [self stopVPN];
             button.backgroundColor = [UIColor lightGrayColor];
             _startButton.selected = NO;
+            _startButton.enabled = YES;
         }
     }
     

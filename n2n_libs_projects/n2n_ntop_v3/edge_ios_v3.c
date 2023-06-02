@@ -238,7 +238,7 @@ __attribute__((visibility("default"))) int start_edge_v3(CurrentSettings *settin
     if (settings->encryptKey && settings->encryptKey[0]) {
         conf.transop_id = N2N_TRANSFORM_ID_TWOFISH;
         conf.encrypt_key = strdup(settings->encryptKey);
-        traceEvent(TRACE_DEBUG, "encrypt_key = '%s'\n", encrypt_key);
+        traceEvent(TRACE_DEBUG, "encrypt_key = '%s'\n", conf.encrypt_key);
 
         switch(settings->encryptionMethod){
             case 0:
