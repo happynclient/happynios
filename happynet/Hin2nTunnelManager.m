@@ -24,6 +24,7 @@ MMWormholeSession * watchConnectivityListeningWormhole;
 AVAudioPlayer *_player;
 //NSTimer * logTimer;
 
+
 + (instancetype)shareManager
 {
     static Hin2nTunnelManager *_manager = nil;
@@ -295,7 +296,15 @@ int openVPN(void){
         
     AVAudioSession *as = [AVAudioSession sharedInstance];
     [as setCategory:AVAudioSessionCategoryPlayback withOptions:AVAudioSessionCategoryOptionMixWithOthers error:nil];
-    NSURL * url = [[NSBundle mainBundle] URLForResource:@"silence.mp3" withExtension:nil];
+    
+    NSURL * url;
+    if (currentModel == nil) {
+        NSLog(@"has no settings, play music");
+        url = [[NSBundle mainBundle] URLForResource:@"music.mp3" withExtension:nil];
+    } else {
+        NSLog(@"has real settings, play silence");
+        url = [[NSBundle mainBundle] URLForResource:@"silence.mp3" withExtension:nil];
+    }
     if (_player == nil) {
         _player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
     }

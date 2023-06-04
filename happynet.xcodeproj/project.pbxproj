@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0426EF9A29F3BD39004DC730 /* libn2n_ntop_v3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0426EF8029F3B376004DC730 /* libn2n_ntop_v3.a */; };
+		04B35B282A2C2F73009026CD /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 04B35B262A2C2F73009026CD /* music.mp3 */; };
 		04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4329F91A830093C829 /* InfoPlist.strings */; };
 		04F26E4729F920430093C829 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4929F920430093C829 /* Localizable.strings */; };
 		5D2FE45B26EC688E00ED4943 /* libn2n_meyerd_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */; };
@@ -192,6 +193,7 @@
 
 /* Begin PBXFileReference section */
 		0456AFBE29E2D04C009FF993 /* happynet copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "happynet copy-Info.plist"; path = "/Users/mac/work/happyn/github/happynios/happynet copy-Info.plist"; sourceTree = "<absolute>"; };
+		04B35B262A2C2F73009026CD /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
 		04F26E3C29F919E40093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		04F26E3E29F919E40093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		04F26E4229F91A830093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
@@ -602,6 +604,7 @@
 		CB8DF86026FB2CA600798323 /* MP3 */ = {
 			isa = PBXGroup;
 			children = (
+				04B35B262A2C2F73009026CD /* music.mp3 */,
 				CB8DF86126FB2CA600798323 /* silence.mp3 */,
 			);
 			path = MP3;
@@ -811,6 +814,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B35B282A2C2F73009026CD /* music.mp3 in Resources */,
 				CB8DF86226FB2CA600798323 /* silence.mp3 in Resources */,
 				04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */,
 				CB53317326CF48A8008A024D /* ListsViewCell.xib in Resources */,
