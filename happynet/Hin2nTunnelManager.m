@@ -178,7 +178,7 @@ AVAudioPlayer *_player;
 -(void)stopTunnel{
     [mg.connection stopVPNTunnel];
      closePipe();
-}
+}	
 
 #pragma mark // 读包 写进 packetDataManager管道
 -(void)readPacketsDataFromTunnelProvider{
@@ -189,7 +189,7 @@ AVAudioPlayer *_player;
         });
     }
 }
-
+	
 #pragma mark // 读包 —本地外发
 -(void)readPacket{
     __weak typeof(self) weakSelf = self;
