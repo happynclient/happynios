@@ -30,6 +30,10 @@
 }
 static id obj;
 - (void)startTunnelWithOptions:(NSDictionary *)options completionHandler:(void (^)(NSError *))completionHandler {
+    // Add code here to start the process of connecting the tunnel.
+    [self startEdgeWithProvider];
+    
+    
     NSString * remoteAdd = [self queryIpWithDomain:options[@"remoteAddress"]];
     NEPacketTunnelNetworkSettings * settings = [[NEPacketTunnelNetworkSettings alloc]initWithTunnelRemoteAddress:remoteAdd];
     
@@ -69,8 +73,6 @@ static id obj;
         [weakSelf didStartTunnel];
         
     }];
-    // Add code here to start the process of connecting the tunnel.
-    [self startEdgeWithProvider];
 }
 
 - (NSString *)subnetAddressWithIPAddress:(NSString *)ipAddress subnetMask:(NSString *)subnetMask {
@@ -127,7 +129,7 @@ static id obj;
 
 -(void)startEdgeWithProvider {
     // Retrieve the property list from the shared data container using MMWormhole
-    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
+    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"tunnel"];
     NSDictionary *currentSettingsDict = [wormhole messageWithIdentifier:@"sharedSettingsKey"];
 
     // Parse the property list into struct parameters
@@ -169,7 +171,7 @@ static id obj;
     
     // 将结果存储在共享的数据中
     // Store the result value in the shared data container using MMWormhole
-    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
+    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"tunnel"];
     [wormhole passMessageObject:@(result) identifier:@"sharedStopResultKey"];
 
 }
