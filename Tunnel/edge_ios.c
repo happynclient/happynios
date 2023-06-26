@@ -66,6 +66,7 @@ void *EdgeRoutine(void *params){
     return NULL;
 }
 
+
 int StartEdge(CurrentSettings *settings){
     // 打印调试信息，看看是否运行正常。
     printSettingInfo(settings);

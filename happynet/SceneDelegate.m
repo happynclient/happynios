@@ -47,7 +47,7 @@
     // Called when the scene will move from an active state to an inactive state.
     // This may occur due to temporary interruptions (ex. an incoming phone call).
     
-    [[Hin2nTunnelManager shareManager] startLoadPlayback];
+    //[[Hin2nTunnelManager shareManager] startLoadPlayback];
 }
 
 
@@ -55,7 +55,7 @@
     // Called as the scene transitions from the background to the foreground.
     // Use this method to undo the changes made on entering the background.
 
-    [[Hin2nTunnelManager shareManager] stopLoadPlayback];
+    //[[Hin2nTunnelManager shareManager] stopLoadPlayback];
 
 }
 

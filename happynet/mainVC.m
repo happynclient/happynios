@@ -12,6 +12,9 @@ typedef enum {
     SUPERNODE_DISCONNECT
 } connectStatus;
 
+#import "MMWormhole.h"
+#import "MMWormholeSession.h"
+
 #import "mainVC.h"
 #import "SettingVC.h"
 #import "Masonry.h"
@@ -23,6 +26,7 @@ typedef enum {
 #import "Hin2nTunnelManager.h"
 #import "CurrentModelSetting.h"
 //#import "PacketTunnelEngine.h"
+
 
 
 @interface mainVC ()
@@ -288,24 +292,57 @@ typedef enum {
         NSString * logPath = [log_path stringByAppendingPathComponent:@"n2nLog/n2n.log"];
         cSettings.logPath[sizeof(cSettings.logPath) - 1] = '\0';
         strncpy(cSettings.logPath, logPath.UTF8String, sizeof(cSettings.logPath));
+
+        // Convert struct parameters to property list
+        NSString *supernode2String = cSettings.supernode2 ? [NSString stringWithUTF8String:cSettings.supernode2] : @"";
+        NSString *gateway2String = cSettings.supernode2 ? [NSString stringWithUTF8String:cSettings.gateway] : @"";
+        NSString *dns2String = cSettings.supernode2 ? [NSString stringWithUTF8String:cSettings.dns] : @"";
+        NSString *mac2String = cSettings.supernode2 ? [NSString stringWithUTF8String:cSettings.mac] : @"";
+        NSDictionary *currentSettingsDict = @{
+            @"version" : @(cSettings.version),
+            @"supernode" : [NSString stringWithUTF8String:cSettings.supernode],
+            @"community" : [NSString stringWithUTF8String:cSettings.community],
+            @"encryptKey" : [NSString stringWithUTF8String:cSettings.encryptKey],
+            @"ipAddress" : [NSString stringWithUTF8String:cSettings.ipAddress],
+            @"subnetMark" : [NSString stringWithUTF8String:cSettings.subnetMark],
+            @"deviceDescription" : [NSString stringWithUTF8String:cSettings.deviceDescription],
+            @"supernode2" : supernode2String,
+            @"mtu" : @(cSettings.mtu),
+            @"gateway" : gateway2String,
+            @"dns" : dns2String,
+            @"mac" : mac2String,
+            @"encryptionMethod" : @(cSettings.encryptionMethod),
+            @"port" : @(cSettings.port),
+            @"forwarding" : @(cSettings.forwarding),
+            @"acceptMultiMacaddr" : @(cSettings.acceptMultiMacaddr),
+            @"level" : @(cSettings.level),
+            @"vpnFd" : @(cSettings.vpnFd),
+            @"logPath" : [NSString stringWithUTF8String:cSettings.logPath]
+        };
+
+        // Store the property list in the shared data container using MMWormhole
+        MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
+        [wormhole passMessageObject:currentSettingsDict identifier:@"sharedSettingsKey"];
+
         
         cSettings.vpnFd = [self->_manger startTunnel];
       
-        int result = StartEdge(&cSettings);
+        //int result = StartEdge(&cSettings);
+        // 调用 App extension 的函数
+        NSNumber *resultNumber = [wormhole messageWithIdentifier:@"sharedStartResultKey"];
+        long result = [resultNumber longValue];
+
         if (result<0) {
         [self stopVPN];
          _startButton.enabled = YES;
          button.selected = NO;
         }
     }else{
-        //关闭
-        int result = StopEdge();
-        if(0 == result){
-            [self stopVPN];
-            button.backgroundColor = [UIColor lightGrayColor];
-            _startButton.selected = NO;
-            _startButton.enabled = YES;
-        }
+        [self stopVPN];
+        button.backgroundColor = [UIColor lightGrayColor];
+        _startButton.selected = NO;
+        _startButton.enabled = YES;
+
     }
     
 }

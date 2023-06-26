@@ -17,22 +17,25 @@
 #import "MMWormhole.h"
 #import "MMWormholeSession.h"
 
+#include "edge_ios.h"
+
 @implementation PacketTunnelProvider
 { NETunnelProviderManager * tunnelManager;
     
-   MMWormhole * traditionalWormhole;
-   MMWormhole * watchConnectivityWormhole;
-   MMWormholeSession * watchConnectivityListeningWormhole;
-   MMWormhole * hole;
+    MMWormhole * traditionalWormhole;
+    MMWormhole * watchConnectivityWormhole;
+    MMWormholeSession * watchConnectivityListeningWormhole;
+    MMWormhole * hole;
     NWUDPSession * udpSession;
 }
 static id obj;
 - (void)startTunnelWithOptions:(NSDictionary *)options completionHandler:(void (^)(NSError *))completionHandler {
     NSString * remoteAdd = [self queryIpWithDomain:options[@"remoteAddress"]];
     NEPacketTunnelNetworkSettings * settings = [[NEPacketTunnelNetworkSettings alloc]initWithTunnelRemoteAddress:remoteAdd];
-
+    
+    NSLog(@"startTunnelWithOptions______");
     NSLog(@"%@",options);
-
+    
     NSString * ip = options[@"ip"];
     
     NSString * subnetMarks = options[@"subnetMark"];
@@ -48,8 +51,8 @@ static id obj;
     // 添加默认路由规则
     NEIPv4Route *defaultRoute = [NEIPv4Route defaultRoute];
     ipv4Settings.excludedRoutes = @[defaultRoute];
-
-
+    
+    
     settings.IPv4Settings = ipv4Settings;
     NSString * dns = options[@"dns"];
     if (![[dns class] isEqual:[NSNull class]] && dns.length >0) {
@@ -57,9 +60,9 @@ static id obj;
         settings.DNSSettings = set_dns;
     }
     [NETunnelProviderManager sharedManager].localizedDescription = @"happyn";
-//    [self setUdpSession];
-
-//    NSLog(@"%@",description);
+    //    [self setUdpSession];
+    
+    //    NSLog(@"%@",description);
     __weak typeof(self) weakSelf = self;
     [weakSelf setTunnelNetworkSettings:settings completionHandler:^(NSError * _Nullable error) {
         completionHandler(error);
@@ -67,27 +70,29 @@ static id obj;
         
     }];
     // Add code here to start the process of connecting the tunnel.
+    [self startEdgeWithProvider];
 }
 
 - (NSString *)subnetAddressWithIPAddress:(NSString *)ipAddress subnetMask:(NSString *)subnetMask {
-     NSArray *ipArray = [ipAddress componentsSeparatedByString:@"."];
-     NSArray *maskArray = [subnetMask componentsSeparatedByString:@"."];
-     NSMutableString *subnet = [NSMutableString string];
-     
-     for (int i = 0; i < 4; i++) {
-         NSString *ipPart = ipArray[i];
-         NSString *maskPart = maskArray[i];
-         NSInteger subnetPart = [ipPart integerValue] & [maskPart integerValue];
-         [subnet appendFormat:@"%ld", subnetPart];
-         if (i < 3) {
-             [subnet appendString:@"."];
-         }
-     }
-     return subnet;
+    NSArray *ipArray = [ipAddress componentsSeparatedByString:@"."];
+    NSArray *maskArray = [subnetMask componentsSeparatedByString:@"."];
+    NSMutableString *subnet = [NSMutableString string];
+    
+    for (int i = 0; i < 4; i++) {
+        NSString *ipPart = ipArray[i];
+        NSString *maskPart = maskArray[i];
+        NSInteger subnetPart = [ipPart integerValue] & [maskPart integerValue];
+        [subnet appendFormat:@"%ld", subnetPart];
+        if (i < 3) {
+            [subnet appendString:@"."];
+        }
+    }
+    return subnet;
 }
 
 - (void)stopTunnelWithReason:(NEProviderStopReason)reason completionHandler:(void (^)(void))completionHandler {
     // Add code here to start the process of stopping the tunnel.
+    [self stopEdgeWithProvider];
     NSLog(@"stopTunnelWithReason______");
     completionHandler();
 }
@@ -117,9 +122,57 @@ static id obj;
     NSLog(@"readPackets:--:");
     [self readPacket];
     [self registerNotificationCallBack];
+    
+}
+
+-(void)startEdgeWithProvider {
+    // Retrieve the property list from the shared data container using MMWormhole
+    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
+    NSDictionary *currentSettingsDict = [wormhole messageWithIdentifier:@"sharedSettingsKey"];
+
+    // Parse the property list into struct parameters
+    static CurrentSettings cSettings = {0};
+    cSettings.version = [currentSettingsDict[@"version"] charValue];
+    cSettings.supernode = [currentSettingsDict[@"supernode"] UTF8String];
+    cSettings.community = [currentSettingsDict[@"community"] UTF8String];
+    cSettings.encryptKey = [currentSettingsDict[@"encryptKey"] UTF8String];
+    cSettings.ipAddress = [currentSettingsDict[@"ipAddress"] UTF8String];
+    cSettings.subnetMark = [currentSettingsDict[@"subnetMark"] UTF8String];
+    cSettings.deviceDescription = [currentSettingsDict[@"deviceDescription"] UTF8String];
+    cSettings.supernode2 = [currentSettingsDict[@"supernode2"] UTF8String];
+    cSettings.mtu = [currentSettingsDict[@"mtu"] intValue];
+    cSettings.gateway = [currentSettingsDict[@"gateway"] UTF8String];
+    cSettings.dns = [currentSettingsDict[@"dns"] UTF8String];
+    cSettings.mac = [currentSettingsDict[@"mac"] UTF8String];
+    cSettings.encryptionMethod = [currentSettingsDict[@"encryptionMethod"] charValue];
+    cSettings.port = [currentSettingsDict[@"port"] unsignedShortValue];
+    cSettings.forwarding = [currentSettingsDict[@"forwarding"] charValue];
+    cSettings.acceptMultiMacaddr = [currentSettingsDict[@"acceptMultiMacaddr"] charValue];
+    cSettings.level = [currentSettingsDict[@"level"] charValue];
+    cSettings.vpnFd = [currentSettingsDict[@"vpnFd"] intValue];
+    NSString *logPath = currentSettingsDict[@"logPath"];
+    if ([logPath isKindOfClass:[NSString class]]) {
+        strncpy(cSettings.logPath, [logPath UTF8String], sizeof(cSettings.logPath));
+    }
+
+    
+    int result = StartEdge(&cSettings);
+    
+    // 将结果存储在共享的数据中
+    [wormhole passMessageObject:@(result) identifier:@"sharedStartResultKey"];
 
 }
 
+-(void)stopEdgeWithProvider {
+    // 执行 StopEdge() 函数
+    int result = StopEdge();
+    
+    // 将结果存储在共享的数据中
+    // Store the result value in the shared data container using MMWormhole
+    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
+    [wormhole passMessageObject:@(result) identifier:@"sharedStopResultKey"];
+
+}
 
 //注册写包通知,如果有收到来自remote packet, 则写进tunnel
 -(void)registerNotificationCallBack{
