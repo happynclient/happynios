@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		041C38C92A568DF200790FAD /* BridgeC2OC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1D26EF325D0095CA63 /* BridgeC2OC.m */; };
+		041C38CA2A568E1200790FAD /* Hin2nTunnelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */; };
+		041C38CC2A56936700790FAD /* libn2n_meyerd_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */; };
+		041C38CD2A56936B00790FAD /* libn2n_meyerd_v2s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC96BDE26EEDE6A00AF5DBA /* libn2n_meyerd_v2s.a */; };
+		041C38CE2A56937000790FAD /* libn2n_ntop_v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE54FC226D0917300435594 /* libn2n_ntop_v2.a */; };
+		041C38CF2A56937400790FAD /* libn2n_ntop_v3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0426EF8029F3B376004DC730 /* libn2n_ntop_v3.a */; };
+		041C38D02A56937900790FAD /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
+		041C38D12A56937C00790FAD /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
 		046AC1732A4829E900CF224E /* edge_ios.c in Sources */ = {isa = PBXBuildFile; fileRef = 5DE54FF326D0A1BE00435594 /* edge_ios.c */; };
 		046AC1742A482A2400CF224E /* libn2n_meyerd_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */; };
 		046AC1752A482A2400CF224E /* libn2n_meyerd_v2s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC96BDE26EEDE6A00AF5DBA /* libn2n_meyerd_v2s.a */; };
@@ -70,9 +78,7 @@
 		CB7EE6BE26D6188000DEA5EF /* PacketTunnelProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = CB7EE6BD26D6188000DEA5EF /* PacketTunnelProvider.m */; };
 		CB7EE6C326D6188000DEA5EF /* Tunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CB7EE6B926D6188000DEA5EF /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CB854B2126EF325E0095CA63 /* BridgeC2OC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1D26EF325D0095CA63 /* BridgeC2OC.m */; };
-		CB854B2226EF325E0095CA63 /* BridgeC2OC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1D26EF325D0095CA63 /* BridgeC2OC.m */; };
 		CB854B2326EF325E0095CA63 /* Hin2nTunnelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */; };
-		CB854B2426EF325E0095CA63 /* Hin2nTunnelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */; };
 		CB8CAF0126E36251003D68F6 /* PacketDataManager.c in Sources */ = {isa = PBXBuildFile; fileRef = CB8CAF0026E36251003D68F6 /* PacketDataManager.c */; };
 		CB8CAF0226E36251003D68F6 /* PacketDataManager.c in Sources */ = {isa = PBXBuildFile; fileRef = CB8CAF0026E36251003D68F6 /* PacketDataManager.c */; };
 		CB8DF86226FB2CA600798323 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CB8DF86126FB2CA600798323 /* silence.mp3 */; };
@@ -297,7 +303,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				041C38CC2A56936700790FAD /* libn2n_meyerd_v1.a in Frameworks */,
 				997E10F627104FB20020D98B /* libcrypto.a in Frameworks */,
+				041C38D02A56937900790FAD /* libslog.a in Frameworks */,
+				041C38CE2A56937000790FAD /* libn2n_ntop_v2.a in Frameworks */,
+				041C38CD2A56936B00790FAD /* libn2n_meyerd_v2s.a in Frameworks */,
+				041C38CF2A56937400790FAD /* libn2n_ntop_v3.a in Frameworks */,
+				041C38D12A56937C00790FAD /* libslog.a in Frameworks */,
 				5D34059C26ECAE4E00BD424B /* libslog.a in Frameworks */,
 				5D34059D26ECAE4E00BD424B /* libuip.a in Frameworks */,
 				CBAAC7DA26D4FC4C00BFF8F2 /* NetworkExtension.framework in Frameworks */,
@@ -897,18 +909,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CB854B2426EF325E0095CA63 /* Hin2nTunnelManager.m in Sources */,
 				CB74D60A26F08D1600E87D63 /* MMWormholeSessionContextTransiting.m in Sources */,
 				CB74D60626F08D1600E87D63 /* MMWormholeCoordinatedFileTransiting.m in Sources */,
 				CB8CAF0226E36251003D68F6 /* PacketDataManager.c in Sources */,
 				CB74D60826F08D1600E87D63 /* MMWormhole.m in Sources */,
 				CB74D60C26F08D1600E87D63 /* MMWormholeSessionMessageTransiting.m in Sources */,
+				041C38C92A568DF200790FAD /* BridgeC2OC.m in Sources */,
 				046AC1732A4829E900CF224E /* edge_ios.c in Sources */,
 				CB7EE6BE26D6188000DEA5EF /* PacketTunnelProvider.m in Sources */,
 				CB74D60226F08D1600E87D63 /* MMWormholeSessionFileTransiting.m in Sources */,
 				CB74D60426F08D1600E87D63 /* MMWormholeFileTransiting.m in Sources */,
-				CB854B2226EF325E0095CA63 /* BridgeC2OC.m in Sources */,
 				CB74D60E26F08D1600E87D63 /* MMWormholeSession.m in Sources */,
+				041C38CA2A568E1200790FAD /* Hin2nTunnelManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -129,7 +129,7 @@ static id obj;
 
 -(void)startEdgeWithProvider {
     // Retrieve the property list from the shared data container using MMWormhole
-    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"tunnel"];
+    MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
     NSDictionary *currentSettingsDict = [wormhole messageWithIdentifier:@"sharedSettingsKey"];
 
     // Parse the property list into struct parameters
