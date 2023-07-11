@@ -1,6 +1,6 @@
 #include "n2n.h"
 #include "tun2tap.h"
-#include "PacketDataManager.h"
+#include "BridgeC2OC.h"
 
 int tuntap_open (tuntap_dev *device /* ignored */,
                  char *dev,
@@ -72,7 +72,7 @@ int tuntap_write (struct tuntap_dev *tuntap, unsigned char *buf, int len) {
     uip_buf = buf;
     uip_len = len;
     if (IPBUF->ethhdr.type == htons(UIP_ETHTYPE_IP)) {
-        int rlen = writeDataToTunnel(buf + UIP_LLH_LEN, len - UIP_LLH_LEN);
+        int rlen = writePacketIntoTunnel(buf + UIP_LLH_LEN, len - UIP_LLH_LEN);
         if (rlen < 0) {
             return rlen;
         }

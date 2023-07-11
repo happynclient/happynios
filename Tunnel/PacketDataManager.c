@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "BridgeC2OC.h"
 
+
 int result = 0;
 pid_t pid=0;
 static int pipe_fd_1[2];
@@ -24,12 +25,13 @@ int startServer(int description){
     int re = description;
     return re;
 }
+
 void closePipe(void){
     close(pipe_fd_1[0]);
     close(pipe_fd_1[1]);
 }
 //将从tunnel读取的包写入管道
-int writePackets(char packets[], int packetLength)
+int writePacketsData(char packets[], int packetLength)
 {
 #if 1
     unsigned short pktHead = 0x1234;
@@ -48,9 +50,4 @@ int writePackets(char packets[], int packetLength)
         writtenLength += ret;
     }
     return writtenLength;
-}
-
-int writeDataToTunnel(char data[], int length){
-    //   c 调用object c  写包到tunnel
-    return writePacketIntoTunnel(data, length);
 }

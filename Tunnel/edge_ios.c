@@ -6,7 +6,18 @@
 //
 #include <stdio.h>
 #include <pthread.h>
+#include <unistd.h>
 #include "edge_ios.h"
+
+typedef struct {
+    int tun_read_fd;
+    int tun_write_fd;
+    int udp_read_fd;
+    int udp_write_fd;
+    int mgr_read_fd;
+    int mgr_write_fd;
+} ios_io_bridge;
+
 
 int start_edge_v1(CurrentSettings *settings);
 int stop_edge_v1(void);
@@ -47,6 +58,36 @@ void printSettingInfo(CurrentSettings *settings){
     printf("\ttraceLevel : %d\n", settings->level);
     printf("===========================\n");
     return;
+}
+
+static void init_fd(ios_io_bridge *bridge) {
+    if (bridge->tun_read_fd == 0) {
+        int fd[2] = {0};
+        
+        //tun
+        int result = pipe(fd);
+        //assert(result >= 0);
+        if (result >= 0) {
+            bridge->tun_read_fd = fd[0];
+            bridge->tun_write_fd = fd[1];
+        }
+        
+        //udp
+        result = pipe(fd);
+        //assert(result >= 0);
+        if (result >= 0) {
+            bridge->udp_read_fd = fd[0];
+            bridge->udp_write_fd = fd[1];
+        }
+
+        //mgr
+        result = pipe(fd);
+        //assert(result >= 0);
+        if (result >= 0) {
+            bridge->mgr_read_fd = fd[0];
+            bridge->mgr_write_fd = fd[1];
+        }
+    }
 }
 
 void *EdgeRoutine(void *params){

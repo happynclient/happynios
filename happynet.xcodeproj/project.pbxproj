@@ -23,6 +23,7 @@
 		046AC1782A482A2400CF224E /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
 		046AC1792A482A2400CF224E /* libuip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D540D4126EB1E80003CC62F /* libuip.a */; };
 		046AC17A2A482A2F00CF224E /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 997E10F427104DED0020D98B /* libcrypto.a */; };
+		0499D98A2A5816D700E067DF /* PacketTunnelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0499D9892A5816D700E067DF /* PacketTunnelManager.m */; };
 		04B35B282A2C2F73009026CD /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 04B35B262A2C2F73009026CD /* music.mp3 */; };
 		04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4329F91A830093C829 /* InfoPlist.strings */; };
 		04F26E4729F920430093C829 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4929F920430093C829 /* Localizable.strings */; };
@@ -79,7 +80,6 @@
 		CB7EE6C326D6188000DEA5EF /* Tunnel.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = CB7EE6B926D6188000DEA5EF /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CB854B2126EF325E0095CA63 /* BridgeC2OC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1D26EF325D0095CA63 /* BridgeC2OC.m */; };
 		CB854B2326EF325E0095CA63 /* Hin2nTunnelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */; };
-		CB8CAF0126E36251003D68F6 /* PacketDataManager.c in Sources */ = {isa = PBXBuildFile; fileRef = CB8CAF0026E36251003D68F6 /* PacketDataManager.c */; };
 		CB8CAF0226E36251003D68F6 /* PacketDataManager.c in Sources */ = {isa = PBXBuildFile; fileRef = CB8CAF0026E36251003D68F6 /* PacketDataManager.c */; };
 		CB8DF86226FB2CA600798323 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CB8DF86126FB2CA600798323 /* silence.mp3 */; };
 		CBAAC7DA26D4FC4C00BFF8F2 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBAAC7D926D4FC4C00BFF8F2 /* NetworkExtension.framework */; };
@@ -182,6 +182,8 @@
 /* Begin PBXFileReference section */
 		0456AFBE29E2D04C009FF993 /* happynet copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "happynet copy-Info.plist"; path = "/Users/mac/work/happyn/github/happynios/happynet copy-Info.plist"; sourceTree = "<absolute>"; };
 		046AC1802A4919AE00CF224E /* TunnelRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TunnelRelease.entitlements; sourceTree = "<group>"; };
+		0499D9892A5816D700E067DF /* PacketTunnelManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PacketTunnelManager.m; sourceTree = "<group>"; };
+		0499D98B2A5817A100E067DF /* PacketTunnelManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PacketTunnelManager.h; sourceTree = "<group>"; };
 		04B35B262A2C2F73009026CD /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
 		04CD45AB2A49616A00842418 /* happynetRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = happynetRelease.entitlements; sourceTree = "<group>"; };
 		04F26E3C29F919E40093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -467,8 +469,6 @@
 				04F26E4329F91A830093C829 /* InfoPlist.strings */,
 				CB5330FE26CF47F3008A024D /* main.m */,
 				5DE54FBB26D0905000435594 /* libs_def.h */,
-				CB8CAEFF26E36251003D68F6 /* PacketDataManager.h */,
-				CB8CAF0026E36251003D68F6 /* PacketDataManager.c */,
 				CB7EE6DB26D62EA000DEA5EF /* happynet-Bridging-Header.h */,
 				CB8DF86026FB2CA600798323 /* MP3 */,
 			);
@@ -592,12 +592,16 @@
 			isa = PBXGroup;
 			children = (
 				046AC1802A4919AE00CF224E /* TunnelRelease.entitlements */,
+				CB8CAEFF26E36251003D68F6 /* PacketDataManager.h */,
+				CB8CAF0026E36251003D68F6 /* PacketDataManager.c */,
 				5DE54FBC26D090AD00435594 /* edge_ios.h */,
 				5DE54FF326D0A1BE00435594 /* edge_ios.c */,
 				CB7EE6BC26D6188000DEA5EF /* PacketTunnelProvider.h */,
 				CB7EE6BD26D6188000DEA5EF /* PacketTunnelProvider.m */,
 				CB7EE6BF26D6188000DEA5EF /* Info.plist */,
 				CB7EE6C026D6188000DEA5EF /* Tunnel.entitlements */,
+				0499D9892A5816D700E067DF /* PacketTunnelManager.m */,
+				0499D98B2A5817A100E067DF /* PacketTunnelManager.h */,
 			);
 			path = Tunnel;
 			sourceTree = "<group>";
@@ -870,7 +874,6 @@
 				CB53316F26CF48A8008A024D /* MASViewConstraint.m in Sources */,
 				CB74D60726F08D1600E87D63 /* MMWormhole.m in Sources */,
 				CB53316426CF48A8008A024D /* FMDatabase.m in Sources */,
-				CB8CAF0126E36251003D68F6 /* PacketDataManager.c in Sources */,
 				CB74D60526F08D1600E87D63 /* MMWormholeCoordinatedFileTransiting.m in Sources */,
 				CB53317226CF48A8008A024D /* ListsViewCell.m in Sources */,
 				CB5330EE26CF47F1008A024D /* AppDelegate.m in Sources */,
@@ -913,6 +916,7 @@
 				CB74D60626F08D1600E87D63 /* MMWormholeCoordinatedFileTransiting.m in Sources */,
 				CB8CAF0226E36251003D68F6 /* PacketDataManager.c in Sources */,
 				CB74D60826F08D1600E87D63 /* MMWormhole.m in Sources */,
+				0499D98A2A5816D700E067DF /* PacketTunnelManager.m in Sources */,
 				CB74D60C26F08D1600E87D63 /* MMWormholeSessionMessageTransiting.m in Sources */,
 				041C38C92A568DF200790FAD /* BridgeC2OC.m in Sources */,
 				046AC1732A4829E900CF224E /* edge_ios.c in Sources */,

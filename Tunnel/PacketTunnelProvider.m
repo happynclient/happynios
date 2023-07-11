@@ -12,12 +12,13 @@
 #import "SettingModel.h"
 #import "CurrentModelSetting.h"
 //#import "PacketTunnelEngine.h"
-#import "Hin2nTunnelManager.h"
+#import "PacketTunnelManager.h"
 #import <Foundation/Foundation.h>
 #import "MMWormhole.h"
 #import "MMWormholeSession.h"
 
 #include "edge_ios.h"
+#include "PacketDataManager.h"
 
 @implementation PacketTunnelProvider
 { NETunnelProviderManager * tunnelManager;
@@ -157,11 +158,13 @@ static id obj;
         strncpy(cSettings.logPath, [logPath UTF8String], sizeof(cSettings.logPath));
     }
 
+    cSettings.vpnFd = initPipe();
     
     int result = StartEdge(&cSettings);
     
     // 将结果存储在共享的数据中
     [wormhole passMessageObject:@(result) identifier:@"sharedStartResultKey"];
+    [self registerNotificationCallBack];
 
 }
 
@@ -173,6 +176,8 @@ static id obj;
     // Store the result value in the shared data container using MMWormhole
     MMWormhole *wormhole = [[MMWormhole alloc] initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"tunnel"];
     [wormhole passMessageObject:@(result) identifier:@"sharedStopResultKey"];
+    
+    closePipe();
 
 }
 

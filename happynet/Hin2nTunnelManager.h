@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void(^backgroundStatus)(BOOL backgroundStatus);
 typedef void(^tunnelConnectStatusCallback)(NEVPNStatus status);
 @interface Hin2nTunnelManager : NSObject
-@property(nonatomic,strong)NEPacketTunnelProvider * currentProvider;
 @property(nonatomic,strong)NSString * testCode;
 @property(nonatomic,copy)tunnelConnectStatusCallback tunnelStatus;
 @property(nonatomic,copy)backgroundStatus background;
@@ -26,7 +25,7 @@ typedef void(^tunnelConnectStatusCallback)(NEVPNStatus status);
 -(int)startTunnel;
 //-(void)setTunnelProvider:(NEPacketTunnelProvider *)provider;
 -(int)setIpFromSupernode:(NSDictionary*)params;
--(int)writPackets:(NSArray<NSData *>*)dataArray;
+-(int)writePackets:(NSArray<NSData *>*)dataArray;
 -(void)stopLoadPlayback;
 -(void)startLoadPlayback;
 -(void)setServiceConnectStatus:(int)status;

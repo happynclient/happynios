@@ -10,8 +10,7 @@
 
 #include <stdio.h>
 int initPipe(void);
-int writePackets(char packets[], int packetLength);
-int writeDataToTunnel(char data[], int length);
+int writePacketsData(char packets[], int packetLength);
 void closePipe(void);
 int startServer(int description);
 #endif /* PacketDataManager_h */

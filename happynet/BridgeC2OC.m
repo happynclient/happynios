@@ -70,7 +70,7 @@ int writePacketIntoTunnel(char data[], int length){
 -(int)writePacketIntoTunnel:(NSArray * )dataArray{
     MMWormhole * hole = [[MMWormhole alloc]initWithApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet" optionalDirectory:@"n2n"];
     [hole passMessageObject:@{@"packets" : dataArray} identifier:@"writePacket"];
-    return [[Hin2nTunnelManager shareManager] writPackets:dataArray];
+    return [[Hin2nTunnelManager shareManager] writePackets:dataArray];
 }
 
 //重新设置ip 并启动tunnel
