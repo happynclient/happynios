@@ -336,4 +336,34 @@ int openVPN(void){
     //    [self registerNotificationCallBack];
     //}
 }
+
+#pragma mark // 写包- 远程进来
+-(int)writePackets:(NSArray<NSData *>*)dataArray{
+    
+    NSMutableArray * packetArray = [NSMutableArray array];
+    for (int i = 0; i<dataArray.count; i++) {
+        NSData * da = dataArray[i];
+        NEPacket * pack = [[NEPacket alloc]initWithData:da protocolFamily:AF_INET];
+        [packetArray addObject:pack];
+    }
+    NSArray * arr = [NSArray arrayWithArray:packetArray];
+    __block int writePacketResult = 0;
+//    if (_currentProvider != nil) {
+        dispatch_queue_t queue = dispatch_queue_create("com.hin2n.packetFlow.writePacket", DISPATCH_QUEUE_CONCURRENT);
+        dispatch_semaphore_t checkAsycSemaphore = dispatch_semaphore_create(0);
+        dispatch_sync(queue, ^{
+            if([_currentProvider.packetFlow writePacketObjects:arr]){
+                writePacketResult += 1;
+                NSUserDefaults * userDefaults = [NSUserDefaults standardUserDefaults];
+                [userDefaults setObject:@"writePacketObjects_success" forKey:@"writePacketObjects"];
+                [userDefaults synchronize];
+                dispatch_semaphore_signal(checkAsycSemaphore);
+            }
+        });
+        dispatch_semaphore_wait(checkAsycSemaphore, 10);
+//}
+
+    return writePacketResult;
+}
+
 @end

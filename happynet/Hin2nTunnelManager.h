@@ -15,7 +15,8 @@ typedef void(^tunnelConnectStatusCallback)(NEVPNStatus status);
 @interface Hin2nTunnelManager : NSObject
 @property(nonatomic,strong)NSString * testCode;
 @property(nonatomic,copy)tunnelConnectStatusCallback tunnelStatus;
-@property(nonatomic,copy)backgroundStatus background;
+@property(nonatomic,copy )backgroundStatus background;
+@property(nonatomic,strong)NEPacketTunnelProvider * currentProvider;
 
 + (instancetype)shareManager;
 

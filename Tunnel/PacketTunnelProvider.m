@@ -194,7 +194,7 @@ static id obj;
         NSArray * dataArray = [messageObject valueForKey:@"packets"];
         
         NSMutableArray * array = [NSMutableArray array];
-//        NSLog(@"%@",dataArray);
+        NSLog(@"%@",dataArray);
        
         for (int i = 0; i<dataArray.count; i++) {
             NSDictionary * dic = dataArray[i];
