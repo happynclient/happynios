@@ -7,11 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04165C6C2A6D280800CD0E61 /* edge_ios.c in Sources */ = {isa = PBXBuildFile; fileRef = 04165C6B2A6D280800CD0E61 /* edge_ios.c */; };
+		04165C702A6D286600CD0E61 /* tuntap_ios.c in Sources */ = {isa = PBXBuildFile; fileRef = 04165C6F2A6D286600CD0E61 /* tuntap_ios.c */; };
+		04165CA12A6D2C6A00CD0E61 /* edge_ios_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84D02D26CFBAA3004F0004 /* edge_ios_v3.c */; };
+		04165CA22A6D2C6A00CD0E61 /* network_traffic_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC526CFB6AC004F0004 /* network_traffic_filter.c */; };
 		0465D58629E56DF500A88C47 /* edge_management.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58229E56DF500A88C47 /* edge_management.c */; };
 		0465D58729E56DF500A88C47 /* edge.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58329E56DF500A88C47 /* edge.c */; };
 		0465D58829E56DF500A88C47 /* curve25519.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58429E56DF500A88C47 /* curve25519.c */; };
 		0465D58929E56DF500A88C47 /* auth.c in Sources */ = {isa = PBXBuildFile; fileRef = 0465D58529E56DF500A88C47 /* auth.c */; };
-		5D84CFD926CFB6AC004F0004 /* network_traffic_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC526CFB6AC004F0004 /* network_traffic_filter.c */; };
 		5D84CFDA26CFB6AC004F0004 /* header_encryption.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC626CFB6AC004F0004 /* header_encryption.c */; };
 		5D84CFDC26CFB6AC004F0004 /* wire.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC826CFB6AC004F0004 /* wire.c */; };
 		5D84CFDD26CFB6AC004F0004 /* sn_selection.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFC926CFB6AC004F0004 /* sn_selection.c */; };
@@ -30,8 +33,6 @@
 		5D84CFEA26CFB6AC004F0004 /* tf.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFD626CFB6AC004F0004 /* tf.c */; };
 		5D84CFEB26CFB6AC004F0004 /* transform_tf.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFD726CFB6AC004F0004 /* transform_tf.c */; };
 		5D84CFEC26CFB6AC004F0004 /* edge_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84CFD826CFB6AC004F0004 /* edge_utils.c */; };
-		5D84D02E26CFBAA3004F0004 /* edge_ios_v3.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D84D02D26CFBAA3004F0004 /* edge_ios_v3.c */; };
-		5DE54FED26D09EE100435594 /* ios_tuntap.c in Sources */ = {isa = PBXBuildFile; fileRef = 5DE54FEC26D09EE100435594 /* ios_tuntap.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,6 +48,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04165C6B2A6D280800CD0E61 /* edge_ios.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = edge_ios.c; path = ../ios/edge_ios.c; sourceTree = "<group>"; };
+		04165C6D2A6D281500CD0E61 /* edge_ios.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_ios.h; path = ../ios/edge_ios.h; sourceTree = "<group>"; };
+		04165C6E2A6D281500CD0E61 /* edge_jni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_jni.h; path = ../ios/edge_jni.h; sourceTree = "<group>"; };
+		04165C6F2A6D286600CD0E61 /* tuntap_ios.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = tuntap_ios.c; path = ../ios/tuntap_ios.c; sourceTree = "<group>"; };
 		0465D58229E56DF500A88C47 /* edge_management.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = edge_management.c; path = ../../bundles/n2n_ntop_v3/src/edge_management.c; sourceTree = "<group>"; };
 		0465D58329E56DF500A88C47 /* edge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = edge.c; path = ../../bundles/n2n_ntop_v3/src/edge.c; sourceTree = "<group>"; };
 		0465D58429E56DF500A88C47 /* curve25519.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = curve25519.c; path = ../../bundles/n2n_ntop_v3/src/curve25519.c; sourceTree = "<group>"; };
@@ -98,7 +103,6 @@
 		5D84D02C26CFB872004F0004 /* n2n_regex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = n2n_regex.h; path = ../../bundles/n2n_ntop_v3/include/n2n_regex.h; sourceTree = "<group>"; };
 		5D84D02D26CFBAA3004F0004 /* edge_ios_v3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = edge_ios_v3.c; sourceTree = "<group>"; };
 		5DE54FD526D0935400435594 /* libs_def.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = ../../happynet/libs_def.h; sourceTree = "<group>"; };
-		5DE54FEC26D09EE100435594 /* ios_tuntap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ios_tuntap.c; path = ../../happynet/ios_tuntap.c; sourceTree = "<group>"; };
 		5DE54FFB26D0F23600435594 /* edge_utils_win32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = edge_utils_win32.h; path = ../../bundles/n2n_ntop_v3/include/edge_utils_win32.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -137,8 +141,9 @@
 				0465D58429E56DF500A88C47 /* curve25519.c */,
 				0465D58229E56DF500A88C47 /* edge_management.c */,
 				0465D58329E56DF500A88C47 /* edge.c */,
-				5DE54FEC26D09EE100435594 /* ios_tuntap.c */,
+				04165C6B2A6D280800CD0E61 /* edge_ios.c */,
 				5D84D02D26CFBAA3004F0004 /* edge_ios_v3.c */,
+				04165C6F2A6D286600CD0E61 /* tuntap_ios.c */,
 				5D84CFCC26CFB6AC004F0004 /* aes.c */,
 				5D84CFD526CFB6AC004F0004 /* cc20.c */,
 				5D84CFD826CFB6AC004F0004 /* edge_utils.c */,
@@ -192,6 +197,8 @@
 				5D84CFF026CFB797004F0004 /* speck.h */,
 				5D84CFEF26CFB797004F0004 /* tf.h */,
 				5D84D00B26CFB81C004F0004 /* uthash.h */,
+				04165C6D2A6D281500CD0E61 /* edge_ios.h */,
+				04165C6E2A6D281500CD0E61 /* edge_jni.h */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -252,17 +259,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D84CFD926CFB6AC004F0004 /* network_traffic_filter.c in Sources */,
-				5DE54FED26D09EE100435594 /* ios_tuntap.c in Sources */,
+				04165CA12A6D2C6A00CD0E61 /* edge_ios_v3.c in Sources */,
+				04165CA22A6D2C6A00CD0E61 /* network_traffic_filter.c in Sources */,
 				5D84CFE526CFB6AC004F0004 /* pearson.c in Sources */,
-				5D84D02E26CFBAA3004F0004 /* edge_ios_v3.c in Sources */,
 				5D84CFE826CFB6AC004F0004 /* transform_speck.c in Sources */,
+				04165C6C2A6D280800CD0E61 /* edge_ios.c in Sources */,
 				5D84CFE726CFB6AC004F0004 /* n2n.c in Sources */,
 				5D84CFEB26CFB6AC004F0004 /* transform_tf.c in Sources */,
 				5D84CFDD26CFB6AC004F0004 /* sn_selection.c in Sources */,
 				5D84CFDF26CFB6AC004F0004 /* minilzo.c in Sources */,
 				5D84CFE126CFB6AC004F0004 /* n2n_regex.c in Sources */,
 				5D84CFE626CFB6AC004F0004 /* speck.c in Sources */,
+				04165C702A6D286600CD0E61 /* tuntap_ios.c in Sources */,
 				0465D58629E56DF500A88C47 /* edge_management.c in Sources */,
 				5D84CFEC26CFB6AC004F0004 /* edge_utils.c in Sources */,
 				5D84CFEA26CFB6AC004F0004 /* tf.c in Sources */,
@@ -327,6 +335,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					__IOS_PLATFORM__,
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -385,6 +394,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = __IOS_PLATFORM__;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

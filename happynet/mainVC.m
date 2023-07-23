@@ -19,7 +19,7 @@ typedef enum {
 #import "SettingModel.h"
 #import "LocalData.h"
 
-#include "edge_ios.h"
+#include "libs_def.h"
 #import "Hin2nTunnelManager.h"
 #import "CurrentModelSetting.h"
 //#import "PacketTunnelEngine.h"
@@ -291,15 +291,17 @@ typedef enum {
         
         cSettings.vpnFd = [self->_manger startTunnel];
       
-        int result = StartEdge(&cSettings);
+        //int result = StartEdge(&cSettings); TODO
+        int result = 0;
         if (result<0) {
         [self stopVPN];
          _startButton.enabled = YES;
          button.selected = NO;
         }
     }else{
-        //关闭
-        int result = StopEdge();
+        //关闭 TODO
+        //int result = StopEdge();
+        int result = 0;
         if(0 == result){
             [self stopVPN];
             button.backgroundColor = [UIColor lightGrayColor];

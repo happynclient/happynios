@@ -215,14 +215,22 @@ typedef struct filter_rule {
 
 #ifndef WIN32
 typedef struct tuntap_dev {
-    int                  fd;
-    int                  if_idx;
-    n2n_mac_t            mac_addr;
-    uint32_t             ip_addr;
-    uint32_t             device_mask;
-    uint16_t             mtu;
-    char                 dev_name[N2N_IFNAMSIZ];
+  int           fd;
+#ifdef __IOS_PLATFORM__
+    int       upd_socket;
+    int       mgr_socket;
+    ssize_t (*sendto_sock)(int fd, const void *buf, size_t len, const char *ip, int port);
+    ssize_t (*recvfrom)(int fd, void *buf, size_t len, char *ip, int *port);
+    int (*tuntap_write)(unsigned char *buf, int len);
+#endif
+  int         if_idx;
+  n2n_mac_t            mac_addr;
+  uint32_t             ip_addr;
+  uint32_t             device_mask;
+  uint16_t      mtu;
+  char          dev_name[N2N_IFNAMSIZ];
 } tuntap_dev;
+
 
 #define SOCKET int
 #endif /* #ifndef WIN32 */
@@ -292,7 +300,7 @@ typedef char n2n_version_t[N2N_VERSION_STRING_SIZE];
 
 
 typedef struct n2n_ip_subnet {
-    uint32_t	    net_addr;       /* Host order IP address. */
+    uint32_t        net_addr;       /* Host order IP address. */
     uint8_t         net_bitlen;     /* Subnet prefix. */
 } n2n_ip_subnet_t;
 
