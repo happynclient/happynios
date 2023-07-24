@@ -70,7 +70,6 @@
 		CB75747B26FDB62100CB3EDD /* SettingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CB75747826FDB62100CB3EDD /* SettingModel.m */; };
 		CB854B2126EF325E0095CA63 /* BridgeC2OC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1D26EF325D0095CA63 /* BridgeC2OC.m */; };
 		CB854B2326EF325E0095CA63 /* Hin2nTunnelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */; };
-		CB8CAF0126E36251003D68F6 /* PacketDataManager.c in Sources */ = {isa = PBXBuildFile; fileRef = CB8CAF0026E36251003D68F6 /* PacketDataManager.c */; };
 		CB8DF86226FB2CA600798323 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CB8DF86126FB2CA600798323 /* silence.mp3 */; };
 		CBAAC7DA26D4FC4C00BFF8F2 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBAAC7D926D4FC4C00BFF8F2 /* NetworkExtension.framework */; };
 /* End PBXBuildFile section */
@@ -267,8 +266,6 @@
 		CB854B1E26EF325D0095CA63 /* Hin2nTunnelManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hin2nTunnelManager.h; sourceTree = "<group>"; };
 		CB854B1F26EF325E0095CA63 /* Hin2nTunnelManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hin2nTunnelManager.m; sourceTree = "<group>"; };
 		CB854B2026EF325E0095CA63 /* BridgeC2OC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeC2OC.h; sourceTree = "<group>"; };
-		CB8CAEFF26E36251003D68F6 /* PacketDataManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PacketDataManager.h; sourceTree = "<group>"; };
-		CB8CAF0026E36251003D68F6 /* PacketDataManager.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = PacketDataManager.c; sourceTree = "<group>"; };
 		CB8DF86126FB2CA600798323 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		CBAAC7D826D4FC4C00BFF8F2 /* happynet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = happynet.entitlements; sourceTree = "<group>"; };
 		CBAAC7D926D4FC4C00BFF8F2 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
@@ -419,8 +416,6 @@
 				CB5330FD26CF47F3008A024D /* Info.plist */,
 				04F26E4329F91A830093C829 /* InfoPlist.strings */,
 				CB5330FE26CF47F3008A024D /* main.m */,
-				CB8CAEFF26E36251003D68F6 /* PacketDataManager.h */,
-				CB8CAF0026E36251003D68F6 /* PacketDataManager.c */,
 				CB7EE6DB26D62EA000DEA5EF /* happynet-Bridging-Header.h */,
 				CB8DF86026FB2CA600798323 /* MP3 */,
 			);
@@ -754,7 +749,6 @@
 				CB74D60726F08D1600E87D63 /* MMWormhole.m in Sources */,
 				04165CBC2A6E5C3500CD0E61 /* HappynedgeManager.swift in Sources */,
 				CB53316426CF48A8008A024D /* FMDatabase.m in Sources */,
-				CB8CAF0126E36251003D68F6 /* PacketDataManager.c in Sources */,
 				CB74D60526F08D1600E87D63 /* MMWormholeCoordinatedFileTransiting.m in Sources */,
 				CB53317226CF48A8008A024D /* ListsViewCell.m in Sources */,
 				CB5330EE26CF47F1008A024D /* AppDelegate.m in Sources */,

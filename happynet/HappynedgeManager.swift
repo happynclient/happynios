@@ -182,7 +182,6 @@ extension HappynedgeManager {
         // containing packet tunnel provider.
         proto.providerBundleIdentifier = "net.happyn.happynios.happynet.tunnel"
         proto.serverAddress = "\(config.superNodeAddr):\(config.superNodePort)"
-        /// passwordReference必须取keychain里面的值
         proto.providerConfiguration = [:]
         manager.protocolConfiguration = proto
         manager.localizedDescription = "happynet"
@@ -210,9 +209,7 @@ extension HappynedgeManager {
                 notifyConnectionStatus(DISCONNECTED);
         }
         
-        #if DEBUG
         print("====> status: \(status.text)")
-        #endif
     }
 
     private func notifyStatusDidChange() {

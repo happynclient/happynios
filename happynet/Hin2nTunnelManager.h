@@ -26,7 +26,6 @@ typedef void(^tunnelConnectStatusCallback)(NEVPNStatus status);
 -(int)startTunnel;
 //-(void)setTunnelProvider:(NEPacketTunnelProvider *)provider;
 -(int)setIpFromSupernode:(NSDictionary*)params;
--(int)writPackets:(NSArray<NSData *>*)dataArray;
 -(void)stopLoadPlayback;
 -(void)startLoadPlayback;
 -(void)setServiceConnectStatus:(int)status;

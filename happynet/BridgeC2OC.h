@@ -15,7 +15,6 @@ typedef enum
 
 int startTunnel(void);
 void stopTunnel(void);
-int writePacketIntoTunnel(char data[], int length);
 
 int setAddressFromSupernode(const char *ip , const char *subnetMark);
 
