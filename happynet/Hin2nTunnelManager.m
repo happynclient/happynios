@@ -5,7 +5,9 @@
 //  Created by noontec on 2021/8/25.
 //
 
+@import HappynetDylib;
 #include "PacketDataManager.h"
+#include "HappynedgeManager.h"
 #import "Hin2nTunnelManager.h"
 #import <Foundation/Foundation.h>
 #import "MMWormhole.h"
@@ -36,6 +38,7 @@ AVAudioPlayer *_player;
        });
        return _manager;
 }
+
 #pragma mark//开启 Tounnel
 -(void)initTunnel:(SettingModel *)currentSettingModel{
     if (currentSettingModel != nil) {
@@ -45,76 +48,29 @@ AVAudioPlayer *_player;
 
 -(int)startTunnel{
     __weak typeof(self) weakSelf = self;
-    int result = initPipe();
+    int result = 0;
     if ([[currentModel.ipAddress class] isEqual:[NSNull class]] || currentModel.ipAddress == nil ||
         [currentModel.ipAddress isEqual:@""]) {
         result = -1;
     }else{
+        // 创建HappynedgeConfig配置信息
+        HappynedgeConfig *config = [[HappynedgeConfig alloc] init];
+        config.superNodeAddr = @"11.happyn.vip";
+        config.superNodePort = @"40011";
+        config.networkName = @"VIP1bFKn8UiJJVT";
+        config.encryptionKey = @"a5645f5f";
+        config.ipAddress = @"10.202.48.244";
+        config.isSecure = false;
 
-        NETunnelProviderProtocol * protocal = [[NETunnelProviderProtocol alloc]init];
-        mg.localizedDescription = @"happyn";
-        protocal.providerBundleIdentifier = @"net.happyn.happynios.happynet.tunnel";
-        protocal.serverAddress = currentModel.supernode;
-        protocal.providerConfiguration = @{@"":@""};
-        mg.protocolConfiguration = protocal;
-//        mg.onDemandEnabled = YES;
-        mg.enabled = YES;
 
-        NSString * supernode =  currentModel.supernode;
-        NSString * remoteAdd = nil;
-
-        if ([supernode containsString:@":"]) {
-            NSArray * tempArray  = [supernode componentsSeparatedByString:@":"];
-            remoteAdd = tempArray[0];
-        } else {
-            remoteAdd = supernode;
-        }
-        NEPacketTunnelNetworkSettings * settings = [[NEPacketTunnelNetworkSettings alloc]initWithTunnelRemoteAddress:remoteAdd];
-
-        NEIPv4Settings * set_ipv4 = [[NEIPv4Settings alloc]initWithAddresses:@[currentModel.ipAddress] subnetMasks:@[currentModel.subnetMark]];
-        set_ipv4.includedRoutes = @[[NEIPv4Route defaultRoute]];
-
-        settings.IPv4Settings = set_ipv4;
-
-        if (![[currentModel.dns class]isEqual:[NSNull class]] && currentModel.dns.length >0) {
-            NEDNSSettings * set_dns = [[NEDNSSettings alloc]initWithServers:@[currentModel.dns]];
-            settings.DNSSettings = set_dns;
-        }
-        [NETunnelProviderManager loadAllFromPreferencesWithCompletionHandler:^(NSArray<NETunnelProviderManager *> * _Nullable managers, NSError * _Nullable error) {
-            if (managers.count>0) {
-                mg = managers.firstObject;
-//                mg.onDemandEnabled = YES;
-                [mg loadFromPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
-                    if (error == nil) {
-                            [weakSelf connectTunnelWithData:currentModel];
-                        NSNotificationCenter * nc = [NSNotificationCenter defaultCenter];
-                        [nc addObserver:self
-                               selector:@selector(vpnStatusDidChanged:)
-                                   name:NEVPNStatusDidChangeNotification
-                                 object:nil];
-                    }
-                }];
-
-            }else{
-                
-                [mg saveToPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
-                    NSLog(@"saveToPreferencesWithCompletionHandler::%@",error);
-                    if (!error) {
-                        [mg loadFromPreferencesWithCompletionHandler:^(NSError * _Nullable error) {
-                            if (error == nil) {
-                                    [weakSelf connectTunnelWithData:currentModel];
-                                NSNotificationCenter * nc = [NSNotificationCenter defaultCenter];
-                                [nc addObserver:self
-                                       selector:@selector(vpnStatusDidChanged:)
-                                           name:NEVPNStatusDidChangeNotification
-                                         object:nil];
-                            }
-                        }];
-                       
-                    }
-                }];
+        // 调用HappynedgeManager的start方法
+        HappynedgeManager *manager = [HappynedgeManager shared];
+        [manager startWithConfig:config completion:^(NSError * _Nullable error) {
+            if (error) {
+                NSLog(@"Error starting VPN: %@", error);
+            } else {
+                NSLog(@"VPN started successfully!");
             }
-           
         }];
     }
      return result;
