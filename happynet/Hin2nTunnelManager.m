@@ -6,8 +6,8 @@
 //
 
 @import HappynetDylib;
+#include "happynet-Swift.h"
 #include "PacketDataManager.h"
-#include "HappynedgeManager.h"
 #import "Hin2nTunnelManager.h"
 #import <Foundation/Foundation.h>
 #import "MMWormhole.h"
@@ -47,7 +47,6 @@ AVAudioPlayer *_player;
 }
 
 -(int)startTunnel{
-    __weak typeof(self) weakSelf = self;
     int result = 0;
     if ([[currentModel.ipAddress class] isEqual:[NSNull class]] || currentModel.ipAddress == nil ||
         [currentModel.ipAddress isEqual:@""]) {
@@ -55,12 +54,13 @@ AVAudioPlayer *_player;
     }else{
         // 创建HappynedgeConfig配置信息
         HappynedgeConfig *config = [[HappynedgeConfig alloc] init];
-        config.superNodeAddr = @"11.happyn.vip";
-        config.superNodePort = @"40011";
-        config.networkName = @"VIP1bFKn8UiJJVT";
-        config.encryptionKey = @"a5645f5f";
-        config.ipAddress = @"10.202.48.244";
-        config.isSecure = false;
+        
+        NSArray *components = [currentModel.supernode componentsSeparatedByString:@":"];
+        config.superNodeAddr = components[0];
+        config.superNodePort = components[1];
+        config.networkName = currentModel.community;
+        config.encryptionKey = currentModel.encrypt;
+        config.ipAddress = currentModel.ipAddress;
 
 
         // 调用HappynedgeManager的start方法
@@ -74,8 +74,8 @@ AVAudioPlayer *_player;
         }];
     }
      return result;
-
 }
+
 -(void)connectTunnelWithData:(SettingModel *)data{
         NSString * supernode =  currentModel.supernode;
         NSString * remoteAdd = nil;
