@@ -46,8 +46,7 @@ int setAddressFromSupernode(const char *ip , const char *subnetMark){
 }
 
 void notifyConnectionStatus(connectStatus status){ //1,2,3,4
-[[Hin2nTunnelManager shareManager] setServiceConnectStatus:status];
-
+    [[Hin2nTunnelManager shareManager] setServiceConnectStatus:status];
 }
 void stopTunnel(void){
     [[Hin2nTunnelManager shareManager] stopTunnel];

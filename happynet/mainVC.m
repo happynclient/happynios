@@ -272,12 +272,11 @@ typedef enum {
     _startButton.enabled = NO;
     [self watchFileChange];
     static CurrentSettings cSettings = {0};
-//    [self watchFileChange];
-//    button.selected = !button.selected;
+    //[self watchFileChange];
+    //button.selected = !button.selected;
     [_startButton setImage:[UIImage imageNamed:@"connecting"] forState:UIControlStateNormal];
     if (!button.selected) { //开始
-
-//       [self startVPNTunnel];
+        //[self startVPNTunnel];
         
         memset(&cSettings, 0, sizeof(cSettings));
         [self getCurrentSettings:&cSettings];
@@ -287,14 +286,11 @@ typedef enum {
         cSettings.logPath[sizeof(cSettings.logPath) - 1] = '\0';
         strncpy(cSettings.logPath, n2nLogPath.UTF8String, sizeof(cSettings.logPath));
         
-        cSettings.vpnFd = [self->_manger startTunnel];
-      
-        //int result = StartEdge(&cSettings); TODO
-        int result = 0;
-        if (result<0) {
-        [self stopVPN];
-         _startButton.enabled = YES;
-         button.selected = NO;
+        int result = [self->_manger startTunnel];
+        if (result < 0) {
+            [self stopVPN];
+             _startButton.enabled = YES;
+             button.selected = NO;
         }
     }else{
         //关闭 TODO
@@ -459,11 +455,6 @@ typedef enum {
     });
 }
 
-
--(void)startVPNTunnel{
-    [self initVPN];
-}
-
 -(void)initVPN{
     [self setCurrentModelSetting];
     _manger = [Hin2nTunnelManager shareManager];
@@ -471,7 +462,7 @@ typedef enum {
     __weak typeof(self) weakSelf = self;
     _manger.tunnelStatus = ^(NEVPNStatus status) {
         //tunnel 连接状态
-    [weakSelf tunnelConnectStatus:status];
+        [weakSelf tunnelConnectStatus:status];
     };
 }
 

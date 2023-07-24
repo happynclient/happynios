@@ -9,6 +9,7 @@ import Foundation
 import NetworkExtension
 import HappynetDylib
 
+
 @objcMembers
 public class HappynedgeManager: NSObject {
     public typealias Handler = (Error?) -> Void
@@ -196,6 +197,19 @@ extension HappynedgeManager {
         } else {
             status = .offline
         }
+        switch status {
+            case .online:
+                notifyConnectionStatus(CONNECTED);
+            case .connecting:
+                notifyConnectionStatus(CONNECTING);
+            case .disconnecting:
+                notifyConnectionStatus(SUPERNODE_DISCONNECT);
+            case .offline, .invalid:
+                notifyConnectionStatus(DISCONNECTED);
+            @unknown default:
+                notifyConnectionStatus(DISCONNECTED);
+        }
+        
         #if DEBUG
         print("====> status: \(status.text)")
         #endif
