@@ -7,7 +7,7 @@
 #endif
 
 #ifdef HAPPYNET_BRIDGE
-#import "Happynet-Swift.h"
+#import "happynet-Swift.h"
 #endif
 
 #import "Tunnel-Swift.h"

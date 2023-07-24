@@ -17,27 +17,19 @@
 		04165C812A6D28F100CD0E61 /* Tunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 04165C782A6D28F100CD0E61 /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		04165C852A6D290200CD0E61 /* HappynetDylib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165C3C2A6D1A4C00CD0E61 /* HappynetDylib.framework */; };
 		04165C862A6D290200CD0E61 /* HappynetDylib.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04165C3C2A6D1A4C00CD0E61 /* HappynetDylib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		04165C892A6D290200CD0E61 /* libn2n_meyerd_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */; };
-		04165C8A2A6D290200CD0E61 /* libn2n_meyerd_v2s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC96BDE26EEDE6A00AF5DBA /* libn2n_meyerd_v2s.a */; };
-		04165C8B2A6D290200CD0E61 /* libn2n_ntop_v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE54FC226D0917300435594 /* libn2n_ntop_v2.a */; };
-		04165C8C2A6D290200CD0E61 /* libn2n_ntop_v3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0426EF8029F3B376004DC730 /* libn2n_ntop_v3.a */; };
 		04165C8D2A6D290200CD0E61 /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
-		04165C8E2A6D290200CD0E61 /* libuip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D540D4126EB1E80003CC62F /* libuip.a */; };
 		04165C902A6D291800CD0E61 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 997E10F427104DED0020D98B /* libcrypto.a */; };
 		04165C972A6D298100CD0E61 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C922A6D298000CD0E61 /* PacketTunnelProvider.swift */; };
 		04165C982A6D298100CD0E61 /* AppProxyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C942A6D298100CD0E61 /* AppProxyProvider.swift */; };
 		04165C992A6D298100CD0E61 /* PacketTunnelEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C952A6D298100CD0E61 /* PacketTunnelEngine.swift */; };
 		04165C9A2A6D298100CD0E61 /* HappynedgeUDP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C962A6D298100CD0E61 /* HappynedgeUDP.swift */; };
-		04165C9D2A6D29E400CD0E61 /* edge_ios_oc.m in Sources */ = {isa = PBXBuildFile; fileRef = 04165C9C2A6D29E400CD0E61 /* edge_ios_oc.m */; };
-		0426EF9A29F3BD39004DC730 /* libn2n_ntop_v3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0426EF8029F3B376004DC730 /* libn2n_ntop_v3.a */; };
+		04165CAE2A6D389D00CD0E61 /* edge_ios_oc.m in Sources */ = {isa = PBXBuildFile; fileRef = 04165CAC2A6D389C00CD0E61 /* edge_ios_oc.m */; };
+		04165CB02A6D38B700CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
+		04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
 		04B35B282A2C2F73009026CD /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 04B35B262A2C2F73009026CD /* music.mp3 */; };
 		04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4329F91A830093C829 /* InfoPlist.strings */; };
 		04F26E4729F920430093C829 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4929F920430093C829 /* Localizable.strings */; };
-		5D2FE45B26EC688E00ED4943 /* libn2n_meyerd_v1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */; };
 		5D34059C26ECAE4E00BD424B /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
-		5D34059D26ECAE4E00BD424B /* libuip.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D540D4126EB1E80003CC62F /* libuip.a */; };
-		5DC96BEA26EEDF1A00AF5DBA /* libn2n_meyerd_v2s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DC96BDE26EEDE6A00AF5DBA /* libn2n_meyerd_v2s.a */; };
-		5DE54FD426D0928000435594 /* libn2n_ntop_v2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE54FC226D0917300435594 /* libn2n_ntop_v2.a */; };
 		997E10F627104FB20020D98B /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 997E10F427104DED0020D98B /* libcrypto.a */; };
 		CB5330EE26CF47F1008A024D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5330ED26CF47F1008A024D /* AppDelegate.m */; };
 		CB5330F126CF47F1008A024D /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5330F026CF47F1008A024D /* SceneDelegate.m */; };
@@ -106,47 +98,12 @@
 			remoteGlobalIDString = 04165C3B2A6D1A4C00CD0E61;
 			remoteInfo = HappynetDylib;
 		};
-		0426EF7F29F3B376004DC730 /* PBXContainerItemProxy */ = {
+		04165CAA2A6D387E00CD0E61 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5DE54FC926D0918400435594 /* n2n_ntop_v3.xcodeproj */;
+			containerPortal = 04165CA62A6D387D00CD0E61 /* n2n.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 5D84CFB826CFB63A004F0004;
-			remoteInfo = n2n_ntop_v3;
-		};
-		5D2FE45726EC686000ED4943 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5D2FE45326EC686000ED4943 /* n2n_meyerd_v1.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5D2FE43526EC626000ED4943;
-			remoteInfo = n2n_meyerd_v1;
-		};
-		5D2FE45926EC688200ED4943 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5D2FE45326EC686000ED4943 /* n2n_meyerd_v1.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5D2FE43426EC626000ED4943;
-			remoteInfo = n2n_meyerd_v1;
-		};
-		5D540D0926EB0775003CC62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5DE54FBD26D0917300435594 /* n2n_ntop_v2.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5DE54F6D26D08D1B00435594;
-			remoteInfo = n2n_ntop_v2;
-		};
-		5D540D4026EB1E80003CC62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5D540D3C26EB1E80003CC62F /* uip.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5D540CEB26EB064B003CC62F;
-			remoteInfo = uip;
-		};
-		5D540D4726EB1F3B003CC62F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5D540D3C26EB1E80003CC62F /* uip.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5D540CEA26EB064B003CC62F;
-			remoteInfo = uip;
+			remoteGlobalIDString = 7EFA8E7D265E248D006B1EE1;
+			remoteInfo = n2n;
 		};
 		5D5E77DD26EC7BB100479FE3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -161,27 +118,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 5D5E77C426EC76C200479FE3;
 			remoteInfo = slog;
-		};
-		5DC96BDD26EEDE6A00AF5DBA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5DC96BD926EEDE6A00AF5DBA /* n2n_meyerd_v2s.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5DC96BB326EEDBFA00AF5DBA;
-			remoteInfo = n2n_meyerd_v2s;
-		};
-		5DC96BE726EEDF0F00AF5DBA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5DC96BD926EEDE6A00AF5DBA /* n2n_meyerd_v2s.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5DC96BB226EEDBFA00AF5DBA;
-			remoteInfo = n2n_meyerd_v2s;
-		};
-		5DE54FC126D0917300435594 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5DE54FBD26D0917300435594 /* n2n_ntop_v2.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 5DE54F6E26D08D1B00435594;
-			remoteInfo = n2n_ntop_v2;
 		};
 		CB53310526CF47F4008A024D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -249,9 +185,10 @@
 		04165C942A6D298100CD0E61 /* AppProxyProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppProxyProvider.swift; sourceTree = "<group>"; };
 		04165C952A6D298100CD0E61 /* PacketTunnelEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTunnelEngine.swift; sourceTree = "<group>"; };
 		04165C962A6D298100CD0E61 /* HappynedgeUDP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HappynedgeUDP.swift; sourceTree = "<group>"; };
-		04165C9B2A6D29E400CD0E61 /* edge_ios_oc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_ios_oc.h; path = n2n_libs_projects/ios/edge_ios_oc.h; sourceTree = SOURCE_ROOT; };
-		04165C9C2A6D29E400CD0E61 /* edge_ios_oc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = edge_ios_oc.m; path = n2n_libs_projects/ios/edge_ios_oc.m; sourceTree = SOURCE_ROOT; };
-		04165C9E2A6D2AF900CD0E61 /* edge_jni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_jni.h; path = n2n_libs_projects/ios/edge_jni.h; sourceTree = SOURCE_ROOT; };
+		04165CA62A6D387D00CD0E61 /* n2n.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = n2n.xcodeproj; path = n2n/src/main/cpp/ios/n2n.xcodeproj; sourceTree = "<group>"; };
+		04165CAC2A6D389C00CD0E61 /* edge_ios_oc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = edge_ios_oc.m; path = n2n/src/main/cpp/ios/edge_ios_oc.m; sourceTree = SOURCE_ROOT; };
+		04165CAD2A6D389D00CD0E61 /* edge_ios_oc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_ios_oc.h; path = n2n/src/main/cpp/ios/edge_ios_oc.h; sourceTree = SOURCE_ROOT; };
+		04165CAF2A6D38A900CD0E61 /* edge_jni.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = edge_jni.h; path = n2n/src/main/cpp/ios/edge_jni.h; sourceTree = SOURCE_ROOT; };
 		0456AFBE29E2D04C009FF993 /* happynet.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = happynet.plist; path = /Users/mac/work/happyn/github/happynios/happynet.plist; sourceTree = "<absolute>"; };
 		04B35B262A2C2F73009026CD /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
 		04F26E3C29F919E40093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -259,13 +196,8 @@
 		04F26E4229F91A830093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		04F26E4429F91AA20093C829 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		04F26E4A29F920470093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		5D2FE45326EC686000ED4943 /* n2n_meyerd_v1.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = n2n_meyerd_v1.xcodeproj; path = n2n_libs_projects/n2n_meyerd_v1/n2n_meyerd_v1.xcodeproj; sourceTree = "<group>"; };
-		5D540D3C26EB1E80003CC62F /* uip.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = uip.xcodeproj; path = n2n_libs_projects/uip/uip.xcodeproj; sourceTree = "<group>"; };
 		5D5E77D926EC7BB100479FE3 /* slog.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = slog.xcodeproj; path = n2n_libs_projects/slog/slog.xcodeproj; sourceTree = "<group>"; };
-		5DC96BD926EEDE6A00AF5DBA /* n2n_meyerd_v2s.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = n2n_meyerd_v2s.xcodeproj; path = n2n_libs_projects/n2n_meyerd_v2s/n2n_meyerd_v2s.xcodeproj; sourceTree = "<group>"; };
 		5DE54FBB26D0905000435594 /* libs_def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = happynet/libs_def.h; sourceTree = SOURCE_ROOT; };
-		5DE54FBD26D0917300435594 /* n2n_ntop_v2.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = n2n_ntop_v2.xcodeproj; path = n2n_libs_projects/n2n_ntop_v2/n2n_ntop_v2.xcodeproj; sourceTree = "<group>"; };
-		5DE54FC926D0918400435594 /* n2n_ntop_v3.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = n2n_ntop_v3.xcodeproj; path = n2n_libs_projects/n2n_ntop_v3/n2n_ntop_v3.xcodeproj; sourceTree = SOURCE_ROOT; };
 		997E10F427104DED0020D98B /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = openssl/lib/libcrypto.a; sourceTree = "<group>"; };
 		CB5330E926CF47F1008A024D /* happynet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = happynet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB5330EC26CF47F1008A024D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -374,13 +306,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				04165C852A6D290200CD0E61 /* HappynetDylib.framework in Frameworks */,
-				04165C8B2A6D290200CD0E61 /* libn2n_ntop_v2.a in Frameworks */,
 				04165C792A6D28F100CD0E61 /* NetworkExtension.framework in Frameworks */,
 				04165C8D2A6D290200CD0E61 /* libslog.a in Frameworks */,
-				04165C8E2A6D290200CD0E61 /* libuip.a in Frameworks */,
-				04165C8A2A6D290200CD0E61 /* libn2n_meyerd_v2s.a in Frameworks */,
-				04165C8C2A6D290200CD0E61 /* libn2n_ntop_v3.a in Frameworks */,
-				04165C892A6D290200CD0E61 /* libn2n_meyerd_v1.a in Frameworks */,
+				04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */,
 				04165C902A6D291800CD0E61 /* libcrypto.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -391,12 +319,8 @@
 			files = (
 				997E10F627104FB20020D98B /* libcrypto.a in Frameworks */,
 				5D34059C26ECAE4E00BD424B /* libslog.a in Frameworks */,
-				5D34059D26ECAE4E00BD424B /* libuip.a in Frameworks */,
-				5D2FE45B26EC688E00ED4943 /* libn2n_meyerd_v1.a in Frameworks */,
-				5DC96BEA26EEDF1A00AF5DBA /* libn2n_meyerd_v2s.a in Frameworks */,
-				5DE54FD426D0928000435594 /* libn2n_ntop_v2.a in Frameworks */,
-				0426EF9A29F3BD39004DC730 /* libn2n_ntop_v3.a in Frameworks */,
 				CBAAC7DA26D4FC4C00BFF8F2 /* NetworkExtension.framework in Frameworks */,
+				04165CB02A6D38B700CD0E61 /* libn2n.a in Frameworks */,
 				04165C422A6D1A4C00CD0E61 /* HappynetDylib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,9 +356,9 @@
 		04165C7A2A6D28F100CD0E61 /* Tunnel */ = {
 			isa = PBXGroup;
 			children = (
-				04165C9E2A6D2AF900CD0E61 /* edge_jni.h */,
-				04165C9B2A6D29E400CD0E61 /* edge_ios_oc.h */,
-				04165C9C2A6D29E400CD0E61 /* edge_ios_oc.m */,
+				04165CAF2A6D38A900CD0E61 /* edge_jni.h */,
+				04165CAD2A6D389D00CD0E61 /* edge_ios_oc.h */,
+				04165CAC2A6D389C00CD0E61 /* edge_ios_oc.m */,
 				04165C942A6D298100CD0E61 /* AppProxyProvider.swift */,
 				04165C962A6D298100CD0E61 /* HappynedgeUDP.swift */,
 				04165C952A6D298100CD0E61 /* PacketTunnelEngine.swift */,
@@ -446,26 +370,10 @@
 			path = Tunnel;
 			sourceTree = "<group>";
 		};
-		0426EF7C29F3B376004DC730 /* Products */ = {
+		04165CA72A6D387D00CD0E61 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0426EF8029F3B376004DC730 /* libn2n_ntop_v3.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		5D2FE45426EC686000ED4943 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		5D540D3D26EB1E80003CC62F /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5D540D4126EB1E80003CC62F /* libuip.a */,
+				04165CAB2A6D387E00CD0E61 /* libn2n.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -474,22 +382,6 @@
 			isa = PBXGroup;
 			children = (
 				5D5E77DE26EC7BB100479FE3 /* libslog.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		5DC96BDA26EEDE6A00AF5DBA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5DC96BDE26EEDE6A00AF5DBA /* libn2n_meyerd_v2s.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		5DE54FBE26D0917300435594 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5DE54FC226D0917300435594 /* libn2n_ntop_v2.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -506,13 +398,9 @@
 		CB5330E026CF47F1008A024D = {
 			isa = PBXGroup;
 			children = (
+				04165CA62A6D387D00CD0E61 /* n2n.xcodeproj */,
 				04F26E4929F920430093C829 /* Localizable.strings */,
 				5D5E77D926EC7BB100479FE3 /* slog.xcodeproj */,
-				5D540D3C26EB1E80003CC62F /* uip.xcodeproj */,
-				5D2FE45326EC686000ED4943 /* n2n_meyerd_v1.xcodeproj */,
-				5DC96BD926EEDE6A00AF5DBA /* n2n_meyerd_v2s.xcodeproj */,
-				5DE54FBD26D0917300435594 /* n2n_ntop_v2.xcodeproj */,
-				5DE54FC926D0918400435594 /* n2n_ntop_v3.xcodeproj */,
 				04165C3D2A6D1A4C00CD0E61 /* HappynetDylib */,
 				04165C7A2A6D28F100CD0E61 /* Tunnel */,
 				5DE54FCF26D091A000435594 /* Frameworks */,
@@ -762,10 +650,6 @@
 			);
 			dependencies = (
 				5D5E77E026EC87F800479FE3 /* PBXTargetDependency */,
-				5D540D4826EB1F3B003CC62F /* PBXTargetDependency */,
-				5D2FE45A26EC688200ED4943 /* PBXTargetDependency */,
-				5DC96BE826EEDF0F00AF5DBA /* PBXTargetDependency */,
-				5D540D0A26EB0775003CC62F /* PBXTargetDependency */,
 				04165C412A6D1A4C00CD0E61 /* PBXTargetDependency */,
 				04165C802A6D28F100CD0E61 /* PBXTargetDependency */,
 			);
@@ -855,28 +739,12 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 5D2FE45426EC686000ED4943 /* Products */;
-					ProjectRef = 5D2FE45326EC686000ED4943 /* n2n_meyerd_v1.xcodeproj */;
-				},
-				{
-					ProductGroup = 5DC96BDA26EEDE6A00AF5DBA /* Products */;
-					ProjectRef = 5DC96BD926EEDE6A00AF5DBA /* n2n_meyerd_v2s.xcodeproj */;
-				},
-				{
-					ProductGroup = 5DE54FBE26D0917300435594 /* Products */;
-					ProjectRef = 5DE54FBD26D0917300435594 /* n2n_ntop_v2.xcodeproj */;
-				},
-				{
-					ProductGroup = 0426EF7C29F3B376004DC730 /* Products */;
-					ProjectRef = 5DE54FC926D0918400435594 /* n2n_ntop_v3.xcodeproj */;
+					ProductGroup = 04165CA72A6D387D00CD0E61 /* Products */;
+					ProjectRef = 04165CA62A6D387D00CD0E61 /* n2n.xcodeproj */;
 				},
 				{
 					ProductGroup = 5D5E77DA26EC7BB100479FE3 /* Products */;
 					ProjectRef = 5D5E77D926EC7BB100479FE3 /* slog.xcodeproj */;
-				},
-				{
-					ProductGroup = 5D540D3D26EB1E80003CC62F /* Products */;
-					ProjectRef = 5D540D3C26EB1E80003CC62F /* uip.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -891,25 +759,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		0426EF8029F3B376004DC730 /* libn2n_ntop_v3.a */ = {
+		04165CAB2A6D387E00CD0E61 /* libn2n.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libn2n_ntop_v3.a;
-			remoteRef = 0426EF7F29F3B376004DC730 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5D2FE45826EC686000ED4943 /* libn2n_meyerd_v1.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libn2n_meyerd_v1.a;
-			remoteRef = 5D2FE45726EC686000ED4943 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5D540D4126EB1E80003CC62F /* libuip.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libuip.a;
-			remoteRef = 5D540D4026EB1E80003CC62F /* PBXContainerItemProxy */;
+			path = libn2n.a;
+			remoteRef = 04165CAA2A6D387E00CD0E61 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		5D5E77DE26EC7BB100479FE3 /* libslog.a */ = {
@@ -917,20 +771,6 @@
 			fileType = archive.ar;
 			path = libslog.a;
 			remoteRef = 5D5E77DD26EC7BB100479FE3 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5DC96BDE26EEDE6A00AF5DBA /* libn2n_meyerd_v2s.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libn2n_meyerd_v2s.a;
-			remoteRef = 5DC96BDD26EEDE6A00AF5DBA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5DE54FC226D0917300435594 /* libn2n_ntop_v2.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libn2n_ntop_v2.a;
-			remoteRef = 5DE54FC126D0917300435594 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -999,7 +839,7 @@
 				04165C972A6D298100CD0E61 /* PacketTunnelProvider.swift in Sources */,
 				04165C992A6D298100CD0E61 /* PacketTunnelEngine.swift in Sources */,
 				04165C982A6D298100CD0E61 /* AppProxyProvider.swift in Sources */,
-				04165C9D2A6D29E400CD0E61 /* edge_ios_oc.m in Sources */,
+				04165CAE2A6D389D00CD0E61 /* edge_ios_oc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1079,30 +919,10 @@
 			target = 04165C3B2A6D1A4C00CD0E61 /* HappynetDylib */;
 			targetProxy = 04165C872A6D290200CD0E61 /* PBXContainerItemProxy */;
 		};
-		5D2FE45A26EC688200ED4943 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = n2n_meyerd_v1;
-			targetProxy = 5D2FE45926EC688200ED4943 /* PBXContainerItemProxy */;
-		};
-		5D540D0A26EB0775003CC62F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = n2n_ntop_v2;
-			targetProxy = 5D540D0926EB0775003CC62F /* PBXContainerItemProxy */;
-		};
-		5D540D4826EB1F3B003CC62F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = uip;
-			targetProxy = 5D540D4726EB1F3B003CC62F /* PBXContainerItemProxy */;
-		};
 		5D5E77E026EC87F800479FE3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = slog;
 			targetProxy = 5D5E77DF26EC87F800479FE3 /* PBXContainerItemProxy */;
-		};
-		5DC96BE826EEDF0F00AF5DBA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = n2n_meyerd_v2s;
-			targetProxy = 5DC96BE726EEDF0F00AF5DBA /* PBXContainerItemProxy */;
 		};
 		CB53310626CF47F4008A024D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
