@@ -76,7 +76,6 @@ typedef enum {
         self.view.backgroundColor = [UIColor whiteColor];
     }
     self.title = @"Happynet";
-    [self createLogFolder];
     [self initUI];
    
 }
@@ -225,7 +224,7 @@ typedef enum {
     copyRightLabel.font = [UIFont systemFontOfSize:12];
     copyRightLabel.numberOfLines = 2; // 设置为两行
     copyRightLabel.textAlignment = NSTextAlignmentCenter;
-    copyRightLabel.text = @"Version 1.1 ©happyn.net\nBased on N2N | Hin2n Project";
+    copyRightLabel.text = @"Version 2.0 ©happyn.net\nBased on N2N Project";
     [footerView addSubview:copyRightLabel];
     [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(footerView.mas_centerX);
@@ -283,11 +282,10 @@ typedef enum {
         memset(&cSettings, 0, sizeof(cSettings));
         [self getCurrentSettings:&cSettings];
 
-        NSString *log_path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0];
-        if(log_path == nil){ return;}
-        NSString * logPath = [log_path stringByAppendingPathComponent:@"n2nLog/n2n.log"];
+        NSString * n2nLogPath = [self getn2nLogPath];
+        NSLog(@"store property logpath:  %@", n2nLogPath);
         cSettings.logPath[sizeof(cSettings.logPath) - 1] = '\0';
-        strncpy(cSettings.logPath, logPath.UTF8String, sizeof(cSettings.logPath));
+        strncpy(cSettings.logPath, n2nLogPath.UTF8String, sizeof(cSettings.logPath));
         
         cSettings.vpnFd = [self->_manger startTunnel];
       
@@ -354,28 +352,41 @@ typedef enum {
 }
 
 #pragma mark //创建日志文件夹
--(void)createLogFolder{
-    NSString * log_path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0];
-
-    if(log_path == nil){return;}
-    NSString * ksnowDir = [log_path stringByAppendingPathComponent:@"n2nLog"];
-    NSLog(@"ksnowdir = %@",ksnowDir);
-    NSFileManager  *fileMg = [NSFileManager defaultManager];
-    BOOL isDirExist = [fileMg fileExistsAtPath:ksnowDir];
-    if (!isDirExist) {
-    [fileMg createDirectoryAtPath:ksnowDir withIntermediateDirectories:YES attributes:nil error:nil];
-}
+- (NSString *)getn2nLogPath {
+    static NSString *logFolderPath = nil;
+    static NSString *n2nLogPath = nil;
+    static dispatch_once_t onceToken;
     
+    dispatch_once(&onceToken, ^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+        // 获取共享容器的路径
+        NSURL *appGroupContainerURL = [fileManager containerURLForSecurityApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet"];
+        if (appGroupContainerURL == nil) {
+            NSLog(@"Failed to get app group container URL");
+            logFolderPath = nil;
+        }
+        
+        // 创建日志文件夹路径
+        NSURL *logFolderURL = [appGroupContainerURL URLByAppendingPathComponent:@"n2nLog"];
+        NSError *error = nil;
+        [fileManager createDirectoryAtURL:logFolderURL withIntermediateDirectories:YES attributes:nil error:&error];
+        if (error != nil) {
+            NSLog(@"Failed to create log folder: %@", error);
+            logFolderPath = nil;
+        }
+        
+        // 构造日志文件路径
+        NSURL *logFileURL = [logFolderURL URLByAppendingPathComponent:@"n2n.log"];
+        n2nLogPath = [logFileURL path];
+    });
+        
+    return n2nLogPath;
 }
 
 #pragma mark 监听n2n.log 的变化
 -(void)watchFileChange{
-    NSString * log_path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0];
-
-    if(log_path == nil)
-        return;
-    
-    NSString * n2nLogPath = [log_path stringByAppendingPathComponent:@"n2nLog/n2n.log"];
+    NSString *n2nLogPath = [self getn2nLogPath];
     NSFileManager  *fileMg = [NSFileManager defaultManager];
     BOOL isLogFileExist = [fileMg fileExistsAtPath:n2nLogPath];
     if (!isLogFileExist) {
@@ -429,10 +440,10 @@ typedef enum {
 
 #pragma mark // 读取n2n.log文件内容显示到logView
 -(void)readLogFile{
-    NSString * log_path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0];
-    if(log_path == nil){return;}
-    NSString * ksnowDir = [log_path stringByAppendingPathComponent:@"n2nLog/n2n.log"];
+    NSString * ksnowDir = [self getn2nLogPath];
+    NSLog(@"readLogFile from  %@", ksnowDir);
     NSString * resultString = [NSString stringWithContentsOfFile:ksnowDir encoding:NSUTF8StringEncoding error:nil];
+    
 //    NSString * lastString = nil;
 //    int readLength = 1024 * 1024;
     
@@ -562,8 +573,8 @@ typedef enum {
    
     NSString * log_path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES)[0];
 
-    if(log_path == nil){return;}
-    NSString * ksnowDir = [log_path stringByAppendingPathComponent:@"n2nLog/n2n.log"];
+    NSString *log_path = [self getLogFolderPath];
+    NSString * ksnowDir = [log_path stringByAppendingPathComponent:@"n2n.log"];
     NSLog(@"ksnowdir = %@",ksnowDir);
     
     NSFileManager * fileManager = [NSFileManager defaultManager];

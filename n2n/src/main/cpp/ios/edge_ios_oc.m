@@ -215,7 +215,29 @@ static void ios_report_edge_status(void) {
 }
 
 - (NSString *)logPath {
-    return [[self documentPath] stringByAppendingPathComponent:@"n2n.log"];
+    static NSString *logFolderPath = nil;
+    static NSString *n2nLogPath = nil;
+    static dispatch_once_t onceToken;
+    
+    dispatch_once(&onceToken, ^{
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+        // 获取共享容器的路径
+        NSURL *appGroupContainerURL = [fileManager containerURLForSecurityApplicationGroupIdentifier:@"group.net.happyn.happynios.happynet"];
+        if (appGroupContainerURL == nil) {
+            NSLog(@"Failed to get app group container URL");
+            logFolderPath = nil;
+        }
+        
+        // 创建日志文件夹路径
+        NSURL *logFolderURL = [appGroupContainerURL URLByAppendingPathComponent:@"n2nLog"];
+        
+        // 构造日志文件路径
+        NSURL *logFileURL = [logFolderURL URLByAppendingPathComponent:@"n2n.log"];
+        n2nLogPath = [logFileURL path];
+    });
+        
+    return n2nLogPath;
 }
 
 @end

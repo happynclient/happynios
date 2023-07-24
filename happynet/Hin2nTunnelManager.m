@@ -26,7 +26,6 @@ MMWormholeSession * watchConnectivityListeningWormhole;
 AVAudioPlayer *_player;
 //NSTimer * logTimer;
 
-
 + (instancetype)shareManager
 {
     static Hin2nTunnelManager *_manager = nil;
@@ -132,8 +131,7 @@ AVAudioPlayer *_player;
 
 #pragma mark //stop tunnel connect
 -(void)stopTunnel{
-    [mg.connection stopVPNTunnel];
-     closePipe();
+    [[HappynedgeManager shared] stop];
 }	
 
 #pragma mark // 读包 写进 packetDataManager管道
