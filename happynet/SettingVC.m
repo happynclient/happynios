@@ -181,6 +181,8 @@
         make.right.mas_equalTo(0);
         make.height.mas_equalTo(20);
     }];
+    
+    //only support n2n V3
     _array = [NSMutableArray array];
     NSArray * arrayTitleText = @[@"v1",@"v2s",@"v2",@"v3"];
     for (int i = 0; i<4; i++) {
@@ -239,7 +241,7 @@
         make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
-    _supernodeTF.placeholder = @"192.168.0.2:30001";
+    _supernodeTF.placeholder = @"vip00.happyn.cc:30001";
     _supernodeTF.keyboardType  = UIKeyboardTypeDefault;
     _supernodeTF.delegate = self;
     _superModeTFline = [[UIView alloc]init];
@@ -533,6 +535,7 @@
         make.right.mas_equalTo(-10);
         make.height.mas_equalTo(1);
     }];
+    _supernode2.hidden = true;
     
     
     UILabel * mtuLabel = [[UILabel alloc]init];
@@ -646,6 +649,8 @@
         make.right.mas_equalTo(-10);
         make.height.mas_equalTo(1);
     }];
+    _DNSTF.hidden = true;
+    DNSTFLine.hidden = true;
     
     UILabel * macLabel = [[UILabel alloc]init];
     [_moreView addSubview:macLabel];
@@ -860,8 +865,6 @@
     model.mac = _macAddressTF.text;
     model.mtu = [_mtuTF.text integerValue];
     model.port = [_portTF.text integerValue];
-    model.isAcceptMulticast = 1;
-    model.forwarding = 1;
     model.encryptionMethod = _method;
     __weak typeof(self) weakSelf = self;
     if (_isUpdate) {
@@ -987,6 +990,7 @@
 }
 -(void)forwardingButtonClick:(UIButton *)button{
     button.selected = !button.selected;
+    _forwarding = button.selected;
 }
 
 -(void)acceptMulticast:(UIButton *)button{

@@ -59,6 +59,18 @@ AVAudioPlayer *_player;
         config.networkName = currentModel.community;
         config.encryptionKey = currentModel.encrypt;
         config.ipAddress = currentModel.ipAddress;
+        
+        config.subnetMask = currentModel.subnetMark;
+        config.deviceDescription = currentModel.deviceDescription;
+        config.gateway = currentModel.gateway;
+        config.dns = currentModel.dns;
+        config.mac = currentModel.mac;
+        config.mtu = currentModel.mtu;
+        config.encryptionMethod = currentModel.encryptionMethod;
+        config.localPort = currentModel.port;
+        config.forwarding = currentModel.forwarding;
+        config.isAcceptMulticast  = currentModel.isAcceptMulticast;
+        config.loglevel = currentModel.level;
 
 
         // 调用HappynedgeManager的start方法

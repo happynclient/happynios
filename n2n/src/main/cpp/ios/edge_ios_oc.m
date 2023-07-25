@@ -109,13 +109,19 @@ static void ios_report_edge_status(void) {
     
     strncpy(status.cmd.community, config.networkName.UTF8String, sizeof(status.cmd.community) - 1);
     status.cmd.enc_key = config.encryptionKey.UTF8String;
-    //enc_key_file
-    //mac_addr
-    status.cmd.mtu = 1400;
-    //local_ip
-    //gateway_ip
-    status.cmd.encryption_mode = 0;
+
+    strncpy(status.cmd.mac_addr, config.mac.UTF8String, sizeof(status.cmd.mac_addr) - 1);
+    strncpy(status.cmd.ip_netmask, config.subnetMask.UTF8String, sizeof(status.cmd.ip_netmask) - 1);
+    strncpy(status.cmd.gateway_ip, config.gateway.UTF8String, sizeof(status.cmd.gateway_ip) - 1);
+    status.cmd.device_description = config.deviceDescription.UTF8String;
+    
+    status.cmd.encryption_mode = config.encryptionMethod;
     //strncpy(status.cmd.encryption_mode, "Twofish", sizeof(status.cmd.encryption_mode) - 1);
+    status.cmd.mtu = config.mtu;
+    status.cmd.allow_routing = config.forwarding;
+    status.cmd.drop_multicast = !config.isAcceptMulticast;
+    status.cmd.trace_vlevel = config.loglevel;
+    
     status.cmd.vpn_fd = ios_get_fd(_n2nBridge, IOS_FD_TUNNEL);
     status.cmd.udp_fd = ios_get_fd(_n2nBridge, IOS_FD_UDP);
     status.cmd.mgr_fd = ios_get_fd(_n2nBridge, IOS_FD_MGR);
