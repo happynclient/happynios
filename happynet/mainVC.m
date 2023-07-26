@@ -293,15 +293,10 @@ typedef enum {
              button.selected = NO;
         }
     }else{
-        //关闭 TODO
-        //int result = StopEdge();
-        int result = 0;
-        if(0 == result){
-            [self stopVPN];
-            button.backgroundColor = [UIColor lightGrayColor];
-            _startButton.selected = NO;
-            _startButton.enabled = YES;
-        }
+        [self stopVPN];
+        button.backgroundColor = [UIColor lightGrayColor];
+        _startButton.selected = NO;
+        _startButton.enabled = YES;
     }
     
 }

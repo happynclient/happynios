@@ -182,7 +182,8 @@ static void ios_report_edge_status(void) {
 }
 
 - (void)stop {
-    ios_write_data(_n2nBridge, IOS_FD_MGR, "stop", 4);
+    //ios_write_data(_n2nBridge, IOS_FD_MGR, "stop", 4);
+    stop_edge_v3();
 }
 
 // MARK: - Private
