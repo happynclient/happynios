@@ -334,6 +334,8 @@
         make.right.mas_equalTo(-20);
         make.height.mas_equalTo(34);
     }];
+    _getSuperModelIcon.hidden = true;
+    _getSuperModelButton.hidden = true;
         
 //    UILabel * deviceDescription = [[UILabel alloc]init];
 //    [_contextView addSubview:deviceDescription];
