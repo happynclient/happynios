@@ -27,7 +27,6 @@
 		04165CB02A6D38B700CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
 		04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
 		04165CBC2A6E5C3500CD0E61 /* HappynedgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165CBA2A6E5C3500CD0E61 /* HappynedgeManager.swift */; };
-		04B35B282A2C2F73009026CD /* music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 04B35B262A2C2F73009026CD /* music.mp3 */; };
 		04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4329F91A830093C829 /* InfoPlist.strings */; };
 		04F26E4729F920430093C829 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4929F920430093C829 /* Localizable.strings */; };
 		5D34059C26ECAE4E00BD424B /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
@@ -176,7 +175,6 @@
 		04165CBA2A6E5C3500CD0E61 /* HappynedgeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HappynedgeManager.swift; sourceTree = "<group>"; };
 		04165CBD2A6E5D9300CD0E61 /* HappynedgeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HappynedgeManager.h; sourceTree = "<group>"; };
 		0456AFBE29E2D04C009FF993 /* happynet.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = happynet.plist; path = /Users/mac/work/happyn/github/happynios/happynet.plist; sourceTree = "<absolute>"; };
-		04B35B262A2C2F73009026CD /* music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = music.mp3; sourceTree = "<group>"; };
 		04E8A3C72A6E76A00006FDFB /* libs_def.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = libs_def.h; path = n2n/src/main/cpp/ios/libs_def.h; sourceTree = SOURCE_ROOT; };
 		04F26E3C29F919E40093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		04F26E3E29F919E40093C829 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -520,7 +518,6 @@
 		CB8DF86026FB2CA600798323 /* MP3 */ = {
 			isa = PBXGroup;
 			children = (
-				04B35B262A2C2F73009026CD /* music.mp3 */,
 				CB8DF86126FB2CA600798323 /* silence.mp3 */,
 			);
 			path = MP3;
@@ -690,7 +687,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04B35B282A2C2F73009026CD /* music.mp3 in Resources */,
 				CB8DF86226FB2CA600798323 /* silence.mp3 in Resources */,
 				04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */,
 				CB53317326CF48A8008A024D /* ListsViewCell.xib in Resources */,
