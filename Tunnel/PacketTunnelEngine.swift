@@ -129,6 +129,19 @@ class PacketTunnelEngine: NSObject {
         config.networkName = configuration.networkName
         config.encryptionKey = configuration.encryptionKey
         config.ipAddress = configuration.ipAddress
+        
+        config.subnetMask = configuration.subnetMask
+        config.deviceDescription = configuration.deviceDescription
+        config.gateway = configuration.gateway
+        config.dns = configuration.dns
+        config.mac = configuration.mac
+        config.mtu = UInt(configuration.mtu)
+        config.encryptionMethod = UInt(configuration.encryptionMethod)
+        config.localPort = UInt(configuration.localPort)
+        config.forwarding = UInt(configuration.forwarding)
+        config.isAcceptMulticast = UInt(configuration.isAcceptMulticast)
+        config.loglevel = UInt(configuration.loglevel)
+
         return config
     }
 
