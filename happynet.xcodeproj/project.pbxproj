@@ -15,8 +15,6 @@
 		04165C4F2A6D1A6900CD0E61 /* HappynedgeLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C4B2A6D1A6900CD0E61 /* HappynedgeLog.swift */; };
 		04165C792A6D28F100CD0E61 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBAAC7D926D4FC4C00BFF8F2 /* NetworkExtension.framework */; };
 		04165C812A6D28F100CD0E61 /* Tunnel.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 04165C782A6D28F100CD0E61 /* Tunnel.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		04165C852A6D290200CD0E61 /* HappynetDylib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165C3C2A6D1A4C00CD0E61 /* HappynetDylib.framework */; };
-		04165C862A6D290200CD0E61 /* HappynetDylib.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04165C3C2A6D1A4C00CD0E61 /* HappynetDylib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		04165C8D2A6D290200CD0E61 /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
 		04165C902A6D291800CD0E61 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 997E10F427104DED0020D98B /* libcrypto.a */; };
 		04165C972A6D298100CD0E61 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C922A6D298000CD0E61 /* PacketTunnelProvider.swift */; };
@@ -24,13 +22,10 @@
 		04165C992A6D298100CD0E61 /* PacketTunnelEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C952A6D298100CD0E61 /* PacketTunnelEngine.swift */; };
 		04165C9A2A6D298100CD0E61 /* HappynedgeUDP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165C962A6D298100CD0E61 /* HappynedgeUDP.swift */; };
 		04165CAE2A6D389D00CD0E61 /* edge_ios_oc.m in Sources */ = {isa = PBXBuildFile; fileRef = 04165CAC2A6D389C00CD0E61 /* edge_ios_oc.m */; };
-		04165CB02A6D38B700CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
 		04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
 		04165CBC2A6E5C3500CD0E61 /* HappynedgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165CBA2A6E5C3500CD0E61 /* HappynedgeManager.swift */; };
 		04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4329F91A830093C829 /* InfoPlist.strings */; };
 		04F26E4729F920430093C829 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4929F920430093C829 /* Localizable.strings */; };
-		5D34059C26ECAE4E00BD424B /* libslog.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D5E77DE26EC7BB100479FE3 /* libslog.a */; };
-		997E10F627104FB20020D98B /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 997E10F427104DED0020D98B /* libcrypto.a */; };
 		CB5330EE26CF47F1008A024D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5330ED26CF47F1008A024D /* AppDelegate.m */; };
 		CB5330F126CF47F1008A024D /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5330F026CF47F1008A024D /* SceneDelegate.m */; };
 		CB5330F726CF47F1008A024D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CB5330F526CF47F1008A024D /* Main.storyboard */; };
@@ -88,13 +83,6 @@
 			remoteGlobalIDString = 04165C772A6D28F100CD0E61;
 			remoteInfo = Tunnel;
 		};
-		04165C872A6D290200CD0E61 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CB5330E126CF47F1008A024D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 04165C3B2A6D1A4C00CD0E61;
-			remoteInfo = HappynetDylib;
-		};
 		04165CAA2A6D387E00CD0E61 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 04165CA62A6D387D00CD0E61 /* n2n.xcodeproj */;
@@ -109,13 +97,6 @@
 			remoteGlobalIDString = 5D5E77C526EC76C200479FE3;
 			remoteInfo = slog;
 		};
-		5D5E77DF26EC87F800479FE3 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5D5E77D926EC7BB100479FE3 /* slog.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 5D5E77C426EC76C200479FE3;
-			remoteInfo = slog;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -126,17 +107,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				04165C432A6D1A4C00CD0E61 /* HappynetDylib.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		04165C8F2A6D290200CD0E61 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				04165C862A6D290200CD0E61 /* HappynetDylib.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,7 +251,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04165C852A6D290200CD0E61 /* HappynetDylib.framework in Frameworks */,
 				04165C792A6D28F100CD0E61 /* NetworkExtension.framework in Frameworks */,
 				04165C8D2A6D290200CD0E61 /* libslog.a in Frameworks */,
 				04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */,
@@ -293,10 +262,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				997E10F627104FB20020D98B /* libcrypto.a in Frameworks */,
-				5D34059C26ECAE4E00BD424B /* libslog.a in Frameworks */,
 				CBAAC7DA26D4FC4C00BFF8F2 /* NetworkExtension.framework in Frameworks */,
-				04165CB02A6D38B700CD0E61 /* libn2n.a in Frameworks */,
 				04165C422A6D1A4C00CD0E61 /* HappynetDylib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -563,12 +529,10 @@
 				04165C742A6D28F100CD0E61 /* Sources */,
 				04165C752A6D28F100CD0E61 /* Frameworks */,
 				04165C762A6D28F100CD0E61 /* Resources */,
-				04165C8F2A6D290200CD0E61 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				04165C882A6D290200CD0E61 /* PBXTargetDependency */,
 			);
 			name = Tunnel;
 			productName = Tunnel;
@@ -588,7 +552,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5D5E77E026EC87F800479FE3 /* PBXTargetDependency */,
 				04165C412A6D1A4C00CD0E61 /* PBXTargetDependency */,
 				04165C802A6D28F100CD0E61 /* PBXTargetDependency */,
 			);
@@ -776,16 +739,6 @@
 			target = 04165C772A6D28F100CD0E61 /* Tunnel */;
 			targetProxy = 04165C7F2A6D28F100CD0E61 /* PBXContainerItemProxy */;
 		};
-		04165C882A6D290200CD0E61 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 04165C3B2A6D1A4C00CD0E61 /* HappynetDylib */;
-			targetProxy = 04165C872A6D290200CD0E61 /* PBXContainerItemProxy */;
-		};
-		5D5E77E026EC87F800479FE3 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = slog;
-			targetProxy = 5D5E77DF26EC87F800479FE3 /* PBXContainerItemProxy */;
-		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -940,7 +893,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/openssl/lib",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet.tunnel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -978,7 +931,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/openssl/lib",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet.tunnel;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1134,7 +1087,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/openssl/lib";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -1167,7 +1120,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(PROJECT_DIR)/openssl/lib";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.happyn.happynios.happynet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
