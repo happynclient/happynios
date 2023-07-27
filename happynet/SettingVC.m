@@ -966,7 +966,8 @@
 }
 -(void)getSuperModel:(UIButton *)button
 {
-    _getSuperModelIcon.selected = !button.selected;
+    //_getSuperModelIcon.selected = !button.selected;
+    _getSuperModelIcon.selected = false;
     if (button.selected) {
         _supernodeView.hidden = YES;
         _ipAddressTF.text = nil;
