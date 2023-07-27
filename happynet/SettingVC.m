@@ -875,9 +875,11 @@
     model.subnetMark = _subnetMarkTF.text;
     model.deviceDescription = _deviceDescriptionTF.text;
     model.supernode2 = _supernode2.text;
+        
     model.gateway = _gatewayTF.text;
     model.dns = _DNSTF.text;
     model.mac = _macAddressTF.text;
+    
     model.mtu = [_mtuTF.text integerValue];
     model.port = [_portTF.text integerValue];
     model.encryptionMethod = _method;
@@ -972,7 +974,9 @@
         self.macAddressTF.text = _model.mac;
     }
     
-    if ([[_model.gateway class] isEqual:[NSNull class]] ||_model.gateway.length > 0 ) {
+    if ([[_model.gateway class] isEqual:[NSNull class]]) {
+        _gatewayTF.placeholder = NSLocalizedString(@"gateway ip address", nil);
+    } else {
         self.gatewayTF.text = _model.gateway;
     }
     

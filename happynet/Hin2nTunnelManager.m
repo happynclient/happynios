@@ -62,10 +62,18 @@ AVAudioPlayer *_player;
         
         config.subnetMask = currentModel.subnetMark;
         config.deviceDescription = currentModel.deviceDescription;
-        config.gateway = currentModel.gateway;
-        config.dns = currentModel.dns;
-        config.mac = currentModel.mac;
+        
+        if (![currentModel.gateway isKindOfClass:[NSNull class]] && currentModel.gateway.length > 0) {
+            config.gateway = currentModel.gateway;
+        }
+        if (![currentModel.dns isKindOfClass:[NSNull class]] && currentModel.dns.length > 0) {
+            config.dns = currentModel.dns;
+        }
+        if (![currentModel.mac isKindOfClass:[NSNull class]] && currentModel.mac.length > 0) {
+            config.mac = currentModel.mac;
+        }
         config.mtu = currentModel.mtu;
+        
         config.encryptionMethod = currentModel.encryptionMethod;
         config.localPort = currentModel.port;
         config.forwarding = currentModel.forwarding;
