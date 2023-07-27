@@ -555,7 +555,12 @@
     _mtuTF = [[UITextField alloc]init];
     [_moreView addSubview:_mtuTF];
     _mtuTF.delegate = self;
-    _mtuTF.placeholder = @"1386";
+    
+    if (_model.mtu > 0) {
+        self.mtuTF.text = [NSString stringWithFormat:@"%ld",_model.mtu];
+    } else {
+        _mtuTF.placeholder = @"1386";
+    }
     _mtuTF.keyboardType = UIKeyboardTypeNumberPad;
     [_mtuTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(mtuLabel.mas_bottom).offset(10);
@@ -589,7 +594,11 @@
     _portTF = [[UITextField alloc]init];
     [_moreView addSubview:_portTF];
     _portTF.delegate = self;
-    _portTF.placeholder = @"0";
+    if (_model.port > 0) {
+        self.portTF.text = [NSString stringWithFormat:@"%ld",_model.port];
+    } else {
+        _portTF.placeholder = @"0";
+    }
     _portTF.keyboardType = UIKeyboardTypeNumberPad;
     [_portTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(portLabel.mas_bottom).offset(10);
@@ -703,6 +712,8 @@
     
     
     UIButton * forwardingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    forwardingButton.selected = _model.forwarding;
+    _forwarding = _model.forwarding;
     [_moreView addSubview:forwardingButton];
     [forwardingButton setImage:[UIImage imageNamed:@"buttom_unselect"] forState:UIControlStateNormal];
     [forwardingButton setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
@@ -728,6 +739,8 @@
 
 
     UIButton * acceptMulticastButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    acceptMulticastButton.selected = _model.isAcceptMulticast;
+    _acceptMulticast = _model.isAcceptMulticast;
     [_moreView addSubview:acceptMulticastButton];
     [acceptMulticastButton setImage:[UIImage imageNamed:@"buttom_unselect"] forState:UIControlStateNormal];
     [acceptMulticastButton setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
@@ -958,6 +971,11 @@
     }else{
         self.macAddressTF.text = _model.mac;
     }
+    
+    if ([[_model.gateway class] isEqual:[NSNull class]] ||_model.gateway.length > 0 ) {
+        self.gatewayTF.text = _model.gateway;
+    }
+    
 }
 
 -(void)cancelMoreView{
