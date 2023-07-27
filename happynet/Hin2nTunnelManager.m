@@ -45,10 +45,9 @@ AVAudioPlayer *_player;
 }
 
 -(int)startTunnel{
-    int result = 0;
     if ([[currentModel.ipAddress class] isEqual:[NSNull class]] || currentModel.ipAddress == nil ||
         [currentModel.ipAddress isEqual:@""]) {
-        result = -1;
+        startResult = -1;
     }else{
         // 创建HappynedgeConfig配置信息
         HappynedgeConfig *config = [[HappynedgeConfig alloc] init];
@@ -87,11 +86,12 @@ AVAudioPlayer *_player;
             if (error) {
                 NSLog(@"Error starting VPN: %@", error);
             } else {
+                startResult = 0;
                 NSLog(@"VPN started successfully!");
             }
         }];
     }
-     return result;
+     return startResult;
 }
 
 #pragma mark//是否启动成功
