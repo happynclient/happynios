@@ -1,5 +1,8 @@
 # happynios
 
+![image](https://github.com/happynclient/happynios/assets/86546534/df4c3a97-f235-4baa-a79e-cf055c847ce6)
+
+
 Apple Store:
 
 https://apps.apple.com/us/app/happynet/id6448507986
@@ -19,6 +22,20 @@ some problems which are already known:
 2. If you select the other VPN in system configuration, then click connect button in app, it will fail and network service will be abnormal after you click disconnect button.
 3. missing legality checking of some parameters.
 
+# HowTo
+
+1. Click the "+" button in the top right corner to create a configuration.
+2. add  params:
+   - Setting Name: Configuration Name
+   - supernode: sueprnode address, such as "server.happyn.net:7654"
+   - community: the community id
+   - Encryption: Encryption Key (the Default Encryption Method is AES, you can set it in `more settings`)
+   - ip address: your edge ip address, such as 10.0.0.1
+   - subnetmask: such as 255.255.255.0
+   - device name: default is happynios
+3. save config, then select this config in setting List view
+4. return to the main View, client `Start` Button
+
 # happynios 说明
 
 此项目同步于[hin2n-ios](https://github.com/Oliver0624/hin2n-ios)
@@ -35,7 +52,6 @@ some problems which are already known:
 1. 切出再切入APP，则连接状态会短暂地显示不正常。
 2. 如果用户选择了其他非happyn的VPN，则点击连接按钮时会连接失败；再断开之后，就无法上网了。
 3. 未对部分参数做合法性判断
-4. 未适配深色主题
 
 
 # RoadMap
