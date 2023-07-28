@@ -33,7 +33,7 @@ some problems which are already known:
    - ip address: your edge ip address, such as 10.0.0.1
    - subnetmask: such as 255.255.255.0
    - device name: default is happynios
-3. save config, then select this config in setting List view
+3. Save the configuration, go back to the previous level interface, click on the `>` icon on the interface, and select service configuration.
 4. return to the main View, client `Start` Button
 
 # happynios 说明
