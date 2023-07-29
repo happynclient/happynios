@@ -84,6 +84,7 @@ AVAudioPlayer *_player;
         HappynedgeManager *manager = [HappynedgeManager shared];
         [manager startWithConfig:config completion:^(NSError * _Nullable error) {
             if (error) {
+                startResult = -1;
                 NSLog(@"Error starting VPN: %@", error);
             } else {
                 startResult = 0;

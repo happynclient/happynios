@@ -291,6 +291,9 @@ typedef enum {
             [self stopVPN];
              _startButton.enabled = YES;
              button.selected = NO;
+        } else {
+            _startButton.enabled = YES;
+            [_startButton setImage:[UIImage imageNamed:@"ic_state_connect"] forState:UIControlStateNormal];
         }
     }else{
         [self stopVPN];
