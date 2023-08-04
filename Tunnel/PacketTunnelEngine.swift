@@ -71,9 +71,8 @@ class PacketTunnelEngine: NSObject {
         if hostname == configuration?.superNodeAddr && port == configuration?.superNodePort {
             superNode.writeDatagram(data) { [weak self] error in
                 if let error = error {
-                    os_log(.default, log: self?.log ?? .default, "Failed to write udp datagram, error: %{public}@", "\(error)")
-                } else {
-                    os_log(.default, log: self?.log ?? .default, "Success to write udp datagram:\(data.count)")
+                    //os_log(.default, log: self?.log ?? .default, "Failed to write udp datagram, error: %{public}@", "\(error)")
+                    NSLog("Failed to write udp datagram, error: %@", "\(error)")
                 }
             }
         } else {
