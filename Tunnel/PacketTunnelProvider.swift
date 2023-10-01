@@ -2,6 +2,26 @@ import NetworkExtension
 import HappynetDylib
 import os.log
 
+func calculateSubnetAddress(ipAddress: String, subnetMask: String) -> String? {
+    let ipComponents = ipAddress.split(separator: ".").compactMap { Int($0) }
+    let subnetComponents = subnetMask.split(separator: ".").compactMap { Int($0) }
+
+    guard ipComponents.count == 4, subnetComponents.count == 4 else {
+        return nil
+    }
+
+    let ipInt = (ipComponents[0] << 24) + (ipComponents[1] << 16) + (ipComponents[2] << 8) + ipComponents[3]
+    let subnetInt = (subnetComponents[0] << 24) + (subnetComponents[1] << 16) + (subnetComponents[2] << 8) + subnetComponents[3]
+
+
+    let subnetAddressInt = ipInt & subnetInt
+
+    let subnetAddress = "\(subnetAddressInt >> 24).\(subnetAddressInt >> 16 & 255).\(subnetAddressInt >> 8 & 255).\(subnetAddressInt & 255)"
+
+    return subnetAddress
+}
+
+
 class PacketTunnelProvider: NEPacketTunnelProvider {
     private let log = OSLog(subsystem: "Happynet", category: "default")
     private var engine: PacketTunnelEngine?
@@ -20,16 +40,18 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
                 return
             }
             os_log(.default, log: self.log, "Happynet Did setup tunnel")
-            //let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "151.11.50.180")
-            //let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "54.223.23.92")
-            //let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: config.superNodeAddr)
-            let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "1.14.154.175")
-            let ipV4 = NEIPv4Settings(addresses: [config.ipAddress], subnetMasks: ["255.255.255.0"])
-            ipV4.includedRoutes = [NEIPv4Route.default()]
+
+            let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "127.0.0.1")
+            let ipV4 = NEIPv4Settings(addresses: [config.ipAddress], subnetMasks: [config.subnetMask])
+            if let subnetAddress = calculateSubnetAddress(ipAddress: config.ipAddress, subnetMask: config.subnetMask) {
+                ipV4.includedRoutes = [NEIPv4Route(destinationAddress: subnetAddress,
+                                                   subnetMask: config.subnetMask)]
+            } else {
+                ipV4.includedRoutes = [NEIPv4Route.default()]
+            }
             settings.ipv4Settings = ipV4
 
-
-            let dns = "8.8.8.8,8.4.4.4"
+            let dns = "119.29.29.29,8.8.8.8"
             let dnsSettings = NEDNSSettings(servers: dns.components(separatedBy: ","))
             /// overrides system DNS settings
             dnsSettings.matchDomains = [""]

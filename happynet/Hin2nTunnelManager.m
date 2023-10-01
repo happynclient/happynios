@@ -158,6 +158,7 @@ int openVPN(void){
     return [self reStartTunnel:params];
 }
 
+// 暂时没有使用，计划自动获取ip后调用
 -(int)reStartTunnel:(NSDictionary *)params{
     NSString * ipAddrerss = params[@"ipAddress"];
     NSString * subnetMark = params[@"subnetMark"];
@@ -239,7 +240,7 @@ int openVPN(void){
     }
 //    remoteAdd = currentModel.supernode;
     if ([[currentModel.dns class] isEqual:[NSNull class]]) {
-        currentModel.dns = @"8.8.8.8";
+        currentModel.dns = @"119.29.29.29";
     }
     if ([[currentModel.ipAddress class] isEqual:[NSNull class]] || currentModel.ipAddress == nil) {
         return ;
