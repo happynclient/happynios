@@ -221,7 +221,7 @@ typedef enum {
     copyRightLabel.font = [UIFont systemFontOfSize:12];
     copyRightLabel.numberOfLines = 2; // 设置为两行
     copyRightLabel.textAlignment = NSTextAlignmentCenter;
-    copyRightLabel.text = @"Version 2.3 ©happyn.net\nBased on N2N Project";
+    copyRightLabel.text = @"Version 2.4 ©happyn.net\nBased on N2N Project";
     [footerView addSubview:copyRightLabel];
     [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(footerView.mas_centerX);
