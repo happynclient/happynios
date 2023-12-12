@@ -24,6 +24,8 @@
 		04165CAE2A6D389D00CD0E61 /* edge_ios_oc.m in Sources */ = {isa = PBXBuildFile; fileRef = 04165CAC2A6D389C00CD0E61 /* edge_ios_oc.m */; };
 		04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165CAB2A6D387E00CD0E61 /* libn2n.a */; };
 		04165CBC2A6E5C3500CD0E61 /* HappynedgeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04165CBA2A6E5C3500CD0E61 /* HappynedgeManager.swift */; };
+		04EE03572B26EA48003C25B6 /* HappynetDylib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04165C3C2A6D1A4C00CD0E61 /* HappynetDylib.framework */; };
+		04EE03582B26EA48003C25B6 /* HappynetDylib.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 04165C3C2A6D1A4C00CD0E61 /* HappynetDylib.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		04F26E4129F91A830093C829 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4329F91A830093C829 /* InfoPlist.strings */; };
 		04F26E4729F920430093C829 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 04F26E4929F920430093C829 /* Localizable.strings */; };
 		CB5330EE26CF47F1008A024D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CB5330ED26CF47F1008A024D /* AppDelegate.m */; };
@@ -90,6 +92,13 @@
 			remoteGlobalIDString = 7EFA8E7D265E248D006B1EE1;
 			remoteInfo = n2n;
 		};
+		04EE03592B26EA48003C25B6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CB5330E126CF47F1008A024D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04165C3B2A6D1A4C00CD0E61;
+			remoteInfo = HappynetDylib;
+		};
 		5D5E77DD26EC7BB100479FE3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5D5E77D926EC7BB100479FE3 /* slog.xcodeproj */;
@@ -107,6 +116,17 @@
 			dstSubfolderSpec = 10;
 			files = (
 				04165C432A6D1A4C00CD0E61 /* HappynetDylib.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		04EE035B2B26EA48003C25B6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				04EE03582B26EA48003C25B6 /* HappynetDylib.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -255,6 +275,7 @@
 				04165C8D2A6D290200CD0E61 /* libslog.a in Frameworks */,
 				04165CB12A6D38BD00CD0E61 /* libn2n.a in Frameworks */,
 				04165C902A6D291800CD0E61 /* libcrypto.a in Frameworks */,
+				04EE03572B26EA48003C25B6 /* HappynetDylib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,10 +550,12 @@
 				04165C742A6D28F100CD0E61 /* Sources */,
 				04165C752A6D28F100CD0E61 /* Frameworks */,
 				04165C762A6D28F100CD0E61 /* Resources */,
+				04EE035B2B26EA48003C25B6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				04EE035A2B26EA48003C25B6 /* PBXTargetDependency */,
 			);
 			name = Tunnel;
 			productName = Tunnel;
@@ -738,6 +761,11 @@
 			isa = PBXTargetDependency;
 			target = 04165C772A6D28F100CD0E61 /* Tunnel */;
 			targetProxy = 04165C7F2A6D28F100CD0E61 /* PBXContainerItemProxy */;
+		};
+		04EE035A2B26EA48003C25B6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04165C3B2A6D1A4C00CD0E61 /* HappynetDylib */;
+			targetProxy = 04EE03592B26EA48003C25B6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
