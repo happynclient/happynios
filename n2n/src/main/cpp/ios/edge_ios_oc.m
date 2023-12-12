@@ -66,8 +66,10 @@ static ssize_t ios_recvfrom(int fd, void *buf, size_t len, char *ip, int *port) 
 
 static int ios_tuntap_write(unsigned char *buf, int len) {
     if (s_provider && buf != NULL && buf != NULL && len > 0) {
-        NSData *data = [[NSData alloc] initWithBytes:buf length:len];
-        [s_provider writeTunData:data];
+        @autoreleasepool {
+            NSData *data = [[NSData alloc] initWithBytes:buf length:len];
+            [s_provider writeTunData:data];
+        }
         return len;
     } else {
         return 0;
