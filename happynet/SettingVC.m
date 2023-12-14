@@ -1264,33 +1264,30 @@
     return YES;
 }
 
-//ip 地址 校验
--(BOOL)checkIpAddress:(NSString *)ipAddress{
-    if (ipAddress!= nil) {
-        
-        NSArray * arr = [ipAddress componentsSeparatedByString:@"."];
+// IP 地址校验
+-(BOOL)checkIpAddress:(NSString *)ipAddress {
+    if (ipAddress != nil) {
+        NSArray *arr = [ipAddress componentsSeparatedByString:@"."];
         if (arr.count != 4) {
             return NO;
         }
-        for (int i = 0; i<arr.count; i++) {
-            NSString * ipItem =  arr[i];
-            NSInteger  temp = [ipItem integerValue];
-            if (i == 0) {
-                if (temp <1) {
-                    return NO;
-                }
+        for (int i = 0; i < arr.count; i++) {
+            NSString *ipItem = arr[i];
+            NSCharacterSet *nonDigitCharacterSet = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+            if ([ipItem rangeOfCharacterFromSet:nonDigitCharacterSet].location != NSNotFound) {
+                return NO; // 包含非数字字符
             }
-            if (temp >254) {
+            NSInteger temp = [ipItem integerValue];
+            if ((temp < 0) || (temp > 255)) { // 校验范围 0-255
                 return NO;
             }
         }
         return YES;
-    
-    }else{
+    } else {
         return NO;
     }
-    return NO;
 }
+
 
 //校验netSmark address
 -(BOOL)checkMark:(NSString *)ipAddress{
