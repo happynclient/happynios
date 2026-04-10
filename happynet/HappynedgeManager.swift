@@ -27,6 +27,7 @@ public class HappynedgeManager: NSObject {
     }
 
     private var observers = [AnyObject]()
+    private var isStarting = false
 
     private override init() {
         super.init()
@@ -40,7 +41,8 @@ public class HappynedgeManager: NSObject {
 
         let configChange = NotificationCenter.default.addObserver(forName: .NEVPNConfigurationChange, object: nil,
                                                                   queue: OperationQueue.main) { [weak self] _ in
-            self?.refresh()
+            guard let self = self, !self.isStarting else { return }
+            self.refresh()
         }
         observers.append(configChange)
     }
@@ -93,8 +95,10 @@ extension HappynedgeManager {
     @objc(startWithConfig:completion:)
     public func start(with config: HappynedgeConfig,
                       completion: @escaping Handler) {
+        isStarting = true
         loadTunnelManager { [unowned self] manager, error in
             if let error = error {
+                self.isStarting = false
                 return completion(error)
             }
 
@@ -108,11 +112,19 @@ extension HappynedgeManager {
 
             self.saveToPreferences(with: config) { [weak self] error in
                 if let error = error {
+                    self?.isStarting = false
                     return completion(error)
                 }
 
-                self?.tunnel?.loadFromPreferences { [weak self] _ in
-                    self?.start(completion)
+                // Reload tunnel manager from system preferences to get the
+                // canonical instance after first-time save, preventing the
+                // race condition where NEVPNConfigurationChange notification
+                // could replace self.tunnel with a different instance.
+                self?.loadTunnelManager { [weak self] _, _ in
+                    self?.tunnel?.loadFromPreferences { [weak self] _ in
+                        self?.isStarting = false
+                        self?.start(completion)
+                    }
                 }
             }
         }
