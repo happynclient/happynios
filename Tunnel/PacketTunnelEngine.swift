@@ -12,7 +12,13 @@ class PacketTunnelEngine: NSObject {
     private var superNode: NWUDPSession!
     private let log = OSLog(subsystem: "Happynet", category: "default")
     private let queue = DispatchQueue(label: "happynet.tunnel")    //serial
-    private let n2nQueue = DispatchQueue(label: "happynet.n2n")     //serial
+    // n2nQueue 设计为「类级（static）串行队列」，所有 PacketTunnelEngine 实例共用：
+    // - ocEngine.stop() 通过设置 closing 标志使 n2n select() 在 ≤1s 内退出，
+    //   从而释放 n2nQueue 供下一次连接使用。
+    // - 全局串行保证旧 n2n 完全退出后新 n2n 才启动，消除并发冲突。
+    // - udpSession(.ready) 块使用 [weak self]：
+    //   若 engine 在等待期间被释放（连接已取消），block 自动 no-op，不会启动孤儿 n2n。
+    private static let n2nQueue = DispatchQueue(label: "happynet.n2n.global", qos: .utility)
     // 专用 stop 队列：将 ocEngine.stop()（可能耸塞数秒）移到此队列，
     // 避免阻塞 `queue`，确保超时 WorkItem 与其他状态操作免受影响。
     // 串行确保多次 stop 调用不会并发执行 n2n stop。
@@ -84,7 +90,8 @@ class PacketTunnelEngine: NSObject {
                 let result = group.wait(timeout: .now() + 5)
                 if case .timedOut = result {
                     os_log(.fault, log: log,
-                           "Happynet ocEngine.stop() timed out after 5s, releasing lock to unblock startNewEngine")
+                           "Fatal: Happynet ocEngine.stop() timed out after 5s! C thread is permanently deadlocked. Terminating extension process to unblock future connections.")
+                    exit(0)
                 }
                 // stopQueue 块完成 → afterStop(execute:) 中排队的任务可以运行
             }
@@ -257,7 +264,7 @@ class PacketTunnelEngine: NSObject {
             // self.timeoutTimer?.invalidate() // Don't invalidate yet, wait for n2n connection
             // startHandler?(nil) // Don't call yet, wait for n2n connection
             // startHandler = nil
-            n2nQueue.async { [weak self] in
+            PacketTunnelEngine.n2nQueue.async { [weak self] in
                 guard let self = self else { return }
                 self.ocEngine.start(self.edgeConfig())
             }

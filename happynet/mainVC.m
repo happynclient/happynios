@@ -125,8 +125,7 @@ typedef enum {
         NSString *msg = [NSString
             stringWithFormat:@"\n[%@] ⚠️ Connection timeout. The process has "
                              @"stopped automatically (Failed to connect to the "
-                             @"server within 10 seconds)."\n ",
-            timeStr];
+                             @"server within 10 seconds).\n ", timeStr];
         self->_logView.text = [self->_logView.text stringByAppendingString:msg];
         [self->_logView
             scrollRangeToVisible:NSMakeRange(self->_logView.text.length, 1)];
