@@ -466,7 +466,10 @@ int start_edge_v3(n2n_edge_status_t* status) {
     eee->curr_sn = eee->conf.supernodes;
     supernode_connect(eee);
 
-    while(runlevel < 5) {
+    keep_on_running = 1;
+    eee->keep_running = &keep_on_running;
+
+    while(runlevel < 5 && keep_on_running) {
 
         now = time(NULL);
 
@@ -618,22 +621,44 @@ int start_edge_v3(n2n_edge_status_t* status) {
         }
 
         // we usually wait for some answer, there however are exceptions when going back to a previous runlevel
-        if(seek_answer) {
+        if(seek_answer && keep_on_running) {
             FD_ZERO(&socket_mask);
             FD_SET(eee->sock, &socket_mask);
+            int max_fd = eee->sock;
+            if (tuntap.mgr_socket != -1) {
+                FD_SET(tuntap.mgr_socket, &socket_mask);
+                if (tuntap.mgr_socket > max_fd) max_fd = tuntap.mgr_socket;
+            }
+
             wait_time.tv_sec = BOOTSTRAP_TIMEOUT;
             wait_time.tv_usec = 0;
 
-            if(select(eee->sock + 1, &socket_mask, NULL, NULL, &wait_time) > 0) {
+            if(select(max_fd + 1, &socket_mask, NULL, NULL, &wait_time) > 0) {
                 if(FD_ISSET(eee->sock, &socket_mask)) {
                     fetch_and_eventually_process_data (eee, eee->sock,
                                                         pktbuf, &expected, &position,
                                                         now);
                 }
+                
+                if (tuntap.mgr_socket != -1 && FD_ISSET(tuntap.mgr_socket, &socket_mask)) {
+                    char cmd_buf[16];
+                    ssize_t n = read(tuntap.mgr_socket, cmd_buf, sizeof(cmd_buf) - 1);
+                    if (n > 0) {
+                        cmd_buf[n] = '\0';
+                        if (strncmp(cmd_buf, "stop", 4) == 0) {
+                            traceEvent(TRACE_NORMAL, "Received stop command during bootstrap.");
+                            keep_on_running = 0;
+                        }
+                    }
+                }
             }
         }
 
         seek_answer = 1;
+    }
+    
+    if (!keep_on_running) {
+        goto cleanup;
     }
     
     // allow a higher number of pings for first regular round of ping
@@ -695,11 +720,6 @@ int start_edge_v3(n2n_edge_status_t* status) {
     edge_set_callbacks(eee, &callbacks);
 
     keep_on_running = 1;
-    pthread_mutex_lock(&g_status->mutex);
-    g_status->running_status = EDGE_STAT_CONNECTED;
-    pthread_mutex_unlock(&g_status->mutex);
-    g_status->report_edge_status();
-    
     traceEvent(TRACE_NORMAL, "edge started");
     keep_on_running = 1;
     eee->keep_running = &keep_on_running;

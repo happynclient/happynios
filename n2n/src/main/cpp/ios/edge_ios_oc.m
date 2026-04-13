@@ -78,6 +78,9 @@ static int ios_tuntap_write(unsigned char *buf, int len) {
 
 static void ios_report_edge_status(void) {
     NSLog(@"Happynet: ios_report_edge_status");
+    if (s_provider && g_status) {
+        [s_provider reportEdgeStatus:g_status->running_status];
+    }
 }
 
 @interface EdgeEngine ()
@@ -184,7 +187,7 @@ static void ios_report_edge_status(void) {
 }
 
 - (void)stop {
-    //ios_write_data(_n2nBridge, IOS_FD_MGR, "stop", 4);
+    ios_write_data(_n2nBridge, IOS_FD_MGR, "stop", 4);
     stop_edge_v3();
 }
 

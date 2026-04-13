@@ -28,17 +28,29 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
     // MARK: - Override
     override func startTunnel(options: [String: NSObject]?, completionHandler: @escaping (Error?) -> Void) {
-        os_log(.default, log: log, "Happynet Starting tunnel, options: %{private}@", "\(String(describing: options))")
-        engine = PacketTunnelEngine(provider: self)
-        guard let engine = engine else {
-            return
+        os_log(.default, log: log, "Happynet startTunnel: engine=%{public}@",
+               engine == nil ? "nil" : "set")
+
+        // 若上一次连接的 engine 还在（异常情况），先静默 stop，不等待
+        if let old = engine {
+            os_log(.default, log: log, "Happynet startTunnel: stopping stale old engine")
+            engine = nil
+            old.stop { }   // complete() 立即触发，n2n 在 stopQueue 后台异步清理
         }
 
+        let newEngine = PacketTunnelEngine(provider: self)
+        engine = newEngine
         let config = HappynedgeConfig()
-        engine.start(config: config) { [weak self] error in
-            guard let self = self else {
+
+        newEngine.start(config: config) { [weak self] error in
+            guard let self = self else { return }
+
+            if let error = error {
+                os_log(.default, log: self.log, "Happynet Failed to setup tunnel: %{public}@", "\(error)")
+                completionHandler(error)
                 return
             }
+
             os_log(.default, log: self.log, "Happynet Did setup tunnel")
 
             let settings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "127.0.0.1")
@@ -53,27 +65,37 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
             let dns = "119.29.29.29,8.8.8.8"
             let dnsSettings = NEDNSSettings(servers: dns.components(separatedBy: ","))
-            /// overrides system DNS settings
             dnsSettings.matchDomains = [""]
             settings.dnsSettings = dnsSettings
 
-
             self.setTunnelNetworkSettings(settings) { error in
-                os_log(.default, log: self.log, "Did setup tunnel settings: %{public}@, error: %{public}@", "\(settings)", "\(String(describing: error))")
-
+                os_log(.default, log: self.log,
+                       "Did setup tunnel settings: %{public}@, error: %{public}@",
+                       "\(settings)", "\(String(describing: error))")
                 completionHandler(error)
-                self.didStartTunnel()
+                // 只有成功时才启动读包循环
+                // 失败时系统会调用 stopTunnel，不能在失败的隧道上开启无限递归
+                if error == nil {
+                    self.didStartTunnel()
+                }
             }
         }
     }
 
     override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {
-        if let engine = engine {
-            engine.stop { [weak self] in
+        os_log(.fault, log: log, "Happynet stopTunnel called, engine=%{public}@",
+               engine == nil ? "nil" : "set")
+        if let current = engine {
+            engine = nil
+            current.stop {
+                // complete() 已在 engine.stop 中立即调用，这里只需走 completionHandler 通知系统
                 completionHandler()
-                guard let self = self else { return }
-                os_log(.fault, log: self.log, "Happynet stopTunnel tunnel, options: %{private}@")
             }
+        } else {
+            // engine 为 nil（如启动失败/未初始化/已清零），必须仍然调用 completionHandler
+            // 否则系统超时后 VPN 会卡在 disconnecting 状态
+            os_log(.fault, log: log, "Happynet stopTunnel: engine is nil, completing immediately")
+            completionHandler()
         }
     }
 

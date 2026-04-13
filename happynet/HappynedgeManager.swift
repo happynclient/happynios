@@ -28,6 +28,7 @@ public class HappynedgeManager: NSObject {
 
     private var observers = [AnyObject]()
     private var isStarting = false
+    private var pendingStartCompletion: Handler?
 
     private override init() {
         super.init()
@@ -95,11 +96,25 @@ extension HappynedgeManager {
     @objc(startWithConfig:completion:)
     public func start(with config: HappynedgeConfig,
                       completion: @escaping Handler) {
+        // 取消上一次未完成的 start
+        pendingStartCompletion = nil
+        pendingStartCompletion = completion
         isStarting = true
-        loadTunnelManager { [unowned self] manager, error in
+
+        loadTunnelManager { [weak self] manager, error in
+            guard let self = self else { return }
+            // 如果 stop() 已经被调用（isStarting 被重置），放弃本次 start
+            guard self.isStarting else {
+                self.pendingStartCompletion = nil
+                return
+            }
+
             if let error = error {
                 self.isStarting = false
-                return completion(error)
+                let cb = self.pendingStartCompletion
+                self.pendingStartCompletion = nil
+                cb?(error)
+                return
             }
 
             if manager == nil {
@@ -111,19 +126,50 @@ extension HappynedgeManager {
             }
 
             self.saveToPreferences(with: config) { [weak self] error in
+                guard let self = self else { return }
+                guard self.isStarting else {
+                    self.pendingStartCompletion = nil
+                    return
+                }
+
                 if let error = error {
-                    self?.isStarting = false
-                    return completion(error)
+                    self.isStarting = false
+                    let cb = self.pendingStartCompletion
+                    self.pendingStartCompletion = nil
+                    cb?(error)
+                    return
                 }
 
                 // Reload tunnel manager from system preferences to get the
                 // canonical instance after first-time save, preventing the
                 // race condition where NEVPNConfigurationChange notification
                 // could replace self.tunnel with a different instance.
-                self?.loadTunnelManager { [weak self] _, _ in
-                    self?.tunnel?.loadFromPreferences { [weak self] _ in
-                        self?.isStarting = false
-                        self?.start(completion)
+                self.loadTunnelManager { [weak self] _, _ in
+                    guard let self = self, self.isStarting else {
+                        self?.pendingStartCompletion = nil
+                        return
+                    }
+                    // tunnel 为 nil 意味着 loadAllFromPreferences 返回空数组
+                    // 发生于 saveToPreferences 后立即 load 但配置未写入的情况
+                    // 快速失败而非静默中断链条（否则 isStarting 永远不清零，UI 卡死）
+                    guard self.tunnel != nil else {
+                        self.isStarting = false
+                        let cb = self.pendingStartCompletion
+                        self.pendingStartCompletion = nil
+                        cb?(NSError(domain: NEVPNErrorDomain,
+                                    code: NEVPNError.Code.configurationInvalid.rawValue,
+                                    userInfo: [NSLocalizedDescriptionKey: "Failed to load VPN configuration after saving"]))
+                        return
+                    }
+                    self.tunnel?.loadFromPreferences { [weak self] _ in
+                        guard let self = self, self.isStarting else {
+                            self?.pendingStartCompletion = nil
+                            return
+                        }
+                        self.isStarting = false
+                        let cb = self.pendingStartCompletion
+                        self.pendingStartCompletion = nil
+                        self.start { error in cb?(error) }
                     }
                 }
             }
@@ -140,7 +186,21 @@ extension HappynedgeManager {
     }
 
     public func stop() {
-        tunnel?.connection.stopVPNTunnel()
+        // 中断任何正在进行的异步 start 链，防止 start/stop 状态交叉
+        isStarting = false
+        pendingStartCompletion = nil
+        if let tunnel = self.tunnel {
+            tunnel.connection.stopVPNTunnel()
+        } else {
+            // tunnel 为 nil（可能在 start 链中途被清空），尝试从系统首选项重新加载后再停止
+            // 这确保 stop() 总是有效，即使 tunnel 引用丢失
+            NETunnelProviderManager.loadAllFromPreferences { [weak self] managers, _ in
+                if let manager = managers?.first {
+                    self?.tunnel = manager
+                    manager.connection.stopVPNTunnel()
+                }
+            }
+        }
     }
 
     public func refresh(completion: Handler? = nil) {
@@ -181,8 +241,8 @@ extension HappynedgeManager {
 
 extension HappynedgeManager {
     private func loadTunnelManager(_ complition: @escaping (NETunnelProviderManager?, Error?) -> Void) {
-        NETunnelProviderManager.loadAllFromPreferences { [unowned self] managers, error in
-            self.tunnel = managers?.first
+        NETunnelProviderManager.loadAllFromPreferences { [weak self] managers, error in
+            self?.tunnel = managers?.first
             complition(managers?.first, error)
         }
     }
