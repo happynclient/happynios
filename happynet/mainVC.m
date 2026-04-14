@@ -214,7 +214,7 @@ typedef enum {
     [self.view addSubview:settingTitle];
     settingTitle.text = NSLocalizedString(@"Current Setting", nil);
     settingTitle.textColor = [UIColor grayColor];
-    settingTitle.font = [UIFont systemFontOfSize:16];
+    settingTitle.font = [UIFont systemFontOfSize:22];
     [settingTitle mas_makeConstraints:^(MASConstraintMaker *make) {
       make.top.mas_equalTo(_startButton.mas_bottom).offset(20);
       make.left.mas_equalTo(10);
@@ -261,6 +261,7 @@ typedef enum {
                            forState:UIControlStateNormal];
     [_currentSettingButton setTitleColor:[UIColor grayColor]
                                 forState:UIControlStateNormal];
+    _currentSettingButton.titleLabel.font = [UIFont systemFontOfSize:20];
 
     [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
       make.top.mas_equalTo(settingTitle.mas_top).offset(-5);
@@ -309,7 +310,7 @@ typedef enum {
   // 在 footerView 中添加版权信息
   UILabel *copyRightLabel = [[UILabel alloc] init];
   copyRightLabel.textColor = [UIColor whiteColor];
-  copyRightLabel.font = [UIFont systemFontOfSize:12];
+  copyRightLabel.font = [UIFont systemFontOfSize:16];
   copyRightLabel.numberOfLines = 2; // 设置为两行
   copyRightLabel.textAlignment = NSTextAlignmentCenter;
   copyRightLabel.text = @"Version 2.7 ©happyn.net\nBased on N2N Project";

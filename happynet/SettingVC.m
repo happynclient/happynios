@@ -123,7 +123,7 @@
     UILabel * name = [[UILabel alloc]init];
     name.text = NSLocalizedString(@"Setting Name", nil);
     
-    name.font = [UIFont systemFontOfSize:14];
+    name.font = [UIFont systemFontOfSize:20];
     name.textColor = [UIColor grayColor];
     [_contextView addSubview:name];
   
@@ -173,7 +173,7 @@
     UILabel * versionLabel = [[UILabel alloc]init];
     [versionView addSubview:versionLabel];
     versionLabel.text = @"N2N version";
-    versionLabel.font = [UIFont systemFontOfSize:14];
+    versionLabel.font = [UIFont systemFontOfSize:20];
     versionLabel.textColor = [UIColor grayColor];
     [versionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(5);
@@ -225,7 +225,7 @@
     [_contextView addSubview:supernodeLabel];
     supernodeLabel.text = NSLocalizedString(@"supernode", nil);;
     supernodeLabel.textColor = [UIColor grayColor];
-    supernodeLabel.font = [UIFont systemFontOfSize:13];
+    supernodeLabel.font = [UIFont systemFontOfSize:18];
     [supernodeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(versionView.mas_bottom);
         make.left.mas_equalTo(20);
@@ -258,7 +258,7 @@
     [_contextView addSubview:communityTitle];
     communityTitle.text = NSLocalizedString(@"community", nil);
     communityTitle.textColor = [UIColor grayColor];
-    communityTitle.font = [UIFont systemFontOfSize:13];
+    communityTitle.font = [UIFont systemFontOfSize:18];
     [communityTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_supernodeTF.mas_bottom).mas_offset(5);
         make.left.mas_equalTo(20);
@@ -301,7 +301,7 @@
     }];
     _EncryptTF.placeholder = NSLocalizedString(@"Encrypt Key", nil);
     _EncryptTF.textColor = [UIColor grayColor];
-    _EncryptTF.font = [UIFont systemFontOfSize:13];
+    _EncryptTF.font = [UIFont systemFontOfSize:18];
     UIView * EncryptTFline = [[UIView alloc]init];
     [_contextView addSubview:EncryptTFline];
     EncryptTFline.backgroundColor = [UIColor grayColor];
@@ -341,7 +341,7 @@
 //    [_contextView addSubview:deviceDescription];
 //    deviceDescription.text = @"Device Description";
 //    deviceDescription.textColor = [UIColor grayColor];
-//    deviceDescription.font = [UIFont systemFontOfSize:13];
+//    deviceDescription.font = [UIFont systemFontOfSize:18];
 //    [deviceDescription mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.top.mas_equalTo(getSuperModelButton.mas_bottom).offset(10);
 //        make.left.mas_equalTo(20);
@@ -492,7 +492,7 @@
     [_moreView addSubview:encryptionLabel];
     encryptionLabel.text = NSLocalizedString(@"Encryption method", nil);
     encryptionLabel.textColor = [UIColor lightGrayColor];
-    encryptionLabel.font = [UIFont systemFontOfSize:14];
+    encryptionLabel.font = [UIFont systemFontOfSize:20];
     [encryptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_moreView.mas_top).offset(5);
         make.left.mas_equalTo(10);
@@ -543,7 +543,7 @@
     UILabel * mtuLabel = [[UILabel alloc]init];
     [_moreView addSubview:mtuLabel];
     mtuLabel.textColor = [UIColor lightGrayColor];
-    mtuLabel.font = [UIFont systemFontOfSize:14];
+    mtuLabel.font = [UIFont systemFontOfSize:20];
     mtuLabel.text = @"MTU";
     [mtuLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(supernode2Line.mas_bottom).offset(10);
@@ -582,7 +582,7 @@
     UILabel * portLabel = [[UILabel alloc]init];
     [_moreView addSubview:portLabel];
     portLabel.textColor = [UIColor lightGrayColor];
-    portLabel.font = [UIFont systemFontOfSize:14];
+    portLabel.font = [UIFont systemFontOfSize:20];
     portLabel.text = NSLocalizedString(@"Port", nil);
     [portLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(mtuTFLine.mas_bottom).offset(10);
@@ -729,7 +729,7 @@
     [_moreView addSubview:forwardLabel];
     forwardLabel.text = NSLocalizedString(@"Enable packet forwarding", nil);
     forwardLabel.textColor = [UIColor lightGrayColor];
-    forwardLabel.font = [UIFont systemFontOfSize:14];
+    forwardLabel.font = [UIFont systemFontOfSize:20];
     [forwardLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(forwardingButton.mas_top);
         make.left.mas_equalTo(forwardingButton.mas_right);
@@ -757,7 +757,7 @@
     [_moreView addSubview:acceptMulticastLabel];
     acceptMulticastLabel.text = NSLocalizedString(@"Accept multicast Mac address", nil);
     acceptMulticastLabel.textColor = [UIColor lightGrayColor];
-    acceptMulticastLabel.font = [UIFont systemFontOfSize:14];
+    acceptMulticastLabel.font = [UIFont systemFontOfSize:20];
     [acceptMulticastLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(acceptMulticastButton.mas_top);
         make.left.mas_equalTo(acceptMulticastButton.mas_right);
@@ -769,7 +769,7 @@
     [_moreView addSubview:traceLabel];
     traceLabel.text = NSLocalizedString(@"Trace level:", nil);
     traceLabel.textColor = [UIColor lightGrayColor];
-    traceLabel.font = [UIFont systemFontOfSize:14];
+    traceLabel.font = [UIFont systemFontOfSize:20];
     //traceLabel.backgroundColor = [UIColor orangeColor];
     [traceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(acceptMulticastLabel.mas_bottom).offset(10);
@@ -785,7 +785,7 @@
         [_selectLevelButton setTitle:@"NORMAL" forState:UIControlStateNormal];
     }
     _selectLevelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    _selectLevelButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    _selectLevelButton.titleLabel.font = [UIFont systemFontOfSize:20];
     [_selectLevelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [_selectLevelButton addTarget:self action:@selector(alertLevelView) forControlEvents:UIControlEventTouchUpInside];
     [_selectLevelButton mas_makeConstraints:^(MASConstraintMaker *make) {
