@@ -192,7 +192,7 @@ typedef enum {
 
     _startButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_startButton];
-    _startButton.layer.cornerRadius = 60;
+    _startButton.layer.cornerRadius = 50;
     [_startButton addTarget:self
                      action:@selector(startServer:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -205,10 +205,68 @@ typedef enum {
     _startButton.backgroundColor = [UIColor lightGrayColor];
     [_startButton mas_remakeConstraints:^(MASConstraintMaker *make) {
       make.centerX.mas_equalTo(self.view.mas_centerX);
-      make.centerY.mas_equalTo(self.view.mas_bottom).multipliedBy(0.22);
-      make.width.mas_equalTo(120);
-      make.height.mas_equalTo(120);
+      make.top.mas_equalTo(self.view.mas_top).offset(100);
+      make.width.mas_equalTo(100);
+      make.height.mas_equalTo(100);
     }];
+
+    // --- Aesthetic Instructional Pill ---
+    UIView *hintBgView = [[UIView alloc] init];
+    [self.view addSubview:hintBgView];
+    hintBgView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+    hintBgView.layer.cornerRadius = 16;
+    if (@available(iOS 13.0, *)) {
+        hintBgView.backgroundColor = [UIColor tertiarySystemFillColor];
+    }
+    
+    UIImageView *boltIcon = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        boltIcon.image = [UIImage systemImageNamed:@"bolt.fill"];
+        boltIcon.tintColor = [UIColor systemOrangeColor];
+    }
+    [hintBgView addSubview:boltIcon];
+    
+    UILabel *hintLabel = [[UILabel alloc] init];
+    [hintBgView addSubview:hintLabel];
+    hintLabel.text = NSLocalizedString(@"Tap to Connect", nil);
+    if (!NSLocalizedString(@"Tap to Connect", nil) || [NSLocalizedString(@"Tap to Connect", nil) isEqualToString:@"Tap to Connect"]) {
+        hintLabel.text = @"点击上方图标连接网络";
+    }
+    hintLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        hintLabel.textColor = [UIColor secondaryLabelColor];
+    }
+    hintLabel.font = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
+    
+    [hintBgView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(_startButton.mas_bottom).offset(15);
+        make.centerX.mas_equalTo(self.view.mas_centerX);
+        make.height.mas_equalTo(32);
+    }];
+    
+    [boltIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(hintBgView.mas_centerY);
+        make.left.mas_equalTo(12);
+        make.width.height.mas_equalTo(16);
+    }];
+    
+    [hintLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(hintBgView.mas_centerY);
+        make.left.mas_equalTo(boltIcon.mas_right).offset(6);
+        make.right.mas_equalTo(-12);
+    }];
+
+    _logView = [[UITextView alloc] init];
+    [self.view addSubview:_logView];
+    _logView.editable = NO;
+    _logView.layoutManager.allowsNonContiguousLayout = NO;
+    _logView.backgroundColor = [UIColor grayColor];
+    // Constraints for _logView will be set later after sloganLabel is created.
+    _logView.textColor = [UIColor whiteColor];
+    [_logView
+        scrollRectToVisible:CGRectMake(0, _logView.contentSize.height - 15,
+                                       _logView.contentSize.width, 10)
+                   animated:YES];
 
     UILabel *settingTitle = [[UILabel alloc] init];
     [self.view addSubview:settingTitle];
@@ -216,7 +274,7 @@ typedef enum {
     settingTitle.textColor = [UIColor grayColor];
     settingTitle.font = [UIFont systemFontOfSize:22];
     [settingTitle mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.centerY.mas_equalTo(self.view.mas_bottom).multipliedBy(0.33);
+      make.top.mas_equalTo(hintBgView.mas_bottom).offset(15);
       make.left.mas_equalTo(20);
       make.width.mas_equalTo(120);
       make.height.mas_equalTo(30);
@@ -260,22 +318,28 @@ typedef enum {
       make.height.mas_equalTo(40);
     }];
 
-    _logView = [[UITextView alloc] init];
-    [self.view addSubview:_logView];
-    _logView.editable = NO;
-    _logView.layoutManager.allowsNonContiguousLayout = NO;
-    _logView.backgroundColor = [UIColor grayColor];
-    [_logView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.height.mas_equalTo(self.view.mas_height).multipliedBy(0.6);
-      make.right.mas_equalTo(-10);
-      make.left.mas_equalTo(10);
-      make.bottom.mas_equalTo(-20);
+    UILabel *sloganLabel = [[UILabel alloc] init];
+    [self.view addSubview:sloganLabel];
+    sloganLabel.text = @"HAPPYN makes the internet simpler.";
+    sloganLabel.font = [UIFont italicSystemFontOfSize:14];
+    sloganLabel.textColor = [UIColor darkGrayColor];
+    if (@available(iOS 13.0, *)) {
+        sloganLabel.textColor = [UIColor secondaryLabelColor];
+    }
+    sloganLabel.textAlignment = NSTextAlignmentCenter;
+
+    [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-70);
+        make.centerX.mas_equalTo(self.view.mas_centerX);
+        make.height.mas_equalTo(20);
     }];
-    _logView.textColor = [UIColor whiteColor];
-    [_logView
-        scrollRectToVisible:CGRectMake(0, _logView.contentSize.height - 15,
-                                       _logView.contentSize.width, 10)
-                   animated:YES];
+
+    [_logView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(settingTitle.mas_bottom).offset(20);
+        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(10);
+        make.bottom.mas_equalTo(sloganLabel.mas_top).offset(-15);
+    }];
 
     UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
     self.navigationItem.rightBarButtonItem =
