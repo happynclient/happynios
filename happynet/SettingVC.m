@@ -168,7 +168,11 @@
    _scrollView = [[UIScrollView alloc]init];
     [self.view addSubview:_scrollView];
     [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
+        if (@available(iOS 11.0, *)) {
+            make.top.mas_equalTo(self.view.mas_safeAreaLayoutGuideTop);
+        } else {
+            make.top.mas_equalTo(64);
+        }
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
         make.bottom.mas_equalTo(footerView.mas_top).offset(-10);
