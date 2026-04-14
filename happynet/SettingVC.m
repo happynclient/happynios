@@ -558,8 +558,8 @@
     encryptionLabel.font = [UIFont systemFontOfSize:20];
     [encryptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_moreView.mas_top).offset(5);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(20);
     }];
     
@@ -574,7 +574,7 @@
     _selectMethodButton.contentHorizontalAlignment =UIControlContentHorizontalAlignmentLeft;
     [_selectMethodButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(encryptionLabel.mas_bottom);
-        make.left.mas_equalTo(10);
+        make.left.mas_equalTo(20);
         make.right.mas_equalTo(-100);
         make.height.mas_equalTo(40);
     }];
@@ -587,8 +587,8 @@
     _supernode2.placeholder = NSLocalizedString(@"Supernode2", nil);
     [_supernode2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_selectMethodButton.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
     UIView * supernode2Line = [[UIView alloc]init];
@@ -596,8 +596,8 @@
     supernode2Line.backgroundColor = [UIColor grayColor];
     [supernode2Line mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_supernode2.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(1);
     }];
     _supernode2.hidden = true;
@@ -610,8 +610,8 @@
     mtuLabel.text = @"MTU";
     [mtuLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(supernode2Line.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(20);
     }];
     
@@ -627,8 +627,8 @@
     _mtuTF.keyboardType = UIKeyboardTypeNumberPad;
     [_mtuTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(mtuLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
     
@@ -637,8 +637,8 @@
     mtuTFLine.backgroundColor = [UIColor grayColor];
     [mtuTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_mtuTF.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(1);
     }];
 
@@ -649,8 +649,8 @@
     portLabel.text = NSLocalizedString(@"Port", nil);
     [portLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(mtuTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(20);
     }];
 
@@ -665,8 +665,8 @@
     _portTF.keyboardType = UIKeyboardTypeNumberPad;
     [_portTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(portLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
     UIView * portTFLine = [[UIView alloc]init];
@@ -674,8 +674,8 @@
     portTFLine.backgroundColor = [UIColor grayColor];
     [portTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_portTF.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(1);
     }];
 
@@ -686,8 +686,8 @@
     _gatewayTF.placeholder = NSLocalizedString(@"gateway ip address", nil);
     [_gatewayTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(portTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
     
@@ -696,8 +696,8 @@
     gatewayTFLine.backgroundColor = [UIColor grayColor];
     [gatewayTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_gatewayTF.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(1);
     }];
     
@@ -709,8 +709,8 @@
     _DNSTF.placeholder = NSLocalizedString(@"DNS server ip address", nil);
     [_DNSTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(gatewayTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(44);
     }];
     
@@ -719,8 +719,8 @@
     DNSTFLine.backgroundColor = [UIColor grayColor];
     [DNSTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_DNSTF.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(1);
     }];
     _DNSTF.hidden = true;
@@ -733,8 +733,8 @@
 //    macLabel.backgroundColor = [UIColor blueColor];
     [macLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(DNSTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(20);
     }];
     
@@ -744,7 +744,7 @@
     _macAddressTF.placeholder = @"Mac  ";
     [_macAddressTF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(macLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
+        make.left.mas_equalTo(20);
         make.right.mas_equalTo(-100);
         make.height.mas_equalTo(44);
     }];
@@ -759,7 +759,7 @@
     [getMacButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(macLabel.mas_bottom).offset(10);
         make.left.mas_equalTo(_macAddressTF.mas_right);
-        make.right.mas_equalTo(-15);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(40);
     }];
     
@@ -768,8 +768,8 @@
     _macLine.backgroundColor = [UIColor grayColor];
     [_macLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_macAddressTF.mas_bottom);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(1);
     }];
     
@@ -782,7 +782,7 @@
     [forwardingButton setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
     [forwardingButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_macLine.mas_bottom).offset(20);
-        make.left.mas_equalTo(10);
+        make.left.mas_equalTo(20);
         make.width.mas_equalTo(60);
         make.height.mas_equalTo(30);
     }];
@@ -796,7 +796,7 @@
     [forwardLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(forwardingButton.mas_top);
         make.left.mas_equalTo(forwardingButton.mas_right);
-        make.right.mas_equalTo(-10);
+        make.right.mas_equalTo(-20);
         make.height.mas_equalTo(30);
     }];
 
@@ -809,7 +809,7 @@
     [acceptMulticastButton setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
     [acceptMulticastButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(forwardingButton.mas_bottom).offset(20);
-        make.left.mas_equalTo(10);
+        make.left.mas_equalTo(20);
         make.width.mas_equalTo(60);
         make.height.mas_equalTo(30);
     }];
