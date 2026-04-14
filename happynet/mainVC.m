@@ -192,7 +192,7 @@ typedef enum {
 
     _startButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_startButton];
-    _startButton.layer.cornerRadius = 40;
+    _startButton.layer.cornerRadius = 60;
     [_startButton addTarget:self
                      action:@selector(startServer:)
            forControlEvents:UIControlEventTouchUpInside];
@@ -203,11 +203,11 @@ typedef enum {
                   forState:UIControlStateSelected];
 
     _startButton.backgroundColor = [UIColor lightGrayColor];
-    [_startButton mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_startButton mas_remakeConstraints:^(MASConstraintMaker *make) {
       make.centerX.mas_equalTo(self.view.mas_centerX);
-      make.top.mas_equalTo(104);
-      make.width.mas_equalTo(80);
-      make.height.mas_equalTo(80);
+      make.centerY.mas_equalTo(self.view.mas_bottom).multipliedBy(0.22);
+      make.width.mas_equalTo(120);
+      make.height.mas_equalTo(120);
     }];
 
     UILabel *settingTitle = [[UILabel alloc] init];
@@ -215,24 +215,13 @@ typedef enum {
     settingTitle.text = NSLocalizedString(@"Current Setting", nil);
     settingTitle.textColor = [UIColor grayColor];
     settingTitle.font = [UIFont systemFontOfSize:22];
-    [settingTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.top.mas_equalTo(_startButton.mas_bottom).offset(20);
-      make.left.mas_equalTo(10);
+    [settingTitle mas_remakeConstraints:^(MASConstraintMaker *make) {
+      make.centerY.mas_equalTo(self.view.mas_bottom).multipliedBy(0.33);
+      make.left.mas_equalTo(20);
       make.width.mas_equalTo(120);
-      make.height.mas_equalTo(20);
+      make.height.mas_equalTo(30);
     }];
 
-    /*
-    UIImageView * nextIcon = [[UIImageView alloc]init];
-    [self.view addSubview:nextIcon];
-    nextIcon.image = [UIImage imageNamed:@"TableViewArrow"];
-    [nextIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(settingTitle.mas_top).offset(5);
-        make.right.mas_equalTo(-30);
-        make.width.mas_equalTo(18);
-        make.height.mas_equalTo(18);
-    }];
-    */
     UIImage *image = [UIImage imageNamed:@"TableViewArrow"];
     UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
     nextButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
@@ -241,11 +230,11 @@ typedef enum {
                    action:@selector(currentSettingLists:)
          forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:nextButton];
-    [nextButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.top.mas_equalTo(settingTitle.mas_top).offset(5);
-      make.right.mas_equalTo(-30);
-      make.width.mas_equalTo(18);
-      make.height.mas_equalTo(18);
+    [nextButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+      make.centerY.mas_equalTo(settingTitle.mas_centerY);
+      make.right.mas_equalTo(-20);
+      make.width.mas_equalTo(24);
+      make.height.mas_equalTo(24);
     }];
 
     _currentSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -257,17 +246,18 @@ typedef enum {
                                                             green:206 / 255.0
                                                              blue:250 / 255.0
                                                             alpha:1];
+    _currentSettingButton.layer.cornerRadius = 8;
     [_currentSettingButton setTitle:NSLocalizedString(@"settingName", nil)
                            forState:UIControlStateNormal];
     [_currentSettingButton setTitleColor:[UIColor grayColor]
                                 forState:UIControlStateNormal];
     _currentSettingButton.titleLabel.font = [UIFont systemFontOfSize:20];
 
-    [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.top.mas_equalTo(settingTitle.mas_top).offset(-5);
-      make.right.mas_equalTo(-120);
-      make.left.mas_equalTo(settingTitle.mas_right);
-      make.height.mas_equalTo(30);
+    [_currentSettingButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+      make.centerY.mas_equalTo(settingTitle.mas_centerY);
+      make.left.mas_equalTo(settingTitle.mas_right).offset(10);
+      make.right.mas_equalTo(self.view.mas_right).offset(-100);
+      make.height.mas_equalTo(40);
     }];
 
     _logView = [[UITextView alloc] init];
@@ -276,7 +266,7 @@ typedef enum {
     _logView.layoutManager.allowsNonContiguousLayout = NO;
     _logView.backgroundColor = [UIColor grayColor];
     [_logView mas_makeConstraints:^(MASConstraintMaker *make) {
-      make.top.mas_equalTo(settingTitle.mas_bottom).offset(15);
+      make.height.mas_equalTo(self.view.mas_height).multipliedBy(0.6);
       make.right.mas_equalTo(-10);
       make.left.mas_equalTo(10);
       make.bottom.mas_equalTo(-20);
