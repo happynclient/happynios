@@ -57,14 +57,17 @@ typedef enum {
 }
 - (void)viewWillAppear:(BOOL)animated {
   [super viewWillAppear:animated];
-  [self readLogFile];
+  // 必须在此注册通知！因为 viewWillDisappear 会移除所有通知，
+  // 若放在 viewDidLoad 中，从配置页返回后 mainVC 将永久丢失对 VPN
+  // 状态的监听能力！
+  [self regNotificationNetworkConnectStatus];
+  [self regApplicationExitNotification];
 
+  [self readLogFile];
   [self searchLocalSettingLists];
 }
 - (void)viewDidLoad {
   [super viewDidLoad];
-  [self regNotificationNetworkConnectStatus];
-  [self regApplicationExitNotification];
   // Do any additional setup after loading the view.
 
   if (@available(iOS 13.0, *)) {
@@ -125,7 +128,8 @@ typedef enum {
         NSString *msg = [NSString
             stringWithFormat:@"\n[%@] ⚠️ Connection timeout. The process has "
                              @"stopped automatically (Failed to connect to the "
-                             @"server within 10 seconds).\n ", timeStr];
+                             @"server within 10 seconds).\n ",
+                             timeStr];
         self->_logView.text = [self->_logView.text stringByAppendingString:msg];
         [self->_logView
             scrollRangeToVisible:NSMakeRange(self->_logView.text.length, 1)];

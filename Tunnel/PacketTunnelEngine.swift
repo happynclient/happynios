@@ -91,7 +91,7 @@ class PacketTunnelEngine: NSObject {
                 if case .timedOut = result {
                     os_log(.fault, log: log,
                            "Fatal: Happynet ocEngine.stop() timed out after 5s! C thread is permanently deadlocked. Terminating extension process to unblock future connections.")
-                    exit(0)
+                    
                 }
                 // stopQueue 块完成 → afterStop(execute:) 中排队的任务可以运行
             }

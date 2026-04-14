@@ -47,7 +47,13 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
 
             if let error = error {
                 os_log(.default, log: self.log, "Happynet Failed to setup tunnel: %{public}@", "\(error)")
-                completionHandler(error)
+                self.setTunnelNetworkSettings(nil) { _ in
+                    completionHandler(error)
+                    // 必须同步退出，绝对不能用 asyncAfter！
+                    // iOS 会在 completionHandler 触发后立刻挂起扩展进程。
+                    // 异步定时器会被冻结，导致在"下一次"重新连接唤醒进程的瞬间引爆，炸毁新连接！
+                    exit(0)
+                }
                 return
             }
 
@@ -85,17 +91,23 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
     override func stopTunnel(with reason: NEProviderStopReason, completionHandler: @escaping () -> Void) {
         os_log(.fault, log: log, "Happynet stopTunnel called, engine=%{public}@",
                engine == nil ? "nil" : "set")
+        
         if let current = engine {
             engine = nil
             current.stop {
-                // complete() 已在 engine.stop 中立即调用，这里只需走 completionHandler 通知系统
-                completionHandler()
+                self.setTunnelNetworkSettings(nil) { _ in
+                    completionHandler()
+                    exit(0) // 同步销毁，杜绝 C 代码全局状态残留到下次连接
+                }
             }
         } else {
             // engine 为 nil（如启动失败/未初始化/已清零），必须仍然调用 completionHandler
             // 否则系统超时后 VPN 会卡在 disconnecting 状态
             os_log(.fault, log: log, "Happynet stopTunnel: engine is nil, completing immediately")
-            completionHandler()
+            self.setTunnelNetworkSettings(nil) { _ in
+                completionHandler()
+                exit(0) // 同步销毁
+            }
         }
     }
 
