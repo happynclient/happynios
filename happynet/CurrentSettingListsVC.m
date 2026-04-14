@@ -44,6 +44,60 @@
        [leftButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:leftButton];
     
+    UIView *footerView = [[UIView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        footerView.backgroundColor = [UIColor secondarySystemBackgroundColor];
+    } else {
+        footerView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+    }
+    footerView.layer.cornerRadius = 8;
+    [self.view addSubview:footerView];
+    
+    [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).offset(-20);
+        make.left.mas_equalTo(10);
+        make.right.mas_equalTo(-10);
+        make.height.mas_equalTo(75);
+    }];
+
+    UILabel *sloganLabel = [[UILabel alloc] init];
+    [footerView addSubview:sloganLabel];
+    sloganLabel.text = @"HAPPYN makes the internet simpler.";
+    sloganLabel.font = [UIFont italicSystemFontOfSize:14];
+    sloganLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        sloganLabel.textColor = [UIColor secondaryLabelColor];
+    }
+    sloganLabel.textAlignment = NSTextAlignmentCenter;
+
+    [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(8);
+        make.centerX.mas_equalTo(footerView.mas_centerX);
+        make.height.mas_equalTo(20);
+    }];
+
+    UILabel *copyRightLabel = [[UILabel alloc] init];
+    copyRightLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        copyRightLabel.textColor = [UIColor tertiaryLabelColor];
+    }
+    copyRightLabel.font = [UIFont systemFontOfSize:13];
+    copyRightLabel.numberOfLines = 2;
+    copyRightLabel.textAlignment = NSTextAlignmentCenter;
+    
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    if (appVersion == nil) {
+        appVersion = @"2.7";
+    }
+    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ ©happyn.net\nBased on N2N Project", appVersion];
+    
+    [footerView addSubview:copyRightLabel];
+    [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(sloganLabel.mas_bottom).offset(2);
+        make.centerX.equalTo(footerView.mas_centerX);
+        make.height.equalTo(@40);
+    }];
+
     _listView = [[UITableView alloc]init];
     [self.view addSubview:_listView];
     [_listView registerNib:[UINib nibWithNibName:@"ListsViewCell" bundle:nil] forCellReuseIdentifier:@"cell"];
@@ -51,7 +105,7 @@
         make.top.mas_equalTo(0);
         make.left.mas_equalTo(0);
         make.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(0);
+        make.bottom.mas_equalTo(footerView.mas_top).offset(-10);
     }];
     _listView.delegate = self;
     _listView.dataSource = self;

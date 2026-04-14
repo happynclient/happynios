@@ -111,9 +111,68 @@
 
 -(void)initUI{
 
+    UIView *footerView = [[UIView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        footerView.backgroundColor = [UIColor secondarySystemBackgroundColor];
+    } else {
+        footerView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+    }
+    footerView.layer.cornerRadius = 8;
+    [self.view addSubview:footerView];
+    
+    [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).offset(-20);
+        make.left.mas_equalTo(10);
+        make.right.mas_equalTo(-10);
+        make.height.mas_equalTo(75);
+    }];
+
+    UILabel *sloganLabel = [[UILabel alloc] init];
+    [footerView addSubview:sloganLabel];
+    sloganLabel.text = @"HAPPYN makes the internet simpler.";
+    sloganLabel.font = [UIFont italicSystemFontOfSize:14];
+    sloganLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        sloganLabel.textColor = [UIColor secondaryLabelColor];
+    }
+    sloganLabel.textAlignment = NSTextAlignmentCenter;
+
+    [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(8);
+        make.centerX.mas_equalTo(footerView.mas_centerX);
+        make.height.mas_equalTo(20);
+    }];
+
+    UILabel *copyRightLabel = [[UILabel alloc] init];
+    copyRightLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        copyRightLabel.textColor = [UIColor tertiaryLabelColor];
+    }
+    copyRightLabel.font = [UIFont systemFontOfSize:13];
+    copyRightLabel.numberOfLines = 2;
+    copyRightLabel.textAlignment = NSTextAlignmentCenter;
+    
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    if (appVersion == nil) {
+        appVersion = @"2.7";
+    }
+    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ ©happyn.net\nBased on N2N Project", appVersion];
+    
+    [footerView addSubview:copyRightLabel];
+    [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(sloganLabel.mas_bottom).offset(2);
+        make.centerX.equalTo(footerView.mas_centerX);
+        make.height.equalTo(@40);
+    }];
+
    _scrollView = [[UIScrollView alloc]init];
-    _scrollView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height+200);
     [self.view addSubview:_scrollView];
+    [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.left.mas_equalTo(0);
+        make.right.mas_equalTo(0);
+        make.bottom.mas_equalTo(footerView.mas_top).offset(-10);
+    }];
     _scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1150);
     _contextView = [[UIView alloc]initWithFrame:CGRectZero];
     
