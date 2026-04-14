@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1420"
+   LastUpgradeVersion = "2630"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -44,7 +44,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "046C16B22A6A25D1000B37DB"
+            BlueprintIdentifier = "CB5330E826CF47F1008A024D"
             BuildableName = "happynet.app"
             BlueprintName = "happynet"
             ReferencedContainer = "container:../../../../../happynet.xcodeproj">
