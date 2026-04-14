@@ -318,27 +318,65 @@ typedef enum {
       make.height.mas_equalTo(40);
     }];
 
+    UIView *footerView = [[UIView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        footerView.backgroundColor = [UIColor secondarySystemBackgroundColor];
+    } else {
+        footerView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+    }
+    footerView.layer.cornerRadius = 8;
+    [self.view addSubview:footerView];
+    
+    [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view.mas_bottom).offset(-20);
+        make.left.mas_equalTo(10);
+        make.right.mas_equalTo(-10);
+        make.height.mas_equalTo(75);
+    }];
+
     UILabel *sloganLabel = [[UILabel alloc] init];
-    [self.view addSubview:sloganLabel];
+    [footerView addSubview:sloganLabel];
     sloganLabel.text = @"HAPPYN makes the internet simpler.";
     sloganLabel.font = [UIFont italicSystemFontOfSize:14];
-    sloganLabel.textColor = [UIColor darkGrayColor];
+    sloganLabel.textColor = [UIColor grayColor];
     if (@available(iOS 13.0, *)) {
         sloganLabel.textColor = [UIColor secondaryLabelColor];
     }
     sloganLabel.textAlignment = NSTextAlignmentCenter;
 
     [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.view.mas_bottom).offset(-70);
-        make.centerX.mas_equalTo(self.view.mas_centerX);
+        make.top.mas_equalTo(8);
+        make.centerX.mas_equalTo(footerView.mas_centerX);
         make.height.mas_equalTo(20);
+    }];
+
+    UILabel *copyRightLabel = [[UILabel alloc] init];
+    copyRightLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        copyRightLabel.textColor = [UIColor tertiaryLabelColor];
+    }
+    copyRightLabel.font = [UIFont systemFontOfSize:13];
+    copyRightLabel.numberOfLines = 2; // 设置为两行
+    copyRightLabel.textAlignment = NSTextAlignmentCenter;
+    
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    if (appVersion == nil) {
+        appVersion = @"2.7"; // Fallback just in case
+    }
+    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ ©happyn.net\nBased on N2N Project", appVersion];
+    
+    [footerView addSubview:copyRightLabel];
+    [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(sloganLabel.mas_bottom).offset(2);
+        make.centerX.equalTo(footerView.mas_centerX);
+        make.height.equalTo(@40); // 改为两行文字的高度
     }];
 
     [_logView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(settingTitle.mas_bottom).offset(20);
         make.right.mas_equalTo(-10);
         make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(sloganLabel.mas_top).offset(-15);
+        make.bottom.mas_equalTo(footerView.mas_top).offset(-15);
     }];
 
     UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
@@ -349,32 +387,6 @@ typedef enum {
         forControlEvents:UIControlEventTouchUpInside];
   }
 
-  // 添加一个 footerView
-  UIView *footerView = [[UIView alloc] init];
-  footerView.backgroundColor = [UIColor grayColor];
-  [self.view addSubview:footerView];
-  [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.bottom.equalTo(self.view.mas_bottom);
-    // make.width.equalTo(self.view.mas_width);
-    make.height.mas_equalTo(50);
-    make.right.mas_equalTo(-10);
-    make.left.mas_equalTo(10);
-  }];
-
-  // 在 footerView 中添加版权信息
-  UILabel *copyRightLabel = [[UILabel alloc] init];
-  copyRightLabel.textColor = [UIColor whiteColor];
-  copyRightLabel.font = [UIFont systemFontOfSize:16];
-  copyRightLabel.numberOfLines = 2; // 设置为两行
-  copyRightLabel.textAlignment = NSTextAlignmentCenter;
-  copyRightLabel.text = @"Version 2.7 ©happyn.net\nBased on N2N Project";
-  [footerView addSubview:copyRightLabel];
-  [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-    make.centerX.equalTo(footerView.mas_centerX);
-    make.centerY.equalTo(footerView.mas_centerY);
-    make.width.equalTo(footerView.mas_width);
-    make.height.equalTo(@40); // 改为两行文字的高度
-  }];
 }
 
 + (char *)ocStyleStrConvert2cStyleStr:(NSString *)stringOBJ {
