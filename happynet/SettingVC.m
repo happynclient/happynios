@@ -63,6 +63,9 @@
 @property(nonatomic,strong)UIView * ipAddressTFline;
 @property(nonatomic,strong)UIView * subnetMarkTFLine;
 
+- (UIView *)createFormRowWithIcon:(NSString *)iconName title:(NSString *)titleText control:(UIView *)control parent:(UIView *)parent topAnchor:(UIView *)topAnchor offset:(CGFloat)offset;
+- (UIView *)createSwitchRowWithIcon:(NSString *)iconName title:(NSString *)titleText control:(UISwitch *)control parent:(UIView *)parent topAnchor:(UIView *)topAnchor offset:(CGFloat)offset;
+
 @end
 
 @implementation SettingVC
@@ -75,17 +78,28 @@
     }
     self.view.backgroundColor = bgColor;
 
-    [self initUI];
+    UILabel *titleLabel = [[UILabel alloc] init];
     if (_isUpdate) {
-        self.title = NSLocalizedString(@"Update Setting", nil);
-        [self setDataFromListVC];
-    }else{
-        self.title = NSLocalizedString(@"Setting", nil);
+        titleLabel.text = @"更新配置";
+    } else {
+        titleLabel.text = @"增加配置";
         _level = 2;
         _version = 3;
     }
+    titleLabel.font = [UIFont systemFontOfSize:24 weight:UIFontWeightBold];
+    if (@available(iOS 13.0, *)) {
+        titleLabel.textColor = [UIColor labelColor];
+    } else {
+        titleLabel.textColor = [UIColor blackColor];
+    }
+    [titleLabel sizeToFit];
+    self.navigationItem.titleView = titleLabel;
+
+    [self initUI];
+    if (_isUpdate) {
+        [self setDataFromListVC];
+    }
     [self initDB];
-    
 }
 -(void)initDB{
     LocalData * data =  [[LocalData alloc]init];
@@ -99,6 +113,160 @@
     LocalData * data =  [[LocalData alloc]init];
     NSInteger  id_key = [data searchDataByName:model.name];
     _model.id_key = id_key;
+}
+
+#pragma mark - UI Helpers
+
+- (UIView *)createFormRowWithIcon:(NSString *)iconName
+                            title:(NSString *)titleText
+                          control:(UIView *)control
+                           parent:(UIView *)parent
+                        topAnchor:(UIView *)topAnchor
+                           offset:(CGFloat)offset {
+    UIView *container = [[UIView alloc] init];
+    [parent addSubview:container];
+    [container mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (topAnchor) {
+            make.top.mas_equalTo(topAnchor.mas_bottom).offset(offset);
+        } else {
+            make.top.mas_equalTo(parent).offset(offset);
+        }
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
+        make.height.mas_equalTo(60);
+    }];
+    
+    UIView *iconBg = [[UIView alloc] init];
+    iconBg.backgroundColor = [UIColor colorWithRed:0.9 green:0.95 blue:1.0 alpha:1.0];
+    if (@available(iOS 13.0, *)) {
+        iconBg.backgroundColor = [UIColor systemGray6Color];
+    }
+    iconBg.layer.cornerRadius = 12;
+    [container addSubview:iconBg];
+    [iconBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.centerY.mas_equalTo(container);
+        make.width.height.mas_equalTo(44);
+    }];
+    
+    UIImageView *iconView = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        iconView.image = [UIImage systemImageNamed:iconName];
+        iconView.tintColor = [UIColor systemBlueColor];
+    }
+    iconView.contentMode = UIViewContentModeScaleAspectFit;
+    [iconBg addSubview:iconView];
+    [iconView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.mas_equalTo(iconBg);
+        make.width.height.mas_equalTo(20);
+    }];
+    
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.text = titleText;
+    titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightMedium];
+    titleLabel.textColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        titleLabel.textColor = [UIColor secondaryLabelColor];
+    }
+    [container addSubview:titleLabel];
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(iconBg.mas_right).offset(12);
+        make.top.mas_equalTo(0);
+        make.height.mas_equalTo(16);
+    }];
+    
+    UIView *controlBg = [[UIView alloc] init];
+    controlBg.backgroundColor = [UIColor whiteColor];
+    controlBg.layer.cornerRadius = 8;
+    controlBg.layer.borderWidth = 1.0;
+    if (@available(iOS 13.0, *)) {
+        controlBg.layer.borderColor = [UIColor separatorColor].CGColor;
+        controlBg.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
+    } else {
+        controlBg.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1.0].CGColor;
+    }
+    [container addSubview:controlBg];
+    [controlBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(iconBg.mas_right).offset(12);
+        make.top.mas_equalTo(titleLabel.mas_bottom).offset(4);
+        make.right.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+    }];
+    
+    [controlBg addSubview:control];
+    [control mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(12);
+        make.right.mas_equalTo(-12);
+        make.top.bottom.mas_equalTo(0);
+    }];
+    
+    return container;
+}
+
+- (UIView *)createSwitchRowWithIcon:(NSString *)iconName title:(NSString *)titleText control:(UISwitch *)control parent:(UIView *)parent topAnchor:(UIView *)topAnchor offset:(CGFloat)offset {
+    UIView *row = [[UIView alloc] init];
+    row.backgroundColor = [UIColor whiteColor];
+    if (@available(iOS 13.0, *)) {
+        row.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
+    }
+    row.layer.cornerRadius = 12;
+    [parent addSubview:row];
+    
+    [row mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (topAnchor) {
+            make.top.mas_equalTo(topAnchor.mas_bottom).offset(offset);
+        } else {
+            make.top.mas_equalTo(parent.mas_top).offset(offset);
+        }
+        make.left.mas_equalTo(20);
+        make.right.mas_equalTo(-20);
+        make.height.mas_equalTo(60);
+    }];
+    
+    UIView *iconBg = [[UIView alloc] init];
+    iconBg.backgroundColor = [UIColor colorWithRed:26/255.0 green:126/255.0 blue:240/255.0 alpha:0.1];
+    if (@available(iOS 13.0, *)) {
+        iconBg.backgroundColor = [UIColor systemGray6Color];
+    }
+    iconBg.layer.cornerRadius = 12;
+    [row addSubview:iconBg];
+    [iconBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(0);
+        make.centerY.mas_equalTo(row);
+        make.width.height.mas_equalTo(44);
+    }];
+    
+    UIImageView *iconView = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        iconView.image = [UIImage systemImageNamed:iconName];
+        iconView.tintColor = [UIColor systemBlueColor];
+    }
+    iconView.contentMode = UIViewContentModeScaleAspectFit;
+    [iconBg addSubview:iconView];
+    [iconView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.mas_equalTo(iconBg);
+        make.width.height.mas_equalTo(20);
+    }];
+    
+    UILabel *label = [[UILabel alloc] init];
+    label.text = titleText;
+    label.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    if (@available(iOS 13.0, *)) {
+        label.textColor = [UIColor labelColor];
+    }
+    [row addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(iconBg.mas_right).offset(12);
+        make.centerY.mas_equalTo(row);
+    }];
+    
+    [row addSubview:control];
+    [control mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-12);
+        make.centerY.mas_equalTo(row);
+    }];
+    
+    return row;
 }
 
 -(void)initUI{
@@ -200,365 +368,160 @@
     [_scrollView addSubview:_contextView];
     _contextView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height+1150);
 
-    UILabel * name = [[UILabel alloc]init];
-    name.text = NSLocalizedString(@"Setting Name", nil);
-    
-    name.font = [UIFont systemFontOfSize:20];
-    name.textColor = [UIColor grayColor];
-    [_contextView addSubview:name];
-  
-    [name mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(44);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(18);
-    }];
-    
     _nameTF = [[UITextField alloc]init];
-    [_contextView addSubview:_nameTF];
     _nameTF.delegate = self;
-    [_nameTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(name.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    _nameTF.keyboardType  = UIKeyboardTypeDefault;
-    _nameTF.placeholder  = @"name";
+    _nameTF.keyboardType = UIKeyboardTypeDefault;
+    _nameTF.placeholder = @"name";
     _nameTF.returnKeyType = UIReturnKeyDone;
     if (@available(iOS 10.0, *)) {
         _nameTF.textContentType = @"userName";
     }
-    UIView * line1 = [[UIView alloc]init];
-    [_contextView addSubview:line1];
-    line1.backgroundColor = [UIColor grayColor];
-    [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_nameTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    
-    UIView * versionView = [[UIView alloc]init];
-    [_contextView addSubview:versionView];
-//    versionView.backgroundColor = [UIColor blueColor];
-    [versionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(line1.mas_bottom).mas_offset(10);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(-50);
-        make.height.mas_equalTo(15);
-    }];
-    
-    UILabel * versionLabel = [[UILabel alloc]init];
-    [versionView addSubview:versionLabel];
-    versionLabel.text = @"N2N version";
-    versionLabel.font = [UIFont systemFontOfSize:20];
-    versionLabel.textColor = [UIColor grayColor];
-    [versionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(5);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(0);
-        make.height.mas_equalTo(20);
-    }];
-    
-    //only support n2n V3
-    _array = [NSMutableArray array];
-    NSArray * arrayTitleText = @[@"v1",@"v2s",@"v2",@"v3"];
-    for (int i = 0; i<4; i++) {
-        UIButton * itemView = [UIButton buttonWithType:UIButtonTypeCustom];
-        [versionView addSubview:itemView];
-        itemView.layer.borderColor = [UIColor grayColor].CGColor;
-        itemView.layer.cornerRadius = 3;
-        itemView.layer.borderWidth = 1;
-        itemView.tag = 30+i;
-        [itemView addTarget:self action:@selector(selectItem:) forControlEvents:UIControlEventTouchUpInside];
-        [itemView setTitle:arrayTitleText[i] forState:UIControlStateNormal];
-        [itemView setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
-        [itemView setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [itemView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(30);
-            make.height.mas_equalTo(34);
-        }];
-       
-        if (_isUpdate) {
-            _version = _model.version;
-            if (_version == i) {
-                itemView.selected = YES;
-                itemView.layer.borderColor = [UIColor orangeColor].CGColor;
-            }
-        }else{
-            if (i==3) {
-                itemView.selected = YES;
-                itemView.layer.borderColor = [UIColor orangeColor].CGColor;
-                _version = 3;
-            }
-        }
-        [_array addObject:itemView];
-    }
-    versionView.hidden = YES;
+    UIView *row1 = [self createFormRowWithIcon:@"person.crop.square" title:NSLocalizedString(@"Setting Name", nil) control:_nameTF parent:_contextView topAnchor:nil offset:30];
 
-    [_array mas_distributeViewsAlongAxis:MASAxisTypeHorizontal withFixedSpacing:10 leadSpacing:20 tailSpacing:10];
-    
-    
-    UILabel * supernodeLabel = [[UILabel alloc]init];
-    [_contextView addSubview:supernodeLabel];
-    supernodeLabel.text = NSLocalizedString(@"supernode", nil);;
-    supernodeLabel.textColor = [UIColor grayColor];
-    supernodeLabel.font = [UIFont systemFontOfSize:18];
-    [supernodeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(versionView.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(20);
-    }];
     _supernodeTF = [[UITextField alloc]init];
-    [_contextView addSubview:_supernodeTF];
-   
-    [_supernodeTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(supernodeLabel.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    _supernodeTF.placeholder = @"vip00.happyn.cc:30001";
-    _supernodeTF.keyboardType  = UIKeyboardTypeDefault;
     _supernodeTF.delegate = self;
-    _superModeTFline = [[UIView alloc]init];
-    [_contextView addSubview:_superModeTFline];
-    _superModeTFline.backgroundColor = [UIColor grayColor];
-    [_superModeTFline mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_supernodeTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    UILabel * communityTitle = [[UILabel alloc]init];
-    [_contextView addSubview:communityTitle];
-    communityTitle.text = NSLocalizedString(@"community", nil);
-    communityTitle.textColor = [UIColor grayColor];
-    communityTitle.font = [UIFont systemFontOfSize:18];
-    [communityTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_supernodeTF.mas_bottom).mas_offset(5);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(20);
-    }];
+    _supernodeTF.keyboardType = UIKeyboardTypeDefault;
+    _supernodeTF.placeholder = @"vip00.happyn.cc:30001";
+    UIView *row2 = [self createFormRowWithIcon:@"link" title:NSLocalizedString(@"supernode", nil) control:_supernodeTF parent:_contextView topAnchor:row1 offset:20];
+
     _communityTF = [[UITextField alloc]init];
     _communityTF.delegate = self;
-    [_contextView addSubview:_communityTF];
-    _communityTF.keyboardType  = UIKeyboardTypeDefault;
-
-    [_communityTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(communityTitle.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
+    _communityTF.keyboardType = UIKeyboardTypeDefault;
     _communityTF.placeholder = @"VIP0378";
-    
-    _communityTFline = [[UIView alloc]init];
-    [_contextView addSubview:_communityTFline];
-    _communityTFline.backgroundColor = [UIColor grayColor];
-    [_communityTFline mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_communityTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    _EncryptTF = [[UITextField alloc]init];
-    [_contextView addSubview:_EncryptTF];
-    _EncryptTF.delegate = self;
-    _EncryptTF.keyboardType  = UIKeyboardTypeDefault;
+    UIView *row3 = [self createFormRowWithIcon:@"person.2.badge.gearshape" title:NSLocalizedString(@"community", nil) control:_communityTF parent:_contextView topAnchor:row2 offset:20];
 
-    [_EncryptTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_communityTF.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
+    _EncryptTF = [[UITextField alloc]init];
+    _EncryptTF.delegate = self;
+    _EncryptTF.keyboardType = UIKeyboardTypeDefault;
     _EncryptTF.placeholder = NSLocalizedString(@"Encrypt Key", nil);
-    _EncryptTF.textColor = [UIColor grayColor];
-    _EncryptTF.font = [UIFont systemFontOfSize:18];
-    UIView * EncryptTFline = [[UIView alloc]init];
-    [_contextView addSubview:EncryptTFline];
-    EncryptTFline.backgroundColor = [UIColor grayColor];
-    [EncryptTFline mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_EncryptTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    _getSuperModelIcon = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_contextView addSubview:_getSuperModelIcon];
-    [_getSuperModelIcon setImage:[UIImage imageNamed:@"buttom_unselect"] forState:UIControlStateNormal];
-    [_getSuperModelIcon setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
-    [_getSuperModelIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_EncryptTF.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.width.mas_equalTo(60);
-        make.height.mas_equalTo(30);
-    }];
-    [_getSuperModelIcon addTarget:self action:@selector(getSuperModel:) forControlEvents:UIControlEventTouchUpInside];
-    _getSuperModelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_contextView addSubview:_getSuperModelButton];
-    [_getSuperModelButton setTitle:NSLocalizedString(@"Get IP from supernode", nil) forState:UIControlStateNormal];
-    [_getSuperModelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    _getSuperModelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [_getSuperModelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_EncryptTF.mas_bottom).offset(10);
-        make.left.mas_equalTo(_getSuperModelIcon.mas_right);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(34);
-    }];
-    _getSuperModelIcon.hidden = true;
-    _getSuperModelButton.hidden = true;
-        
-//    UILabel * deviceDescription = [[UILabel alloc]init];
-//    [_contextView addSubview:deviceDescription];
-//    deviceDescription.text = @"Device Description";
-//    deviceDescription.textColor = [UIColor grayColor];
-//    deviceDescription.font = [UIFont systemFontOfSize:18];
-//    [deviceDescription mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.mas_equalTo(getSuperModelButton.mas_bottom).offset(10);
-//        make.left.mas_equalTo(20);
-//        make.right.mas_equalTo(-20);
-//        make.height.mas_equalTo(24);
-//    }];
-//
+    UIView *row4 = [self createFormRowWithIcon:@"key.fill" title:NSLocalizedString(@"Encrypt Key", nil) control:_EncryptTF parent:_contextView topAnchor:row3 offset:20];
+
+
     _supernodeView = [[UIView alloc]init];
     [_contextView addSubview:_supernodeView];
     [_supernodeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_getSuperModelButton.mas_bottom).offset(10);
-        make.left.mas_equalTo(0);
-        make.right.mas_equalTo(0);
-        make.height.mas_equalTo(90);
+        make.top.mas_equalTo(row4.mas_bottom).offset(20);
+        make.left.right.mas_equalTo(0);
+        make.height.mas_equalTo(140);
     }];
-    
+
     _ipAddressTF = [[UITextField alloc]init];
-    [_supernodeView addSubview:_ipAddressTF];
     _ipAddressTF.delegate = self;
-    _ipAddressTF.keyboardType  = UIKeyboardTypeDecimalPad;
-
+    _ipAddressTF.keyboardType = UIKeyboardTypeDecimalPad;
     _ipAddressTF.placeholder = NSLocalizedString(@"ip address", nil);
-    [_ipAddressTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_getSuperModelButton.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    _ipAddressTFline = [[UIView alloc]init];
-    [_supernodeView addSubview:_ipAddressTFline];
-    _ipAddressTFline.backgroundColor = [UIColor grayColor];
-    [_ipAddressTFline mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_ipAddressTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    
+    UIView *row5 = [self createFormRowWithIcon:@"network" title:NSLocalizedString(@"ip address", nil) control:_ipAddressTF parent:_supernodeView topAnchor:nil offset:0];
+
     _subnetMarkTF = [[UITextField alloc]init];
-    [_supernodeView addSubview:_subnetMarkTF];
     _subnetMarkTF.delegate = self;
-    _subnetMarkTF.keyboardType  = UIKeyboardTypeDecimalPad;
-
+    _subnetMarkTF.keyboardType = UIKeyboardTypeDecimalPad;
     _subnetMarkTF.placeholder = NSLocalizedString(@"Subnet Mark", nil);
-    [_subnetMarkTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_ipAddressTFline.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    _subnetMarkTFLine = [[UIView alloc]init];
-    [_supernodeView addSubview:_subnetMarkTFLine];
-    _subnetMarkTFLine.backgroundColor = [UIColor grayColor];
-    
-    [_subnetMarkTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_subnetMarkTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    
-    _deviceDescriptionTF = [[UITextField alloc]init];
-    [_contextView addSubview:_deviceDescriptionTF];
-    _deviceDescriptionTF.delegate = self;
-    _deviceDescriptionTF.keyboardType  = UIKeyboardTypeDefault;
+    [self createFormRowWithIcon:@"globe" title:NSLocalizedString(@"Subnet Mark", nil) control:_subnetMarkTF parent:_supernodeView topAnchor:row5 offset:20];
 
+    _deviceDescriptionTF = [[UITextField alloc]init];
+    _deviceDescriptionTF.delegate = self;
+    _deviceDescriptionTF.keyboardType = UIKeyboardTypeDefault;
     _deviceDescriptionTF.placeholder = NSLocalizedString(@"Device Description", nil);
-    [_deviceDescriptionTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_supernodeView.mas_bottom).offset(10);
+    UIView *row7 = [self createFormRowWithIcon:@"doc.text" title:NSLocalizedString(@"Device Description", nil) control:_deviceDescriptionTF parent:_contextView topAnchor:_supernodeView offset:20];
+
+    // Expert Settings Card
+    UIView *expertCard = [[UIView alloc] init];
+    expertCard.backgroundColor = [UIColor whiteColor];
+    if (@available(iOS 13.0, *)) {
+        expertCard.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
+    }
+    expertCard.layer.cornerRadius = 12;
+    [_contextView addSubview:expertCard];
+    [expertCard mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(row7.mas_bottom).offset(30);
         make.left.mas_equalTo(20);
         make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
+        make.height.mas_equalTo(64);
     }];
-    
-    UIView * deviceDescriptionTFLine = [[UIView alloc]init];
-    [_contextView addSubview:deviceDescriptionTFLine];
-    deviceDescriptionTFLine.backgroundColor = [UIColor grayColor];
-    [deviceDescriptionTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_deviceDescriptionTF.mas_bottom).mas_offset(1);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
+
+    UIImageView *checkIcon = [[UIImageView alloc] init];
+    checkIcon.tag = 1001;
+    if (@available(iOS 13.0, *)) {
+        checkIcon.image = [UIImage systemImageNamed:@"square"];
+        checkIcon.tintColor = [UIColor systemGrayColor];
+    }
+    [expertCard addSubview:checkIcon];
+    [checkIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(16);
+        make.centerY.mas_equalTo(expertCard);
+        make.width.height.mas_equalTo(24);
     }];
-    
-    
-    UIButton * moreSettingIcon = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_contextView addSubview:moreSettingIcon];
-    [moreSettingIcon setImage:[UIImage imageNamed:@"buttom_unselect"] forState:UIControlStateNormal];
-    [moreSettingIcon setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
-    [moreSettingIcon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_deviceDescriptionTF.mas_bottom).offset(20);
-        make.left.mas_equalTo(10);
-        make.width.mas_equalTo(60);
-        make.height.mas_equalTo(34);
+
+    UILabel *expertTitle = [[UILabel alloc] init];
+    expertTitle.text = @"专家设置";
+    expertTitle.font = [UIFont boldSystemFontOfSize:16];
+    [expertCard addSubview:expertTitle];
+    [expertTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(checkIcon.mas_right).offset(12);
+        make.top.mas_equalTo(12);
     }];
-    [moreSettingIcon addTarget:self action:@selector(moreSettingIcon:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
+
+    UILabel *expertSub = [[UILabel alloc] init];
+    expertSub.text = @"显示高级选项 (路由、加密、NAT 穿透等)";
+    expertSub.font = [UIFont systemFontOfSize:12];
+    expertSub.textColor = [UIColor systemGrayColor];
+    [expertCard addSubview:expertSub];
+    [expertSub mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(expertTitle);
+        make.top.mas_equalTo(expertTitle.mas_bottom).offset(2);
+    }];
+
+    UIImageView *chevron = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        chevron.image = [UIImage systemImageNamed:@"chevron.right"];
+        chevron.tintColor = [UIColor systemGrayColor];
+    }
+    [expertCard addSubview:chevron];
+    [chevron mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(-16);
+        make.centerY.mas_equalTo(expertCard);
+        make.width.mas_equalTo(12);
+        make.height.mas_equalTo(20);
+    }];
+
     _moreSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_contextView addSubview:_moreSettingButton];
-//    [_moreSettingButton addTarget:self action:@selector(moreSetting:) forControlEvents:UIControlEventTouchUpInside];
-    [_moreSettingButton setTitle:NSLocalizedString(@"more setting", nil) forState:UIControlStateNormal];
-    [_moreSettingButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    _moreSettingButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [expertCard addSubview:_moreSettingButton];
     [_moreSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_deviceDescriptionTF.mas_bottom).offset(20);
-        make.left.mas_equalTo(moreSettingIcon.mas_right);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(34);
+        make.edges.mas_equalTo(0);
     }];
+    [_moreSettingButton addTarget:self action:@selector(moreSettingIcon:) forControlEvents:UIControlEventTouchUpInside];
+
+    // Placeholder subviews to keep original references intact if needed
+    UIView *versionView = [[UIView alloc] init];
+    versionView.hidden = YES;
+    [_contextView addSubview:versionView];
     
+    _getSuperModelIcon = [UIButton buttonWithType:UIButtonTypeCustom];
+    _getSuperModelIcon.hidden = YES;
+    [_contextView addSubview:_getSuperModelIcon];
+    
+    _getSuperModelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _getSuperModelButton.hidden = YES;
+    [_contextView addSubview:_getSuperModelButton];
+
     _saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_contextView addSubview:_saveButton];
     [_saveButton addTarget:self action:@selector(saveSettingData:) forControlEvents:UIControlEventTouchUpInside];
     [_saveButton setTitle:NSLocalizedString(@"Save", nil) forState:UIControlStateNormal];
-    
     [_saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _saveButton.backgroundColor = [UIColor systemBlueColor];
+    _saveButton.layer.cornerRadius = 12;
+    _saveButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
+    
     [_saveButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(_moreSettingButton.mas_bottom).offset(60);
+        make.top.mas_equalTo(expertCard.mas_bottom).offset(40);
         make.left.mas_equalTo(20);
         make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
+        make.height.mas_equalTo(54);
     }];
-    _saveButton.backgroundColor = [UIColor colorWithRed:26/255.0 green:126/255.0  blue:240/255.0  alpha:1];
-    _saveButton.layer.cornerRadius = 5;
-
 }
-
-
 
 #pragma mark moreSettingView
 -(void)moreSetting:(UIButton *)button{
-    
     _moreView = [[UIView alloc]init];
     [_contextView addSubview:_moreView];
     [_moreView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -568,111 +531,38 @@
         make.height.mas_equalTo(620);
     }];
     
-    UILabel * encryptionLabel = [[UILabel alloc]init];
-    [_moreView addSubview:encryptionLabel];
-    encryptionLabel.text = NSLocalizedString(@"Encryption method", nil);
-    encryptionLabel.textColor = [UIColor lightGrayColor];
-    encryptionLabel.font = [UIFont systemFontOfSize:20];
-    [encryptionLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_moreView.mas_top).offset(5);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(20);
-    }];
-    
     _selectMethodButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_moreView addSubview:_selectMethodButton];
     if (_isUpdate) {
         [self setSelectMethodButtonTitle];
     }else{
        [_selectMethodButton setTitle:@"AES-CBC" forState:UIControlStateNormal];
     }
     [_selectMethodButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    _selectMethodButton.contentHorizontalAlignment =UIControlContentHorizontalAlignmentLeft;
-    [_selectMethodButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(encryptionLabel.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-100);
-        make.height.mas_equalTo(40);
-    }];
+    if (@available(iOS 13.0, *)) {
+        [_selectMethodButton setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
+    }
+    _selectMethodButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_selectMethodButton addTarget:self action:@selector(selectMethod) forControlEvents:UIControlEventTouchUpInside];
-    
-    
+    UIView *mRow1 = [self createFormRowWithIcon:@"lock.shield" title:NSLocalizedString(@"Encryption method", nil) control:_selectMethodButton parent:_moreView topAnchor:nil offset:20];
+
     _supernode2 = [[UITextField alloc]init];
-    [_moreView addSubview:_supernode2];
     _supernode2.delegate = self;
     _supernode2.placeholder = NSLocalizedString(@"Supernode2", nil);
-    [_supernode2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_selectMethodButton.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    UIView * supernode2Line = [[UIView alloc]init];
-    [_moreView addSubview:supernode2Line];
-    supernode2Line.backgroundColor = [UIColor grayColor];
-    [supernode2Line mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_supernode2.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    _supernode2.hidden = true;
-    
-    
-    UILabel * mtuLabel = [[UILabel alloc]init];
-    [_moreView addSubview:mtuLabel];
-    mtuLabel.textColor = [UIColor lightGrayColor];
-    mtuLabel.font = [UIFont systemFontOfSize:20];
-    mtuLabel.text = @"MTU";
-    [mtuLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(supernode2Line.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(20);
-    }];
-    
+    _supernode2.hidden = YES;
+    UIView *mRow2 = [self createFormRowWithIcon:@"link.badge.plus" title:NSLocalizedString(@"Supernode2", nil) control:_supernode2 parent:_moreView topAnchor:mRow1 offset:20];
+    mRow2.hidden = YES;
+
     _mtuTF = [[UITextField alloc]init];
-    [_moreView addSubview:_mtuTF];
     _mtuTF.delegate = self;
-    
     if (_model.mtu > 0) {
         self.mtuTF.text = [NSString stringWithFormat:@"%ld",_model.mtu];
     } else {
         _mtuTF.placeholder = @"1386";
     }
     _mtuTF.keyboardType = UIKeyboardTypeNumberPad;
-    [_mtuTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(mtuLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    UIView * mtuTFLine = [[UIView alloc]init];
-    [_moreView addSubview:mtuTFLine];
-    mtuTFLine.backgroundColor = [UIColor grayColor];
-    [mtuTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_mtuTF.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-
-    UILabel * portLabel = [[UILabel alloc]init];
-    [_moreView addSubview:portLabel];
-    portLabel.textColor = [UIColor lightGrayColor];
-    portLabel.font = [UIFont systemFontOfSize:20];
-    portLabel.text = NSLocalizedString(@"Port", nil);
-    [portLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(mtuTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(20);
-    }];
+    UIView *mRow3 = [self createFormRowWithIcon:@"ruler" title:@"MTU" control:_mtuTF parent:_moreView topAnchor:mRow1 offset:20];
 
     _portTF = [[UITextField alloc]init];
-    [_moreView addSubview:_portTF];
     _portTF.delegate = self;
     if (_model.port > 0) {
         self.portTF.text = [NSString stringWithFormat:@"%ld",_model.port];
@@ -680,208 +570,70 @@
         _portTF.placeholder = @"0";
     }
     _portTF.keyboardType = UIKeyboardTypeNumberPad;
-    [_portTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(portLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    UIView * portTFLine = [[UIView alloc]init];
-    [_moreView addSubview:portTFLine];
-    portTFLine.backgroundColor = [UIColor grayColor];
-    [portTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_portTF.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
+    UIView *mRow4 = [self createFormRowWithIcon:@"number" title:NSLocalizedString(@"Port", nil) control:_portTF parent:_moreView topAnchor:mRow3 offset:20];
 
     _gatewayTF = [[UITextField alloc]init];
-    [_moreView addSubview:_gatewayTF];
     _gatewayTF.delegate = self;
     _gatewayTF.keyboardType = UIKeyboardTypeDecimalPad;
     _gatewayTF.placeholder = NSLocalizedString(@"gateway ip address", nil);
-    [_gatewayTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(portTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    UIView * gatewayTFLine = [[UIView alloc]init];
-    [_moreView addSubview:gatewayTFLine];
-    gatewayTFLine.backgroundColor = [UIColor grayColor];
-    [gatewayTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_gatewayTF.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    
+    UIView *mRow5 = [self createFormRowWithIcon:@"externaldrive" title:NSLocalizedString(@"gateway", nil) control:_gatewayTF parent:_moreView topAnchor:mRow4 offset:20];
+
     _DNSTF = [[UITextField alloc]init];
-    [_moreView addSubview:_DNSTF];
     _DNSTF.delegate = self;
     _DNSTF.keyboardType = UIKeyboardTypeDecimalPad;
     _DNSTF.placeholder = NSLocalizedString(@"DNS server ip address", nil);
-    [_DNSTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(gatewayTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    UIView * DNSTFLine = [[UIView alloc]init];
-    [_moreView addSubview:DNSTFLine];
-    DNSTFLine.backgroundColor = [UIColor grayColor];
-    [DNSTFLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_DNSTF.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    _DNSTF.hidden = true;
-    DNSTFLine.hidden = true;
-    
-    UILabel * macLabel = [[UILabel alloc]init];
-    [_moreView addSubview:macLabel];
-    macLabel.textColor = [UIColor lightGrayColor];
-    macLabel.text = NSLocalizedString(@"Mac  address", nil);
-//    macLabel.backgroundColor = [UIColor blueColor];
-    [macLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(DNSTFLine.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(20);
-    }];
-    
-   _macAddressTF = [[UITextField alloc]init];
-    [_moreView addSubview:_macAddressTF];
-    _macAddressTF.delegate  = self;
-    _macAddressTF.placeholder = @"Mac  ";
-    [_macAddressTF mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(macLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-100);
-        make.height.mas_equalTo(44);
-    }];
+    UIView *mRow6 = [self createFormRowWithIcon:@"bolt.horizontal.circle" title:@"DNS" control:_DNSTF parent:_moreView topAnchor:mRow5 offset:20];
+    _DNSTF.hidden = YES;
+    mRow6.hidden = YES;
 
-    UIButton * getMacButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_moreView addSubview:getMacButton];
-    [getMacButton setTitle:@"Refresh" forState:UIControlStateNormal];
-    [getMacButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    getMacButton.layer.cornerRadius = 4;
-    getMacButton.backgroundColor = [UIColor colorWithRed:26/255.0 green:126/255.0  blue:240/255.0  alpha:1];
-    [getMacButton addTarget:self action:@selector(refreshMac:) forControlEvents:UIControlEventTouchUpInside];
-    [getMacButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(macLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(_macAddressTF.mas_right);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(40);
-    }];
-    
-    _macLine = [[UIView alloc]init];
-    [_moreView addSubview:_macLine];
-    _macLine.backgroundColor = [UIColor grayColor];
-    [_macLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_macAddressTF.mas_bottom);
-        make.left.mas_equalTo(20);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(1);
-    }];
-    
-    
-    UIButton * forwardingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    forwardingButton.selected = _model.forwarding;
-    _forwarding = _model.forwarding;
-    [_moreView addSubview:forwardingButton];
-    [forwardingButton setImage:[UIImage imageNamed:@"buttom_unselect"] forState:UIControlStateNormal];
-    [forwardingButton setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
-    [forwardingButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_macLine.mas_bottom).offset(20);
-        make.left.mas_equalTo(20);
-        make.width.mas_equalTo(60);
-        make.height.mas_equalTo(30);
-    }];
-    [forwardingButton addTarget:self action:@selector(forwardingButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    UILabel * forwardLabel = [[UILabel alloc]init];
-    [_moreView addSubview:forwardLabel];
-    forwardLabel.text = NSLocalizedString(@"Enable packet forwarding", nil);
-    forwardLabel.textColor = [UIColor lightGrayColor];
-    forwardLabel.font = [UIFont systemFontOfSize:20];
-    [forwardLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(forwardingButton.mas_top);
-        make.left.mas_equalTo(forwardingButton.mas_right);
-        make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(30);
-    }];
+    _macAddressTF = [[UITextField alloc]init];
+    _macAddressTF.delegate = self;
+    _macAddressTF.placeholder = NSLocalizedString(@"mac address", nil);
+    UIView *mRow7 = [self createFormRowWithIcon:@"cpu" title:NSLocalizedString(@"mac address", nil) control:_macAddressTF parent:_moreView topAnchor:mRow5 offset:20];
 
+    // Forwarding Row
+    UISwitch *forwardingSwitch = [[UISwitch alloc] init];
+    [forwardingSwitch setOn:_forwarding];
+    [forwardingSwitch addTarget:self action:@selector(forwardingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    UIView *mRow8 = [self createSwitchRowWithIcon:@"arrow.right.arrow.left" title:NSLocalizedString(@"Enable packet forwarding", nil) control:forwardingSwitch parent:_moreView topAnchor:mRow7 offset:20];
 
-    UIButton * acceptMulticastButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    acceptMulticastButton.selected = _model.isAcceptMulticast;
-    _acceptMulticast = _model.isAcceptMulticast;
-    [_moreView addSubview:acceptMulticastButton];
-    [acceptMulticastButton setImage:[UIImage imageNamed:@"buttom_unselect"] forState:UIControlStateNormal];
-    [acceptMulticastButton setImage:[UIImage imageNamed:@"buttom_select"] forState:UIControlStateSelected];
-    [acceptMulticastButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(forwardingButton.mas_bottom).offset(20);
-        make.left.mas_equalTo(20);
-        make.width.mas_equalTo(60);
-        make.height.mas_equalTo(30);
-    }];
-    [acceptMulticastButton addTarget:self action:@selector(acceptMulticast:) forControlEvents:UIControlEventTouchUpInside];
+    // Accept Multicast Row
+    UISwitch *multicastSwitch = [[UISwitch alloc] init];
+    [multicastSwitch setOn:_acceptMulticast];
+    [multicastSwitch addTarget:self action:@selector(multicastSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    UIView *mRow9 = [self createSwitchRowWithIcon:@"antenna.radiowaves.left.and.right" title:NSLocalizedString(@"Accept multicast Mac address", nil) control:multicastSwitch parent:_moreView topAnchor:mRow8 offset:20];
 
-    
-    UILabel * acceptMulticastLabel = [[UILabel alloc]init];
-    [_moreView addSubview:acceptMulticastLabel];
-    acceptMulticastLabel.text = NSLocalizedString(@"Accept multicast Mac address", nil);
-    acceptMulticastLabel.textColor = [UIColor lightGrayColor];
-    acceptMulticastLabel.font = [UIFont systemFontOfSize:20];
-    [acceptMulticastLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(acceptMulticastButton.mas_top);
-        make.left.mas_equalTo(acceptMulticastButton.mas_right);
-        make.right.mas_equalTo(-10);
-        make.height.mas_equalTo(30);
-    }];
-    
-    UILabel * traceLabel = [[UILabel alloc]init];
-    [_moreView addSubview:traceLabel];
-    traceLabel.text = NSLocalizedString(@"Trace level:", nil);
-    traceLabel.textColor = [UIColor lightGrayColor];
-    traceLabel.font = [UIFont systemFontOfSize:20];
-    //traceLabel.backgroundColor = [UIColor orangeColor];
-    [traceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(acceptMulticastLabel.mas_bottom).offset(10);
-        make.left.mas_equalTo(10);
-        make.width.mas_equalTo(90);
-        make.height.mas_equalTo(30);
-    }];
+    // Trace Level Row
     _selectLevelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_moreView addSubview:_selectLevelButton];
     if (_isUpdate) {
         [self setlevelButtonTitle];
-    }else{
+    } else {
         [_selectLevelButton setTitle:@"NORMAL" forState:UIControlStateNormal];
     }
     _selectLevelButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    _selectLevelButton.titleLabel.font = [UIFont systemFontOfSize:20];
     [_selectLevelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    if (@available(iOS 13.0, *)) {
+        [_selectLevelButton setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
+    }
     [_selectLevelButton addTarget:self action:@selector(alertLevelView) forControlEvents:UIControlEventTouchUpInside];
-    [_selectLevelButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(traceLabel.mas_top);
-        make.left.mas_equalTo(traceLabel.mas_right);
-        make.right.mas_equalTo(-10);
-        make.height.mas_equalTo(30);
-    }];
-    
+    UIView *mRow10 = [self createFormRowWithIcon:@"list.bullet.rectangle" title:NSLocalizedString(@"Trace level:", nil) control:_selectLevelButton parent:_moreView topAnchor:mRow9 offset:20];
+
     [_saveButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(traceLabel.mas_bottom).offset(20);
+        make.top.mas_equalTo(mRow10.mas_bottom).offset(40);
         make.left.mas_equalTo(20);
         make.right.mas_equalTo(-20);
-        make.height.mas_equalTo(44);
+        make.height.mas_equalTo(54);
     }];
 }
+
+- (void)forwardingSwitchChanged:(UISwitch *)sender {
+    _forwarding = sender.isOn;
+}
+
+- (void)multicastSwitchChanged:(UISwitch *)sender {
+    _acceptMulticast = sender.isOn;
+}
+
 
 
 #pragma mark //选择版本
@@ -1039,14 +791,37 @@
 -(void)moreSettingIcon:(UIButton *)button{
     button.selected = !button.selected;
     _moreSettingButton.selected = button.selected;
+    
+    UIImageView *checkIcon = [button.superview viewWithTag:1001];
     if (button.selected) {
+        if (@available(iOS 13.0, *)) {
+            checkIcon.image = [UIImage systemImageNamed:@"checkmark.square.fill"];
+            checkIcon.tintColor = [UIColor systemBlueColor];
+        }
         _scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1800);
         [self moreSetting: _moreSettingButton];
+        
+        [_saveButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(_moreView.mas_bottom).offset(40);
+            make.left.mas_equalTo(20);
+            make.right.mas_equalTo(-20);
+            make.height.mas_equalTo(54);
+        }];
     }else{
+        if (@available(iOS 13.0, *)) {
+            checkIcon.image = [UIImage systemImageNamed:@"square"];
+            checkIcon.tintColor = [UIColor systemGrayColor];
+        }
         [self cancelMoreView];
         _scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 1150);
+        
+        [_saveButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(button.superview.mas_bottom).offset(40);
+            make.left.mas_equalTo(20);
+            make.right.mas_equalTo(-20);
+            make.height.mas_equalTo(54);
+        }];
     }
-    //[self setlevelButtonTitle];
     
     if ([[_model.mac class] isEqual:[NSNull class]] ||_model.mac.length <5 ) {
         self.macAddressTF.text = [self getMac];
@@ -1177,6 +952,8 @@
     if (self.model) {
         self.version =_model.version;
         self.nameTF.text = _model.name;
+        self.forwarding = _model.forwarding;
+        self.acceptMulticast = _model.isAcceptMulticast;
         self.supernodeTF.text = _model.supernode;
         self.communityTF.text = _model.community;
         self.EncryptTF.text = _model.encrypt;
