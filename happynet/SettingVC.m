@@ -69,19 +69,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIColor *bgColor = [UIColor colorWithRed:242/255.0 green:245/255.0 blue:250/255.0 alpha:1.0];
     if (@available(iOS 13.0, *)) {
-        BOOL isDarkMode = self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
-        if (isDarkMode) {
-            // 当前是夜间模式
-            self.view.backgroundColor = [UIColor blackColor];
-        } else {
-            // 当前是白天模式
-            self.view.backgroundColor = [UIColor whiteColor];
-        }
-    } else {
-        // 设备运行的是旧版本的iOS，此时无法确定模式
-        self.view.backgroundColor = [UIColor whiteColor];
+        bgColor = [UIColor systemGroupedBackgroundColor];
     }
+    self.view.backgroundColor = bgColor;
 
     [self initUI];
     if (_isUpdate) {
@@ -111,58 +103,83 @@
 
 -(void)initUI{
 
-    UIView *footerView = [[UIView alloc] init];
+    UIColor *cardColor = [UIColor whiteColor];
+    UIColor *titleColor = [UIColor blackColor];
+    UIColor *subTitleColor = [UIColor grayColor];
     if (@available(iOS 13.0, *)) {
-        footerView.backgroundColor = [UIColor secondarySystemBackgroundColor];
-    } else {
-        footerView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+        cardColor = [UIColor secondarySystemGroupedBackgroundColor];
+        titleColor = [UIColor labelColor];
+        subTitleColor = [UIColor secondaryLabelColor];
     }
-    footerView.layer.cornerRadius = 8;
+
+    UIView *footerView = [[UIView alloc] init];
+    footerView.backgroundColor = cardColor;
+    footerView.layer.cornerRadius = 16;
+    footerView.layer.shadowColor = [UIColor blackColor].CGColor;
+    footerView.layer.shadowOffset = CGSizeMake(0, 2);
+    footerView.layer.shadowOpacity = 0.05;
+    footerView.layer.shadowRadius = 8;
     [self.view addSubview:footerView];
-    
+
     [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view.mas_bottom).offset(-20);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
-        make.height.mas_equalTo(75);
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-10);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom).offset(-20);
+        }
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
+        make.height.mas_equalTo(70);
+    }];
+
+    UIView *footerContentContainer = [[UIView alloc] init];
+    [footerView addSubview:footerContentContainer];
+    [footerContentContainer mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(footerView);
+        make.height.mas_equalTo(40);
+    }];
+
+    UIView *shieldIconBg = [[UIView alloc] init];
+    shieldIconBg.backgroundColor = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:1.0];
+    shieldIconBg.layer.cornerRadius = 8;
+    [footerContentContainer addSubview:shieldIconBg];
+    [shieldIconBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(footerContentContainer);
+        make.centerY.equalTo(footerContentContainer);
+        make.width.height.mas_equalTo(40);
+    }];
+
+    UIImageView *shieldIcon = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        shieldIcon.image = [UIImage systemImageNamed:@"checkmark.shield.fill"];
+        shieldIcon.tintColor = [UIColor whiteColor];
+    }
+    [shieldIconBg addSubview:shieldIcon];
+    [shieldIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(shieldIconBg);
+        make.width.height.mas_equalTo(24);
     }];
 
     UILabel *sloganLabel = [[UILabel alloc] init];
-    [footerView addSubview:sloganLabel];
     sloganLabel.text = @"HAPPYN makes the internet simpler.";
-    sloganLabel.font = [UIFont italicSystemFontOfSize:14];
-    sloganLabel.textColor = [UIColor grayColor];
-    if (@available(iOS 13.0, *)) {
-        sloganLabel.textColor = [UIColor secondaryLabelColor];
-    }
-    sloganLabel.textAlignment = NSTextAlignmentCenter;
-
+    sloganLabel.font = [UIFont boldSystemFontOfSize:12];
+    sloganLabel.textColor = titleColor;
+    [footerContentContainer addSubview:sloganLabel];
     [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(8);
-        make.centerX.mas_equalTo(footerView.mas_centerX);
-        make.height.mas_equalTo(20);
+        make.left.equalTo(shieldIconBg.mas_right).offset(12);
+        make.top.equalTo(shieldIconBg).offset(2);
     }];
 
     UILabel *copyRightLabel = [[UILabel alloc] init];
-    copyRightLabel.textColor = [UIColor grayColor];
-    if (@available(iOS 13.0, *)) {
-        copyRightLabel.textColor = [UIColor tertiaryLabelColor];
-    }
-    copyRightLabel.font = [UIFont systemFontOfSize:13];
-    copyRightLabel.numberOfLines = 2;
-    copyRightLabel.textAlignment = NSTextAlignmentCenter;
-    
-    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    if (appVersion == nil) {
-        appVersion = @"2.7";
-    }
-    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ ©happyn.net\nBased on N2N Project", appVersion];
-    
-    [footerView addSubview:copyRightLabel];
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.8";
+    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ © happyn.net | Based on N2N Project", appVersion];
+    copyRightLabel.font = [UIFont systemFontOfSize:10];
+    copyRightLabel.textColor = subTitleColor;
+    [footerContentContainer addSubview:copyRightLabel];
     [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(sloganLabel.mas_bottom).offset(2);
-        make.centerX.equalTo(footerView.mas_centerX);
-        make.height.equalTo(@40);
+        make.left.equalTo(sloganLabel);
+        make.bottom.equalTo(shieldIconBg).offset(-2);
+        make.right.equalTo(footerContentContainer);
     }];
 
    _scrollView = [[UIScrollView alloc]init];
