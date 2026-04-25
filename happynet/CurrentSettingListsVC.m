@@ -75,6 +75,17 @@
     subTitleColor = [UIColor secondaryLabelColor];
   }
 
+    // Background Gradient
+    UIView *gradientBg = [[UIView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 300)];
+    [self.view insertSubview:gradientBg atIndex:0];
+    CAGradientLayer *gl = [CAGradientLayer layer];
+    gl.frame = gradientBg.bounds;
+    gl.colors = @[
+        (__bridge id)[UIColor colorWithRed:0.85 green:0.92 blue:1.0 alpha:1.0].CGColor,
+        (__bridge id)[UIColor colorWithRed:0.85 green:0.92 blue:1.0 alpha:0.0].CGColor
+    ];
+    [gradientBg.layer addSublayer:gl];
+
   UIView *footerView = [[UIView alloc] init];
   footerView.backgroundColor = cardColor;
   footerView.layer.cornerRadius = 16;
@@ -154,6 +165,7 @@
   }];
 
   _listView = [[UITableView alloc] init];
+  _listView.backgroundColor = [UIColor clearColor]; // Reveal gradient
   [self.view addSubview:_listView];
   [_listView registerNib:[UINib nibWithNibName:@"ListsViewCell" bundle:nil]
       forCellReuseIdentifier:@"cell"];
