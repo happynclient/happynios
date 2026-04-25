@@ -441,7 +441,7 @@ typedef enum {
     }];
 
     UILabel *copyRightLabel = [[UILabel alloc] init];
-    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.8";
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.9";
     copyRightLabel.text = [NSString stringWithFormat:@"Version %@ © happyn.net | Based on N2N Project", appVersion];
     copyRightLabel.font = [UIFont systemFontOfSize:10];
     copyRightLabel.textColor = subTitleColor;
