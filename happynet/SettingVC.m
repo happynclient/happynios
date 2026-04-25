@@ -80,9 +80,9 @@
 
     UILabel *titleLabel = [[UILabel alloc] init];
     if (_isUpdate) {
-        titleLabel.text = @"更新配置";
+        titleLabel.text = NSLocalizedString(@"Update Setting", nil);
     } else {
-        titleLabel.text = @"增加配置";
+        titleLabel.text = NSLocalizedString(@"Add Setting", nil);
         _level = 2;
         _version = 3;
     }
@@ -572,7 +572,7 @@
         _mtuTF.placeholder = @"1386";
     }
     _mtuTF.keyboardType = UIKeyboardTypeNumberPad;
-    UIView *mRow3 = [self createFormRowWithIcon:@"ruler" title:@"MTU" control:_mtuTF parent:_moreView topAnchor:mRow1 offset:20];
+    UIView *mRow3 = [self createFormRowWithIcon:@"ruler" title:NSLocalizedString(@"MTU", nil) control:_mtuTF parent:_moreView topAnchor:mRow1 offset:20];
 
     _portTF = [[UITextField alloc]init];
     _portTF.delegate = self;
@@ -594,7 +594,7 @@
     _DNSTF.delegate = self;
     _DNSTF.keyboardType = UIKeyboardTypeDecimalPad;
     _DNSTF.placeholder = NSLocalizedString(@"DNS server ip address", nil);
-    UIView *mRow6 = [self createFormRowWithIcon:@"bolt.horizontal.circle" title:@"DNS" control:_DNSTF parent:_moreView topAnchor:mRow5 offset:20];
+    UIView *mRow6 = [self createFormRowWithIcon:@"bolt.horizontal.circle" title:NSLocalizedString(@"DNS", nil) control:_DNSTF parent:_moreView topAnchor:mRow5 offset:20];
     _DNSTF.hidden = YES;
     mRow6.hidden = YES;
 

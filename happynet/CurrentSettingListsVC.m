@@ -37,7 +37,7 @@
   //    _currentRow = -1;
 
   UILabel *titleLabel = [[UILabel alloc] init];
-  titleLabel.text = @"配置列表";
+  titleLabel.text = NSLocalizedString(@"Setting", nil);
   titleLabel.font = [UIFont systemFontOfSize:24 weight:UIFontWeightBold];
   if (@available(iOS 13.0, *)) {
     titleLabel.textColor = [UIColor labelColor];

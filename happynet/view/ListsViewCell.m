@@ -21,7 +21,7 @@
     self.nextButton.layer.cornerRadius = 14;
     self.nextButton.contentEdgeInsets = UIEdgeInsetsMake(4, 12, 4, 8);
     
-    [self.nextButton setTitle:@" 编辑配置" forState:UIControlStateNormal];
+    [self.nextButton setTitle:[NSString stringWithFormat:@" %@", NSLocalizedString(@"Edit Config", nil)] forState:UIControlStateNormal];
     self.nextButton.titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightMedium];
     [self.nextButton setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
     
