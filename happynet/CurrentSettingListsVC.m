@@ -32,6 +32,18 @@
     }
     self.view.backgroundColor = bgColor;
 //    _currentRow = -1;
+    
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.text = @"配置列表";
+    titleLabel.font = [UIFont systemFontOfSize:24 weight:UIFontWeightBold];
+    if (@available(iOS 13.0, *)) {
+        titleLabel.textColor = [UIColor labelColor];
+    } else {
+        titleLabel.textColor = [UIColor blackColor];
+    }
+    [titleLabel sizeToFit];
+    self.navigationItem.titleView = titleLabel;
+
     [self initUI];
 }
 -(void)viewWillAppear:(BOOL)animated{
@@ -139,6 +151,40 @@
     _listView.delegate = self;
     _listView.dataSource = self;
     _listView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+    
+    UIButton *navAddBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    navAddBtn.backgroundColor = cardColor;
+    navAddBtn.layer.cornerRadius = 20;
+    navAddBtn.layer.shadowColor = [UIColor blackColor].CGColor;
+    navAddBtn.layer.shadowOffset = CGSizeMake(0, 2);
+    navAddBtn.layer.shadowOpacity = 0.1;
+    navAddBtn.layer.shadowRadius = 4;
+    
+    if (@available(iOS 13.0, *)) {
+        UIImage *plusImg = [UIImage systemImageNamed:@"plus" withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:18 weight:UIImageSymbolWeightSemibold]];
+        [navAddBtn setImage:plusImg forState:UIControlStateNormal];
+        navAddBtn.tintColor = [UIColor systemBlueColor];
+    } else {
+        [navAddBtn setTitle:@"+" forState:UIControlStateNormal];
+        [navAddBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
+        navAddBtn.titleLabel.font = [UIFont systemFontOfSize:28];
+    }
+    
+    [navAddBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(40);
+    }];
+    
+    [navAddBtn addTarget:self
+                  action:@selector(addSetting:)
+        forControlEvents:UIControlEventTouchUpInside];
+        
+    self.navigationItem.rightBarButtonItem =
+        [[UIBarButtonItem alloc] initWithCustomView:navAddBtn];
+}
+
+- (void)addSetting:(UIButton *)button {
+    SettingVC *next = [[SettingVC alloc] init];
+    [self.navigationController pushViewController:next animated:YES];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
