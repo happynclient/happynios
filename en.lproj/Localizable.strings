@@ -7,3 +7,21 @@
 */
 
 "Tap to Connect" = "Tap the icon above to connect";
+"Setting Name" = "Setting Name";
+"supernode" = "Supernode URL";
+"community" = "Community ID";
+"Encrypt Key" = "Encrypt Key";
+"ip address" = "IP Address";
+"Subnet Mark" = "Subnet Mark";
+"Device Description" = "Device Description";
+"Save" = "Save";
+"Edit Config" = "Edit Config";
+"gateway" = "Gateway";
+"DNS" = "DNS";
+"MTU" = "MTU";
+"Enable packet forwarding" = "Enable packet forwarding";
+"Accept multicast Mac address" = "Accept multicast Mac address";
+"Trace level:" = "Trace level:";
+"Update Setting" = "Update Config";
+"Setting" = "Config List";
+"Add Setting" = "Add Config";

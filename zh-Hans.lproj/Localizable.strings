@@ -34,5 +34,10 @@
 "subnetMark is error" = "请检查子网掩码是否合法";
 "Update Setting" = "更新配置";
 "Setting" = "配置";
+"Edit Config" = "编辑配置";
+"gateway" = "网关地址";
+"DNS" = "DNS服务器";
+"MTU" = "MTU";
+"Add Setting" = "增加配置";
 
 "Tap to Connect" = "点击上方图标连接网络";
