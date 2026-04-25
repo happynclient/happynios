@@ -189,6 +189,45 @@ typedef enum {
 }
 - (void)initUI {
   if (_startButton == nil) {
+    
+    UIColor *bgColor = [UIColor colorWithRed:242/255.0 green:245/255.0 blue:250/255.0 alpha:1.0];
+    UIColor *cardColor = [UIColor whiteColor];
+    UIColor *titleColor = [UIColor blackColor];
+    UIColor *subTitleColor = [UIColor grayColor];
+    if (@available(iOS 13.0, *)) {
+        bgColor = [UIColor systemGroupedBackgroundColor];
+        cardColor = [UIColor secondarySystemGroupedBackgroundColor];
+        titleColor = [UIColor labelColor];
+        subTitleColor = [UIColor secondaryLabelColor];
+    }
+    self.view.backgroundColor = bgColor;
+
+    // Background Gradient
+    UIImageView *bgImageView = [[UIImageView alloc] init];
+    bgImageView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.view addSubview:bgImageView];
+    [bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.view);
+        make.height.mas_equalTo(300);
+    }];
+    CAGradientLayer *gl = [CAGradientLayer layer];
+    gl.frame = CGRectMake(0, 0, UIScreen.mainScreen.bounds.size.width, 300);
+    gl.colors = @[
+        (__bridge id)[UIColor colorWithRed:0.85 green:0.92 blue:1.0 alpha:1.0].CGColor,
+        (__bridge id)[UIColor colorWithRed:0.85 green:0.92 blue:1.0 alpha:0.0].CGColor
+    ];
+    [bgImageView.layer addSublayer:gl];
+
+    // Glow effects
+    UIView *glow1 = [[UIView alloc] init];
+    glow1.backgroundColor = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:0.15];
+    glow1.layer.cornerRadius = 85;
+    [self.view addSubview:glow1];
+
+    UIView *glow2 = [[UIView alloc] init];
+    glow2.backgroundColor = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:0.3];
+    glow2.layer.cornerRadius = 70;
+    [self.view addSubview:glow2];
 
     _startButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.view addSubview:_startButton];
@@ -202,191 +241,309 @@ typedef enum {
     [_startButton setImage:[UIImage imageNamed:@"ic_state_connect"]
                   forState:UIControlStateSelected];
 
-    _startButton.backgroundColor = [UIColor lightGrayColor];
     [_startButton mas_remakeConstraints:^(MASConstraintMaker *make) {
       make.centerX.mas_equalTo(self.view.mas_centerX);
-      make.top.mas_equalTo(self.view.mas_top).offset(100);
+      make.top.mas_equalTo(self.view.mas_top).offset(140);
       make.width.mas_equalTo(100);
       make.height.mas_equalTo(100);
     }];
+    [glow2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(_startButton);
+        make.width.height.mas_equalTo(140);
+    }];
+    [glow1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(_startButton);
+        make.width.height.mas_equalTo(170);
+    }];
 
-    // --- Aesthetic Instructional Pill ---
+    // Hint pill
     UIView *hintBgView = [[UIView alloc] init];
     [self.view addSubview:hintBgView];
-    hintBgView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+    hintBgView.backgroundColor = cardColor;
     hintBgView.layer.cornerRadius = 16;
-    if (@available(iOS 13.0, *)) {
-        hintBgView.backgroundColor = [UIColor tertiarySystemFillColor];
-    }
+    hintBgView.layer.shadowColor = [UIColor blackColor].CGColor;
+    hintBgView.layer.shadowOpacity = 0.05;
+    hintBgView.layer.shadowOffset = CGSizeMake(0, 2);
+    hintBgView.layer.shadowRadius = 4;
     
     UIImageView *boltIcon = [[UIImageView alloc] init];
     if (@available(iOS 13.0, *)) {
         boltIcon.image = [UIImage systemImageNamed:@"bolt.fill"];
-        boltIcon.tintColor = [UIColor systemOrangeColor];
+        boltIcon.tintColor = [UIColor systemBlueColor];
     }
     [hintBgView addSubview:boltIcon];
     
     UILabel *hintLabel = [[UILabel alloc] init];
     [hintBgView addSubview:hintLabel];
-    hintLabel.text = NSLocalizedString(@"Tap to Connect", nil);
-    if (!NSLocalizedString(@"Tap to Connect", nil) || [NSLocalizedString(@"Tap to Connect", nil) isEqualToString:@"Tap to Connect"]) {
-        hintLabel.text = @"点击上方图标连接网络";
-    }
-    hintLabel.textColor = [UIColor grayColor];
-    if (@available(iOS 13.0, *)) {
-        hintLabel.textColor = [UIColor secondaryLabelColor];
-    }
-    hintLabel.font = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
+    hintLabel.text = @"点击上方图标连接网络";
+    hintLabel.textColor = subTitleColor;
+    hintLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightMedium];
     
     [hintBgView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_startButton.mas_bottom).offset(15);
+        make.top.mas_equalTo(glow1.mas_bottom).offset(15);
         make.centerX.mas_equalTo(self.view.mas_centerX);
         make.height.mas_equalTo(32);
     }];
-    
     [boltIcon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(hintBgView.mas_centerY);
         make.left.mas_equalTo(12);
-        make.width.height.mas_equalTo(16);
+        make.width.height.mas_equalTo(14);
     }];
-    
     [hintLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(hintBgView.mas_centerY);
         make.left.mas_equalTo(boltIcon.mas_right).offset(6);
         make.right.mas_equalTo(-12);
     }];
 
-    _logView = [[UITextView alloc] init];
-    [self.view addSubview:_logView];
-    _logView.editable = NO;
-    _logView.layoutManager.allowsNonContiguousLayout = NO;
-    _logView.backgroundColor = [UIColor grayColor];
-    // Constraints for _logView will be set later after sloganLabel is created.
-    _logView.textColor = [UIColor whiteColor];
-    [_logView
-        scrollRectToVisible:CGRectMake(0, _logView.contentSize.height - 15,
-                                       _logView.contentSize.width, 10)
-                   animated:YES];
+    // Setting Card
+    UIControl *settingCard = [[UIControl alloc] init];
+    settingCard.backgroundColor = cardColor;
+    settingCard.layer.cornerRadius = 16;
+    settingCard.layer.shadowColor = [UIColor blackColor].CGColor;
+    settingCard.layer.shadowOffset = CGSizeMake(0, 2);
+    settingCard.layer.shadowOpacity = 0.05;
+    settingCard.layer.shadowRadius = 8;
+    [settingCard addTarget:self action:@selector(currentSettingLists:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:settingCard];
 
-    UILabel *settingTitle = [[UILabel alloc] init];
-    [self.view addSubview:settingTitle];
-    settingTitle.text = NSLocalizedString(@"Current Setting", nil);
-    settingTitle.textColor = [UIColor grayColor];
-    settingTitle.font = [UIFont systemFontOfSize:22];
-    [settingTitle mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.top.mas_equalTo(hintBgView.mas_bottom).offset(15);
-      make.left.mas_equalTo(20);
-      make.width.mas_equalTo(120);
-      make.height.mas_equalTo(30);
+    [settingCard mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(hintBgView.mas_bottom).offset(20);
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
+        make.height.mas_equalTo(70);
     }];
 
-    UIImage *image = [UIImage imageNamed:@"TableViewArrow"];
-    UIButton *nextButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    nextButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    [nextButton setBackgroundImage:image forState:UIControlStateNormal];
-    [nextButton addTarget:self
-                   action:@selector(currentSettingLists:)
-         forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:nextButton];
-    [nextButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.centerY.mas_equalTo(settingTitle.mas_centerY);
-      make.right.mas_equalTo(-20);
-      make.width.mas_equalTo(24);
-      make.height.mas_equalTo(24);
+    UIView *settingIconBg = [[UIView alloc] init];
+    settingIconBg.backgroundColor = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:1.0];
+    settingIconBg.layer.cornerRadius = 8;
+    [settingCard addSubview:settingIconBg];
+    [settingIconBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(settingCard).offset(16);
+        make.centerY.equalTo(settingCard);
+        make.width.height.mas_equalTo(40);
+    }];
+
+    UIImageView *settingIcon = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        settingIcon.image = [UIImage systemImageNamed:@"server.rack"];
+        settingIcon.tintColor = [UIColor whiteColor];
+    }
+    [settingIconBg addSubview:settingIcon];
+    [settingIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(settingIconBg);
+        make.width.height.mas_equalTo(24);
+    }];
+
+    UILabel *settingTitle = [[UILabel alloc] init];
+    settingTitle.text = @"当前配置";
+    settingTitle.textColor = subTitleColor;
+    settingTitle.font = [UIFont systemFontOfSize:12];
+    [settingCard addSubview:settingTitle];
+    [settingTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(settingIconBg.mas_right).offset(12);
+        make.top.equalTo(settingIconBg).offset(2);
     }];
 
     _currentSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.view addSubview:_currentSettingButton];
-    [_currentSettingButton addTarget:self
-                              action:@selector(currentSettingLists:)
-                    forControlEvents:UIControlEventTouchUpInside];
-    _currentSettingButton.backgroundColor = [UIColor colorWithRed:135 / 255.0
-                                                            green:206 / 255.0
-                                                             blue:250 / 255.0
-                                                            alpha:1];
-    _currentSettingButton.layer.cornerRadius = 8;
-    [_currentSettingButton setTitle:NSLocalizedString(@"settingName", nil)
-                           forState:UIControlStateNormal];
-    [_currentSettingButton setTitleColor:[UIColor grayColor]
-                                forState:UIControlStateNormal];
-    _currentSettingButton.titleLabel.font = [UIFont systemFontOfSize:20];
-
-    [_currentSettingButton mas_remakeConstraints:^(MASConstraintMaker *make) {
-      make.centerY.mas_equalTo(settingTitle.mas_centerY);
-      make.left.mas_equalTo(settingTitle.mas_right).offset(10);
-      make.right.mas_equalTo(self.view.mas_right).offset(-100);
-      make.height.mas_equalTo(40);
+    [_currentSettingButton setTitleColor:titleColor forState:UIControlStateNormal];
+    _currentSettingButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    _currentSettingButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    _currentSettingButton.userInteractionEnabled = NO; // Let the card handle taps
+    [settingCard addSubview:_currentSettingButton];
+    [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(settingTitle);
+        make.bottom.equalTo(settingIconBg).offset(-2);
+        make.right.equalTo(settingCard).offset(-40);
     }];
 
-    UIView *footerView = [[UIView alloc] init];
+    UIImageView *arrowIcon = [[UIImageView alloc] init];
     if (@available(iOS 13.0, *)) {
-        footerView.backgroundColor = [UIColor secondarySystemBackgroundColor];
+        arrowIcon.image = [UIImage systemImageNamed:@"chevron.right"];
+        arrowIcon.tintColor = [UIColor lightGrayColor];
     } else {
-        footerView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.96 alpha:1.0];
+        arrowIcon.image = [UIImage imageNamed:@"TableViewArrow"];
     }
-    footerView.layer.cornerRadius = 8;
-    [self.view addSubview:footerView];
-    
-    [footerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.view.mas_bottom).offset(-20);
-        make.left.mas_equalTo(10);
-        make.right.mas_equalTo(-10);
-        make.height.mas_equalTo(75);
-    }];
-
-    UILabel *sloganLabel = [[UILabel alloc] init];
-    [footerView addSubview:sloganLabel];
-    sloganLabel.text = @"HAPPYN makes the internet simpler.";
-    sloganLabel.font = [UIFont italicSystemFontOfSize:14];
-    sloganLabel.textColor = [UIColor grayColor];
-    if (@available(iOS 13.0, *)) {
-        sloganLabel.textColor = [UIColor secondaryLabelColor];
-    }
-    sloganLabel.textAlignment = NSTextAlignmentCenter;
-
-    [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(8);
-        make.centerX.mas_equalTo(footerView.mas_centerX);
+    [settingCard addSubview:arrowIcon];
+    [arrowIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(settingCard).offset(-16);
+        make.centerY.equalTo(settingCard);
+        make.width.mas_equalTo(12);
         make.height.mas_equalTo(20);
     }];
 
-    UILabel *copyRightLabel = [[UILabel alloc] init];
-    copyRightLabel.textColor = [UIColor grayColor];
+    // Footer Card
+    UIView *footerCard = [[UIView alloc] init];
+    footerCard.backgroundColor = cardColor;
+    footerCard.layer.cornerRadius = 16;
+    footerCard.layer.shadowColor = [UIColor blackColor].CGColor;
+    footerCard.layer.shadowOffset = CGSizeMake(0, 2);
+    footerCard.layer.shadowOpacity = 0.05;
+    footerCard.layer.shadowRadius = 8;
+    [self.view addSubview:footerCard];
+
+    [footerCard mas_makeConstraints:^(MASConstraintMaker *make) {
+        if (@available(iOS 11.0, *)) {
+            make.bottom.equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-10);
+        } else {
+            make.bottom.equalTo(self.view.mas_bottom).offset(-20);
+        }
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
+        make.height.mas_equalTo(70);
+    }];
+
+    UIView *footerContentContainer = [[UIView alloc] init];
+    [footerCard addSubview:footerContentContainer];
+    [footerContentContainer mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(footerCard);
+        make.height.mas_equalTo(40);
+    }];
+
+    UIView *shieldIconBg = [[UIView alloc] init];
+    shieldIconBg.backgroundColor = [UIColor colorWithRed:0.2 green:0.5 blue:1.0 alpha:1.0];
+    shieldIconBg.layer.cornerRadius = 8;
+    [footerContentContainer addSubview:shieldIconBg];
+    [shieldIconBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(footerContentContainer);
+        make.centerY.equalTo(footerContentContainer);
+        make.width.height.mas_equalTo(40);
+    }];
+
+    UIImageView *shieldIcon = [[UIImageView alloc] init];
     if (@available(iOS 13.0, *)) {
-        copyRightLabel.textColor = [UIColor tertiaryLabelColor];
+        shieldIcon.image = [UIImage systemImageNamed:@"checkmark.shield.fill"];
+        shieldIcon.tintColor = [UIColor whiteColor];
     }
-    copyRightLabel.font = [UIFont systemFontOfSize:13];
-    copyRightLabel.numberOfLines = 2; // 设置为两行
-    copyRightLabel.textAlignment = NSTextAlignmentCenter;
-    
-    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-    if (appVersion == nil) {
-        appVersion = @"2.7"; // Fallback just in case
-    }
-    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ ©happyn.net\nBased on N2N Project", appVersion];
-    
-    [footerView addSubview:copyRightLabel];
+    [shieldIconBg addSubview:shieldIcon];
+    [shieldIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(shieldIconBg);
+        make.width.height.mas_equalTo(24);
+    }];
+
+    UILabel *sloganLabel = [[UILabel alloc] init];
+    sloganLabel.text = @"HAPPYN makes the internet simpler.";
+    sloganLabel.font = [UIFont boldSystemFontOfSize:12];
+    sloganLabel.textColor = titleColor;
+    [footerContentContainer addSubview:sloganLabel];
+    [sloganLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(shieldIconBg.mas_right).offset(12);
+        make.top.equalTo(shieldIconBg).offset(2);
+    }];
+
+    UILabel *copyRightLabel = [[UILabel alloc] init];
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.8";
+    copyRightLabel.text = [NSString stringWithFormat:@"Version %@ © happyn.net | Based on N2N Project", appVersion];
+    copyRightLabel.font = [UIFont systemFontOfSize:10];
+    copyRightLabel.textColor = subTitleColor;
+    [footerContentContainer addSubview:copyRightLabel];
     [copyRightLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(sloganLabel.mas_bottom).offset(2);
-        make.centerX.equalTo(footerView.mas_centerX);
-        make.height.equalTo(@40); // 改为两行文字的高度
+        make.left.equalTo(sloganLabel);
+        make.bottom.equalTo(shieldIconBg).offset(-2);
+        make.right.equalTo(footerContentContainer);
     }];
 
+    // Log Card
+    UIView *logCard = [[UIView alloc] init];
+    logCard.backgroundColor = cardColor;
+    logCard.layer.cornerRadius = 16;
+    logCard.layer.shadowColor = [UIColor blackColor].CGColor;
+    logCard.layer.shadowOffset = CGSizeMake(0, 2);
+    logCard.layer.shadowOpacity = 0.05;
+    logCard.layer.shadowRadius = 8;
+    [self.view addSubview:logCard];
+
+    [logCard mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(settingCard.mas_bottom).offset(20);
+        make.left.equalTo(self.view).offset(20);
+        make.right.equalTo(self.view).offset(-20);
+        make.bottom.equalTo(footerCard.mas_top).offset(-20);
+    }];
+
+    UIImageView *logIcon = [[UIImageView alloc] init];
+    if (@available(iOS 13.0, *)) {
+        logIcon.image = [UIImage systemImageNamed:@"doc.text"];
+        logIcon.tintColor = subTitleColor;
+    }
+    [logCard addSubview:logIcon];
+    [logIcon mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(logCard).offset(16);
+        make.top.equalTo(logCard).offset(16);
+        make.width.height.mas_equalTo(18);
+    }];
+
+    UILabel *logTitle = [[UILabel alloc] init];
+    logTitle.text = @"连接日志";
+    logTitle.font = [UIFont boldSystemFontOfSize:14];
+    logTitle.textColor = titleColor;
+    [logCard addSubview:logTitle];
+    [logTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(logIcon.mas_right).offset(8);
+        make.centerY.equalTo(logIcon);
+    }];
+
+    UIButton *clearLogBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [clearLogBtn setTitle:@" 清除日志" forState:UIControlStateNormal];
+    [clearLogBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
+    clearLogBtn.titleLabel.font = [UIFont systemFontOfSize:12];
+    if (@available(iOS 13.0, *)) {
+        [clearLogBtn setImage:[UIImage systemImageNamed:@"trash"] forState:UIControlStateNormal];
+    }
+    [clearLogBtn addTarget:self action:@selector(clearLogAction) forControlEvents:UIControlEventTouchUpInside];
+    [logCard addSubview:clearLogBtn];
+    [clearLogBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(logCard).offset(-16);
+        make.centerY.equalTo(logIcon);
+    }];
+
+    UIView *logDivider = [[UIView alloc] init];
+    logDivider.backgroundColor = [UIColor colorWithWhite:0.8 alpha:0.3];
+    if (@available(iOS 13.0, *)) {
+        logDivider.backgroundColor = [UIColor separatorColor];
+    }
+    [logCard addSubview:logDivider];
+    [logDivider mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(logCard).offset(16);
+        make.right.equalTo(logCard).offset(-16);
+        make.top.equalTo(logIcon.mas_bottom).offset(12);
+        make.height.mas_equalTo(1);
+    }];
+
+    _logView = [[UITextView alloc] init];
+    _logView.editable = NO;
+    _logView.layoutManager.allowsNonContiguousLayout = NO;
+    _logView.backgroundColor = [UIColor clearColor];
+    _logView.textColor = subTitleColor;
+    _logView.font = [UIFont fontWithName:@"Menlo" size:10];
+    if (!_logView.font) {
+        _logView.font = [UIFont systemFontOfSize:10];
+    }
+    [logCard addSubview:_logView];
     [_logView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(settingTitle.mas_bottom).offset(20);
-        make.right.mas_equalTo(-10);
-        make.left.mas_equalTo(10);
-        make.bottom.mas_equalTo(footerView.mas_top).offset(-15);
+        make.top.equalTo(logDivider.mas_bottom).offset(8);
+        make.left.equalTo(logCard).offset(12);
+        make.right.equalTo(logCard).offset(-12);
+        make.bottom.equalTo(logCard).offset(-12);
     }];
 
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    UIButton *navAddBtn = [UIButton buttonWithType:UIButtonTypeContactAdd];
     self.navigationItem.rightBarButtonItem =
-        [[UIBarButtonItem alloc] initWithCustomView:button];
-    [button addTarget:self
+        [[UIBarButtonItem alloc] initWithCustomView:navAddBtn];
+    [navAddBtn addTarget:self
                   action:@selector(setting:)
         forControlEvents:UIControlEventTouchUpInside];
   }
 
+}
+
+- (void)clearLogAction {
+    NSString *n2nLogPath = [self getn2nLogPath];
+    int fd = open([n2nLogPath UTF8String], O_WRONLY | O_TRUNC);
+    if (fd >= 0) {
+        close(fd);
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self->_logView.text = @"";
+    });
 }
 
 + (char *)ocStyleStrConvert2cStyleStr:(NSString *)stringOBJ {
@@ -407,7 +564,7 @@ typedef enum {
       [mainVC ocStyleStrConvert2cStyleStr:_currentSettingModel.community];
   cStyleCurrentSetting->encryptKey =
       [mainVC ocStyleStrConvert2cStyleStr:_currentSettingModel.encrypt];
-  cStyleCurrentSetting->ipAddress =
+    cStyleCurrentSetting->ipAddress =
       [mainVC ocStyleStrConvert2cStyleStr:_currentSettingModel.ipAddress];
   cStyleCurrentSetting->subnetMark =
       [mainVC ocStyleStrConvert2cStyleStr:_currentSettingModel.subnetMark];
