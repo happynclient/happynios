@@ -568,7 +568,27 @@
         [_selectMethodButton setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
     }
     _selectMethodButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [_selectMethodButton addTarget:self action:@selector(selectMethod) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (@available(iOS 14.0, *)) {
+        _selectMethodButton.showsMenuAsPrimaryAction = YES;
+        NSArray *methodOptions = @[@"AES-CBC", @"Twofish", @"Speck-CRT", @"ChaCha20"];
+        NSMutableArray *methodActions = [NSMutableArray array];
+        __weak typeof(self) weakSelf = self;
+        for (int i = 0; i < methodOptions.count; i++) {
+            UIAction *action = [UIAction actionWithTitle:methodOptions[i] image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+                [weakSelf.selectMethodButton setTitle:action.title forState:UIControlStateNormal];
+                weakSelf.method = i;
+            }];
+            [methodActions addObject:action];
+        }
+        _selectMethodButton.menu = [UIMenu menuWithTitle:@"" children:methodActions];
+        [_selectMethodButton setImage:[UIImage systemImageNamed:@"chevron.up.chevron.down"] forState:UIControlStateNormal];
+        _selectMethodButton.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        _selectMethodButton.tintColor = [UIColor systemGrayColor];
+    } else {
+        [_selectMethodButton addTarget:self action:@selector(selectMethod) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     UIView *mRow1 = [self createFormRowWithIcon:@"lock.shield" title:NSLocalizedString(@"Encryption method", nil) control:_selectMethodButton parent:_moreView topAnchor:nil offset:20];
 
     _supernode2 = [[UITextField alloc]init];
@@ -641,7 +661,27 @@
     if (@available(iOS 13.0, *)) {
         [_selectLevelButton setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
     }
-    [_selectLevelButton addTarget:self action:@selector(alertLevelView) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (@available(iOS 14.0, *)) {
+        _selectLevelButton.showsMenuAsPrimaryAction = YES;
+        NSArray *levelOptions = @[@"ERROR", @"WARNING", @"NORMAL", @"INFO", @"DEBUG"];
+        NSMutableArray *levelActions = [NSMutableArray array];
+        __weak typeof(self) weakSelf = self;
+        for (int i = 0; i < levelOptions.count; i++) {
+            UIAction *action = [UIAction actionWithTitle:levelOptions[i] image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+                [weakSelf.selectLevelButton setTitle:action.title forState:UIControlStateNormal];
+                weakSelf.level = i;
+            }];
+            [levelActions addObject:action];
+        }
+        _selectLevelButton.menu = [UIMenu menuWithTitle:@"" children:levelActions];
+        [_selectLevelButton setImage:[UIImage systemImageNamed:@"chevron.up.chevron.down"] forState:UIControlStateNormal];
+        _selectLevelButton.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        _selectLevelButton.tintColor = [UIColor systemGrayColor];
+    } else {
+        [_selectLevelButton addTarget:self action:@selector(alertLevelView) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     UIView *mRow10 = [self createFormRowWithIcon:@"list.bullet.rectangle" title:NSLocalizedString(@"Trace level:", nil) control:_selectLevelButton parent:_moreView topAnchor:mRow9 offset:20];
 
     [_saveButton mas_remakeConstraints:^(MASConstraintMaker *make) {
