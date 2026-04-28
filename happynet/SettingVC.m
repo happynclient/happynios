@@ -204,19 +204,13 @@
 }
 
 - (UIView *)createSwitchRowWithIcon:(NSString *)iconName title:(NSString *)titleText control:(UISwitch *)control parent:(UIView *)parent topAnchor:(UIView *)topAnchor offset:(CGFloat)offset {
-    UIView *row = [[UIView alloc] init];
-    row.backgroundColor = [UIColor whiteColor];
-    if (@available(iOS 13.0, *)) {
-        row.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
-    }
-    row.layer.cornerRadius = 12;
-    [parent addSubview:row];
-    
-    [row mas_makeConstraints:^(MASConstraintMaker *make) {
+    UIView *container = [[UIView alloc] init];
+    [parent addSubview:container];
+    [container mas_makeConstraints:^(MASConstraintMaker *make) {
         if (topAnchor) {
             make.top.mas_equalTo(topAnchor.mas_bottom).offset(offset);
         } else {
-            make.top.mas_equalTo(parent.mas_top).offset(offset);
+            make.top.mas_equalTo(parent).offset(offset);
         }
         make.left.mas_equalTo(20);
         make.right.mas_equalTo(-20);
@@ -224,15 +218,15 @@
     }];
     
     UIView *iconBg = [[UIView alloc] init];
-    iconBg.backgroundColor = [UIColor colorWithRed:26/255.0 green:126/255.0 blue:240/255.0 alpha:0.1];
+    iconBg.backgroundColor = [UIColor colorWithRed:0.9 green:0.95 blue:1.0 alpha:1.0];
     if (@available(iOS 13.0, *)) {
         iconBg.backgroundColor = [UIColor systemGray6Color];
     }
     iconBg.layer.cornerRadius = 12;
-    [row addSubview:iconBg];
+    [container addSubview:iconBg];
     [iconBg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(0);
-        make.centerY.mas_equalTo(row);
+        make.centerY.mas_equalTo(container);
         make.width.height.mas_equalTo(44);
     }];
     
@@ -248,25 +242,45 @@
         make.width.height.mas_equalTo(20);
     }];
     
-    UILabel *label = [[UILabel alloc] init];
-    label.text = titleText;
-    label.font = [UIFont systemFontOfSize:16 weight:UIFontWeightMedium];
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.text = titleText;
+    titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightMedium];
+    titleLabel.textColor = [UIColor grayColor];
     if (@available(iOS 13.0, *)) {
-        label.textColor = [UIColor labelColor];
+        titleLabel.textColor = [UIColor secondaryLabelColor];
     }
-    [row addSubview:label];
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+    [container addSubview:titleLabel];
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(iconBg.mas_right).offset(12);
-        make.centerY.mas_equalTo(row);
+        make.top.mas_equalTo(0);
+        make.height.mas_equalTo(16);
     }];
     
-    [row addSubview:control];
+    UIView *controlBg = [[UIView alloc] init];
+    controlBg.backgroundColor = [UIColor whiteColor];
+    controlBg.layer.cornerRadius = 8;
+    controlBg.layer.borderWidth = 1.0;
+    if (@available(iOS 13.0, *)) {
+        controlBg.layer.borderColor = [UIColor separatorColor].CGColor;
+        controlBg.backgroundColor = [UIColor secondarySystemGroupedBackgroundColor];
+    } else {
+        controlBg.layer.borderColor = [UIColor colorWithWhite:0.9 alpha:1.0].CGColor;
+    }
+    [container addSubview:controlBg];
+    [controlBg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(iconBg.mas_right).offset(12);
+        make.top.mas_equalTo(titleLabel.mas_bottom).offset(4);
+        make.right.mas_equalTo(0);
+        make.bottom.mas_equalTo(0);
+    }];
+    
+    [controlBg addSubview:control];
     [control mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-12);
-        make.centerY.mas_equalTo(row);
+        make.left.mas_equalTo(12);
+        make.centerY.mas_equalTo(controlBg);
     }];
     
-    return row;
+    return container;
 }
 
 -(void)initUI{
