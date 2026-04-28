@@ -55,17 +55,6 @@
 }
 
 - (void)initUI {
-  UIButton *leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-  leftButton.frame = CGRectMake(0, 0, 60, 44);
-  [leftButton setImage:[UIImage imageNamed:@"back_blackColor"]
-              forState:UIControlStateNormal];
-  leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 40);
-  [leftButton addTarget:self
-                 action:@selector(back)
-       forControlEvents:UIControlEventTouchUpInside];
-  self.navigationItem.leftBarButtonItem =
-      [[UIBarButtonItem alloc] initWithCustomView:leftButton];
-
   UIColor *cardColor = [UIColor whiteColor];
   UIColor *titleColor = [UIColor blackColor];
   UIColor *subTitleColor = [UIColor grayColor];
@@ -304,14 +293,5 @@
   next.model = model;
   next.isUpdate = YES;
   [self.navigationController pushViewController:next animated:YES];
-}
-
-- (void)back {
-  if (self.settCallback) {
-    if (_currentModel != nil) {
-      self.settCallback(_currentModel);
-    }
-  }
-  [self.navigationController popViewControllerAnimated:YES];
 }
 @end
