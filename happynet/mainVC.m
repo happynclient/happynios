@@ -320,7 +320,7 @@ typedef enum {
         make.top.equalTo(hintBgView.mas_bottom).offset(20);
         make.left.equalTo(self.view).offset(20);
         make.right.equalTo(self.view).offset(-20);
-        make.height.mas_equalTo(70);
+        make.height.mas_equalTo(60);
     }];
 
     UIView *settingIconBg = [[UIView alloc] init];
@@ -345,25 +345,25 @@ typedef enum {
     }];
 
     UILabel *settingTitle = [[UILabel alloc] init];
-    settingTitle.text = @"当前配置";
+    settingTitle.text = @"当前配置：";
     settingTitle.textColor = subTitleColor;
-    settingTitle.font = [UIFont systemFontOfSize:12];
+    settingTitle.font = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
     [settingCard addSubview:settingTitle];
     [settingTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(settingIconBg.mas_right).offset(12);
-        make.top.equalTo(settingIconBg).offset(2);
+        make.centerY.equalTo(settingCard);
     }];
 
     _currentSettingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [_currentSettingButton setTitleColor:titleColor forState:UIControlStateNormal];
-    _currentSettingButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    _currentSettingButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
     _currentSettingButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     _currentSettingButton.userInteractionEnabled = NO; // Let the card handle taps
     [settingCard addSubview:_currentSettingButton];
     [_currentSettingButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(settingTitle);
-        make.bottom.equalTo(settingIconBg).offset(-2);
-        make.right.equalTo(settingCard).offset(-40);
+        make.left.equalTo(settingTitle.mas_right).offset(4);
+        make.centerY.equalTo(settingCard);
+        make.right.equalTo(settingCard).offset(-32);
     }];
 
     UIImageView *arrowIcon = [[UIImageView alloc] init];
