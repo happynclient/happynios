@@ -41,3 +41,13 @@
 "Add Setting" = "增加配置";
 
 "Tap to Connect" = "点击上方图标连接网络";
+
+"点击上方图标连接网络" = "点击上方图标连接网络";
+"当前配置：" = "当前配置：";
+"连接日志" = "连接日志";
+" 清除日志" = " 清除日志";
+"HAPPYN makes the internet simpler." = "HAPPYN 让网络更简单。";
+"no setting information" = "没有配置信息";
+"专家设置" = "专家设置";
+"显示高级选项 (路由、加密、NAT 穿透等)" = "显示高级选项 (路由、加密、NAT 穿透等)";
+"Name is error" = "名称不能为空";

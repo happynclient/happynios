@@ -478,7 +478,7 @@
     }];
 
     UILabel *expertTitle = [[UILabel alloc] init];
-    expertTitle.text = @"专家设置";
+    expertTitle.text = NSLocalizedString(@"专家设置", nil);
     expertTitle.font = [UIFont boldSystemFontOfSize:16];
     [expertCard addSubview:expertTitle];
     [expertTitle mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -487,7 +487,7 @@
     }];
 
     UILabel *expertSub = [[UILabel alloc] init];
-    expertSub.text = @"显示高级选项 (路由、加密、NAT 穿透等)";
+    expertSub.text = NSLocalizedString(@"显示高级选项 (路由、加密、NAT 穿透等)", nil);
     expertSub.font = [UIFont systemFontOfSize:12];
     expertSub.textColor = [UIColor systemGrayColor];
     [expertCard addSubview:expertSub];
@@ -720,7 +720,7 @@
 #pragma mark //保存设置
 -(void)saveSettingData:(UIButton *)button{
     if (_nameTF.text  == nil || _nameTF.text.length <1|| [_nameTF.text isEqual:@""]) {
-        [self alertMessage:@"Name is error"];
+        [self alertMessage:NSLocalizedString(@"Name is error", nil)];
         return;
     }
     if (_supernodeTF.text != nil){

@@ -237,6 +237,7 @@
 		CB8DF86126FB2CA600798323 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
 		CBAAC7D826D4FC4C00BFF8F2 /* happynet.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = happynet.entitlements; sourceTree = "<group>"; };
 		CBAAC7D926D4FC4C00BFF8F2 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		CC7DDDF7B11B86C0D239F99A /* en */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -757,6 +758,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				04F26E4A29F920470093C829 /* zh-Hans */,
+				CC7DDDF7B11B86C0D239F99A /* en */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

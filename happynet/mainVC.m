@@ -285,7 +285,7 @@ typedef enum {
     
     UILabel *hintLabel = [[UILabel alloc] init];
     [hintBgView addSubview:hintLabel];
-    hintLabel.text = @"点击上方图标连接网络";
+    hintLabel.text = NSLocalizedString(@"点击上方图标连接网络", nil);
     hintLabel.textColor = subTitleColor;
     hintLabel.font = [UIFont systemFontOfSize:13 weight:UIFontWeightMedium];
     
@@ -345,7 +345,7 @@ typedef enum {
     }];
 
     UILabel *settingTitle = [[UILabel alloc] init];
-    settingTitle.text = @"当前配置：";
+    settingTitle.text = NSLocalizedString(@"当前配置：", nil);
     settingTitle.textColor = subTitleColor;
     settingTitle.font = [UIFont systemFontOfSize:14 weight:UIFontWeightMedium];
     [settingCard addSubview:settingTitle];
@@ -431,7 +431,7 @@ typedef enum {
     }];
 
     UILabel *sloganLabel = [[UILabel alloc] init];
-    sloganLabel.text = @"HAPPYN makes the internet simpler.";
+    sloganLabel.text = NSLocalizedString(@"HAPPYN makes the internet simpler.", nil);
     sloganLabel.font = [UIFont boldSystemFontOfSize:12];
     sloganLabel.textColor = titleColor;
     [footerContentContainer addSubview:sloganLabel];
@@ -482,7 +482,7 @@ typedef enum {
     }];
 
     UILabel *logTitle = [[UILabel alloc] init];
-    logTitle.text = @"连接日志";
+    logTitle.text = NSLocalizedString(@"连接日志", nil);
     logTitle.font = [UIFont boldSystemFontOfSize:14];
     logTitle.textColor = titleColor;
     [logCard addSubview:logTitle];
@@ -492,7 +492,7 @@ typedef enum {
     }];
 
     UIButton *clearLogBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [clearLogBtn setTitle:@" 清除日志" forState:UIControlStateNormal];
+    [clearLogBtn setTitle:NSLocalizedString(@" 清除日志", nil) forState:UIControlStateNormal];
     [clearLogBtn setTitleColor:[UIColor systemBlueColor] forState:UIControlStateNormal];
     clearLogBtn.titleLabel.font = [UIFont systemFontOfSize:12];
     if (@available(iOS 13.0, *)) {
@@ -624,7 +624,7 @@ typedef enum {
 #pragma mark // 点击启动按钮，启动连接服务  //这里调用C 传参启动服务
 - (void)startServer:(UIButton *)button {
   if (_currentSettingModel == nil) {
-    _logView.text = @"no setting information";
+    _logView.text = NSLocalizedString(@"no setting information", nil);
     return;
   }
   _startButton.enabled = NO;

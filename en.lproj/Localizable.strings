@@ -25,3 +25,13 @@
 "Update Setting" = "Update Config";
 "Setting" = "Config List";
 "Add Setting" = "Add Config";
+
+"点击上方图标连接网络" = "Tap the icon above to connect";
+"当前配置：" = "Current Config: ";
+"连接日志" = "Connection Log";
+" 清除日志" = " Clear Log";
+"HAPPYN makes the internet simpler." = "HAPPYN makes the internet simpler.";
+"no setting information" = "No setting information";
+"专家设置" = "Expert Settings";
+"显示高级选项 (路由、加密、NAT 穿透等)" = "Show advanced options (Routing, Encryption, NAT, etc.)";
+"Name is error" = "Name is invalid";
