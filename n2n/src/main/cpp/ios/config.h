@@ -5,7 +5,7 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
-#define GIT_RELEASE "2.9.0"
+#define GIT_RELEASE "3.0.0"
 #define PACKAGE_OSNAME "iOS"
 
 #undef N2N_HAVE_DAEMON

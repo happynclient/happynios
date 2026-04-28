@@ -364,7 +364,7 @@
     }];
 
     UILabel *copyRightLabel = [[UILabel alloc] init];
-    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.9";
+    NSString *appVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"3.0";
     copyRightLabel.text = [NSString stringWithFormat:@"Version %@ © happyn.net | Based on N2N Project", appVersion];
     copyRightLabel.font = [UIFont systemFontOfSize:10];
     copyRightLabel.textColor = subTitleColor;
