@@ -1,6 +1,6 @@
 # happynios
 
-![image](https://github.com/happynclient/happynios/assets/86546534/df4c3a97-f235-4baa-a79e-cf055c847ce6)
+<img width="500" height="760" alt="happynet" src="https://github.com/user-attachments/assets/1b9cb292-48fb-4acb-b071-cbbf229e1095" />
 
 
 Apple Store:
