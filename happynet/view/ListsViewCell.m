@@ -44,6 +44,45 @@
         make.height.mas_equalTo(28);
         make.width.mas_greaterThanOrEqualTo(95);
     }];
+    
+    // Create and setup deleteButton
+    self.deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.contentView addSubview:self.deleteButton];
+    [self.deleteButton addTarget:self action:@selector(deleteBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.deleteButton.backgroundColor = [UIColor colorWithRed:255/255.0 green:59/255.0 blue:48/255.0 alpha:0.1];
+    self.deleteButton.layer.cornerRadius = 14;
+    self.deleteButton.contentEdgeInsets = UIEdgeInsetsMake(4, 12, 4, 8);
+    
+    [self.deleteButton setTitle:[NSString stringWithFormat:@" %@", NSLocalizedString(@"Delete Config", nil)] forState:UIControlStateNormal];
+    self.deleteButton.titleLabel.font = [UIFont systemFontOfSize:12 weight:UIFontWeightMedium];
+    [self.deleteButton setTitleColor:[UIColor systemRedColor] forState:UIControlStateNormal];
+    
+    if (@available(iOS 13.0, *)) {
+        UIImage *trash = [UIImage systemImageNamed:@"trash.circle.fill" withConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:14 weight:UIImageSymbolWeightMedium]];
+        [self.deleteButton setImage:trash forState:UIControlStateNormal];
+        self.deleteButton.tintColor = [UIColor systemRedColor];
+        
+        // Flip image to right side
+        self.deleteButton.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        
+        // Add spacing between text and icon
+        self.deleteButton.imageEdgeInsets = UIEdgeInsetsMake(0, 8, 0, -8);
+        self.deleteButton.titleEdgeInsets = UIEdgeInsetsMake(0, -8, 0, 8);
+    }
+    
+    [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.nextButton.mas_left).offset(-10);
+        make.centerY.mas_equalTo(self.contentView);
+        make.height.mas_equalTo(28);
+        make.width.mas_greaterThanOrEqualTo(95);
+    }];
+}
+
+-(void)deleteBtnClick:(UIButton *)btn{
+    if (self.deleteSetting) {
+        self.deleteSetting();
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

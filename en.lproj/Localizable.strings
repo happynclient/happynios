@@ -16,6 +16,10 @@
 "Device Description" = "Device Description";
 "Save" = "Save";
 "Edit Config" = "Edit Config";
+"Delete Config" = "Delete Config";
+"Are you sure you want to delete this config?" = "Are you sure you want to delete this config?";
+"Cancel" = "Cancel";
+"Delete" = "Delete";
 "gateway" = "Gateway";
 "DNS" = "DNS";
 "MTU" = "MTU";

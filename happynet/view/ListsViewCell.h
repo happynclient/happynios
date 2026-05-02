@@ -11,12 +11,15 @@
 NS_ASSUME_NONNULL_BEGIN
 //typedef void(^selectCell)(void);
 typedef void(^next)(void);
+typedef void(^deleteSetting)(void);
 
 @interface ListsViewCell : UITableViewCell
 @property (weak, nonatomic) IBOutlet UILabel *settingName;
 @property (weak, nonatomic) IBOutlet UIButton *selectButton;
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
+@property (strong, nonatomic) UIButton *deleteButton;
 @property(nonatomic,copy)next  next;
+@property(nonatomic,copy)deleteSetting deleteSetting;
 -(void)setData:(SettingModel *)model;
 //@property(nonatomic,copy)selectCell  select;
 

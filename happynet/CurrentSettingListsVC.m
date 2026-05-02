@@ -222,6 +222,17 @@
   cell.next = ^{
     [self settinginfo:model];
   };
+  
+  cell.deleteSetting = ^{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Delete Config", nil) message:NSLocalizedString(@"Are you sure you want to delete this config?", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *delete = [UIAlertAction actionWithTitle:NSLocalizedString(@"Delete", nil) style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self deleteDataByid:model.id_key];
+    }];
+    [alert addAction:cancel];
+    [alert addAction:delete];
+    [self presentViewController:alert animated:YES completion:nil];
+  };
 
   return cell;
 }
